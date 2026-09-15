@@ -1,0 +1,47 @@
+# 加速、并行与资源
+
+## 执行组合
+
+| engine / backend | Step-A | Step-B | 使用条件 |
+|---|---|---|---|
+| jax / cpu | JIT 批量自适应 DOPRI5 | JIT RKG/差分 | 默认；启用 float64 |
+| jax / gpu | GPU 批量磁力线 | GPU JIT，减少主机往返 | 安装兼容 JAX CUDA extra |
+| native / cpu | SciPy DOP853 | NumPy/SciPy | 对照与调试路径 |
+| native / gpu | 仍为 CPU 磁力线 | CuPy | 不代表全部阶段上 GPU |
+
+JAX/native 的积分器不同，因此差异不只有浮点加法顺序；应按容差与离散误差进行比较，不要求逐位相同。两者仍应实现相同物理方程和边界含义。
+
+## 各环节的实际加速
+
+| 环节 | 已实现 | 仍可能成为瓶颈 |
+|---|---|---|
+| VMEC/壁预处理 | 向量化、共享插值、线程库、可分配几何任务 | 非线性反解、几何判断及根进程工作 |
+| 初始 casing 场 | 全周期源缓存、批量目标、JAX CPU/GPU、MPI 分块 | 近边界自适应面板、CPU 控制、内存带宽 |
+| 初始离散投影 | FFT/分离算子避免大稠密全空间矩阵 | CPU 根进程求解与广播 |
+| Step-A | FSAL、自适应批处理、MPI 起点分配、设备并行 | 长/短磁力线负载不均，壁附近退步 |
+| Step-B | JIT 内循环、低存储 RKG、缓冲复用、分片通信 | wall 每阶段约束求解与通信 |
+| s 标签 | 排序和累积和代替层数×网格全扫描 | 根进程统计/广播 |
+| 磁轴 | 热启动、共享场插值 | 周期固定点仍有串行部分 |
+| NetCDF | 根进程写、可调保存/压缩频率 | 压缩、网络文件系统与完整 3D 场体量 |
+| 数值后处理 | JAX/GPU 采样/导数、MPI 独立种子 | 拓扑判断、磁面求积、根进程写入 |
+| Notebook | 可使用 JAX/GPU 数值路径 | Matplotlib CPU；普通调用不自动启动 MPI |
+
+当前程序不是“每一个 Python 循环都 OpenMP 化”。NumPy/BLAS/OpenMP 库线程与 MPI 是不同层次：前者通常共享内存，后者为进程间通信，可跨节点；二者可混合，错误叠加会造成超额线程竞争。
+
+## 自动分配与约束
+
+程序参考 CPU affinity、cgroup 和调度环境控制线程预算。MPI 主程序多 rank 路径要求 JAX；分片网格根据可分解的 R/Z/φ 维度和设备资源构造，不合适时可能出现多余副本并警告。增加 rank 不保证加速。
+
+GPU 通常按一 rank 一设备绑定，避免多个进程重复抢同一设备。多节点必须由 OpenMPI/MPICH 或调度系统实际启动，pip 安装 mpi4py 不会自己创建跨节点作业。
+
+多进程 JAX 初始化要求与当前分片实现兼容的常量提升行为。CLI 会设置需要的 `JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=true`；自写 Python 入口应在导入 JAX 前设置。源码有能力检查，不应只依据最低依赖版本就假定某个旧 JAX 支持全部多机路径。
+
+后处理 MPI 按种子分配，**每个 rank 可能保留整个输入场**；不能把它当作自动降低单 rank 内存的域分解。wall 阶段投影和一些全局归约使其并行扩展规律不同于 debug。
+
+## 性能测量的正确方式
+
+分别记录首次 JIT 编译、VMEC 初始化、每步 Step-A/Step-B、轴/标签处理和 I/O。GPU 异步执行须同步后计时，否则只测到提交开销。总耗时不能简单用 Step-A+Step-B 代替。
+
+本次文档制作没有重新测量吞吐量，也不把旧 NCSX 单机数据推广为所有设备/多节点性能保证。合理的并行设置不应牺牲边界约束、积分容差或双精度来制造表面加速。
+
+源码：[硬件后端](source:debug:src/hint_debug/backend.py)、[MPI/线程管理](source:debug:src/hint_debug/parallel.py)、[wall 执行说明](source:wall:docs/EXECUTION.md)。

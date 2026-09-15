@@ -1,0 +1,43 @@
+# Continue the last complete record in an existing HINT-wall main output.
+# Relative paths resolve from this TOML file. Do not run two writers on one file.
+# Static inputs, B/v/p/s, ramp progress and axis warm start come from that NetCDF.
+# Follow appends to output_file; it does not create a separate continuation file.
+# To branch without changing an old result, duplicate a stopped main file first.
+# Missing required physical values invalidate a completed checkpoint; they are not zero-filled.
+
+[paths]
+# string; default "hint_wall.nc"; existing compatible main NetCDF, read then appended.
+# No wout/mgrid/vessel paths are required or reread in follow mode.
+output_file = "hint_wall.nc"
+
+[solver]
+# string; default "initial"; explicitly select "follow" to avoid replacing the file.
+mode = "follow"
+# start_point and the immutable initial B1.n reference come from the checkpoint.
+# Omit start_point here; changing it in follow is an error. No wout/mgrid is reread.
+# string; default "cpu"; "gpu" requires the matching runtime/device.
+# Hardware and engine are invocation settings; they do not inherit automatically.
+backend = "cpu"
+# string; default "jax"; alternatively "native" (single-process main evolution).
+engine = "jax"
+# integer >=1; default 1; ADDITIONAL outer cycles, not an absolute final step number.
+outer_steps = 20
+# integer >=1; default 1; checkpoint interval; always saves the final new cycle.
+save_every = 1
+# Omitted Step-A/B, axis-seed/tolerance and scale_after settings inherit the saved record.
+# Explicit entries override them and can change the trajectory. For example:
+# float >0; initial default 1, follow omission inherits the recorded value.
+# axis_residual_tolerance_scale = 2.0
+# boolean; initial/legacy default true. Explicit false disables pressure-target
+# maintenance AFTER the saved ramp completes (immediately for vmec starts).
+# Omit to preserve the recorded value. Explicit true re-enables maintenance;
+# neither value restores the initial pressure shape or restarts a completed ramp.
+# scale_after = false
+# Do not reset the pressure ramp: its saved progress is always retained.
+
+[output]
+# integer [0,9]; default 4; compression for newly created variables, not a
+# recompression of existing NetCDF arrays. Existing variables retain their filters.
+compression_level = 4
+# boolean; default true; store new Step-B diagnostic history. Checkpoints remain.
+store_stepb_diagnostics = true

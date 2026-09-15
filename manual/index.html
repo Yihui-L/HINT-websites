@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="HINT-debug 与 HINT-wall 物理模型、数值方法、参数及使用手册"><title>HINT | 程序与使用手册</title>
+<link rel="stylesheet" href="assets/manual.css"><script src="assets/manual.js" defer></script></head>
+<body><a class="skip" href="#content">跳至正文</a><header class="mobile-header"><a href="#overview">HINT / 文档</a>
+<button id="menu-toggle" aria-label="章节导航" aria-controls="sidebar" aria-expanded="false">☰</button></header>
+<aside id="sidebar"><a class="brand" href="#overview">HINT<span>程序与使用手册</span></a>
+<div class="versions">debug 0.8.8<br>wall 0.15.8</div>
+<label class="search-label" for="global-search">全文检索</label><input id="global-search" type="search" placeholder="方程、参数、关键字" autocomplete="off">
+<output id="search-status" aria-live="polite"></output><nav aria-label="章节"><a href="#overview">01<span>阅读入口</span></a><a href="#installation">02<span>安装与运行</span></a><a href="#model">03<span>物理模型与归一化</span></a><a href="#input-data">04<span>VMEC、线圈与第一壁</span></a><a href="#sources">05<span>压力、电流源与 s 标签</span></a><a href="#initial-restart">06<span>VMEC 响应场与续算</span></a><a href="#numerics">07<span>外迭代与数值方法</span></a><a href="#boundaries">08<span>两种边界与散度控制</span></a><a href="#acceleration">09<span>加速、并行与资源</span></a><a href="#output">10<span>NetCDF 与 IPO 管理</span></a><a href="#diagnostics">11<span>收敛性与平均方式</span></a><a href="#postprocess">12<span>后处理与 Notebook</span></a><a href="#validation">13<span>合法性、诊断与局限</span></a><a href="#main-parameters">14<span>主程序参数全表</span></a><a href="#post-parameters">15<span>后处理参数全表</span></a><a href="#variables">16<span>绘图变量索引</span></a><a href="#downloads">17<span>文档与示例文件</span></a></nav>
+<div class="sidebar-bottom"><a href="https://github.com/Yihui-L/HINT-docs/tree/main/Documents">GitHub 文档目录（需权限） ↗</a>
+<a href="https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/">NCSX 结果档案 ↗</a></div></aside>
+<main id="content"><div class="document-meta"><span>TECHNICAL MANUAL</span><span>源码 e3c9155 · schema 7</span></div>
+<section class="chapter" id="overview" data-title="阅读入口"><h1>阅读入口</h1>
+<p>本手册面向本仓库的 <strong>HINT-debug 0.8.8 / HINT-wall 0.15.8</strong> Python 实现。它不是原始 Fortran HINT 的逐参数翻译，也不把历史修复记录当作当前行为。源码快照和文件校验值见<a href="docs-data/source-manifest.json">版本清单</a>，章节末的源码链接固定到该快照。</p>
+<p>两个版本都从 VMEC、mgrid 和第一壁文本构建统一数据，使用无磁面假设的磁力线压力松弛和电阻形式磁场松弛，输出一个可续算的 NetCDF。主要区别是<strong>磁场/速度约束的位置及对应离散算子</strong>。它们不是完整输运程序，也不是时间准确的实验放电模拟器。</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>选择</th>
+<th>HINT-debug</th>
+<th>HINT-wall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>磁场与速度边界</td>
+<td>R–Z 矩形计算域</td>
+<td>用户提供的第一壁</td>
+</tr>
+<tr>
+<td>第一壁之外</td>
+<td>至矩形边界仍演化 B₁、v；压力/电流源受壁限制</td>
+<td>仅为几何/差分延拓，不作为外部演化区域</td>
+</tr>
+<tr>
+<td>外部电阻率</td>
+<td><code>solver.step_b.eta1</code></td>
+<td>不接受 eta1</td>
+</tr>
+<tr>
+<td>每个 RKG 阶段</td>
+<td>先约束感应通量，再取离散旋度</td>
+<td>壁一致的增量投影，约束其散度和法向场</td>
+</tr>
+<tr>
+<td>可选状态投影默认上限</td>
+<td>0</td>
+<td>200</td>
+</tr>
+<tr>
+<td>相同功能</td>
+<td>VMEC/zero 起点、压力策略、TOML、NetCDF、CPU/GPU、JAX、MPI、后处理</td>
+<td>同左，但离散边界成本不同</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>选用依据：</strong>要比较原版矩形边界逻辑，选 debug；要研究静止理想第一壁法向磁通冻结的平衡，选 wall。二者都不能不加说明地称为“无限空间自由边界”或“电阻壁模型”。</p>
+<h2>导读</h2>
+<ul>
+<li>首次运行：安装 → 输入几何 → 初始化与续算 → 主程序参数。</li>
+<li>检查物理：方程与归一化 → 源项和 s → Step-A/B → 边界 → 收敛诊断。</li>
+<li>查看结果：NetCDF 与 IPO → 后处理参数 → Python 绘图接口与变量表。</li>
+<li>开发维护：加速与资源 → 验证与局限 → 源码地图和文档重建。</li>
+</ul>
+<p>“默认值”均指当前配置类的默认值，<strong>不是推荐网格或可直接运行的算例</strong>。<code>nr=0</code>、空路径、轴位置 R=0 等占位值会在 initial 合法性检查时被拒绝。示例 TOML 仍需真实输入文件和几何。</p>
+<p>本网站公开访问，也可离线阅读；不依赖在线脚本或字体，数学公式已转换为本地 HTML/MathML。源码仓库仍为私有，源码链接仅对获授权的 GitHub 用户可用。结果档案另见 <a href="https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/">NCSX 第 100 步结果浏览器</a>。</p>
+<h2>一次计算的数据流</h2>
+<p><img alt="准备、演化、保存与后处理的数据流示意" src="assets/workflow.png" /></p>
+<p>图为程序逻辑示意，不是性能占比或实验装置图。follow 直接从统一结果恢复状态，不重新用初始化数据覆盖演化后的 s、压力或响应场。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L1">配置</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/pipeline.py#L1">主流程</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/pipeline.py#L1">wall 主流程</a>。</p></section><section class="chapter" id="installation" data-title="安装与运行"><h1>安装与运行</h1>
+<h2>环境与安装</h2>
+<p>Python <strong>3.11 或更新版本</strong>；当前依赖下限包含 NumPy 2、SciPy 1.14、netCDF4 1.7.2、JAX 0.5、threadpoolctl 3.5。实际解析结果取决于平台。MPI 的系统库/启动器以及 CUDA 驱动不是 pip 自动配置的集群资源。</p>
+<pre><code class="language-bash">git clone git@github.com:Yihui-L/HINT-docs.git
+cd HINT-docs
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install './HINT-debug[plots,distributed]'
+# 另一版本：python -m pip install './HINT-wall[plots,distributed]'
+</code></pre>
+<p>GPU 路径按驱动兼容性选择包内 extra，例如 <code>./HINT-debug[jax-cuda12,plots,distributed]</code> 或 <code>jax-cuda13</code>。<code>native/gpu</code> 使用 <code>gpu-cuda11</code> / <code>gpu-cuda12</code> 的 CuPy 路径，不要同时安装多个互相冲突的 CuPy CUDA 包。<code>vmec</code> extra 是历史兼容入口，内置响应场算法不需要额外安装 virtual-casing。</p>
+<p>私有仓库需使用用户自己的 GitHub SSH key 或授权凭据；不要把口令、token 写进 TOML、Notebook 或脚本。多节点运行要求每个节点看到一致的代码、环境和输入路径。</p>
+<h2>最小文件隔离</h2>
+<pre><code class="language-text">work/
+  source/HINT-docs/              # 源码
+  environments/                 # 虚拟环境，可在其他位置
+  cases/ncsx/
+    main.toml
+    follow.toml
+    post.toml
+    inputs/wout_case.nc
+    inputs/mgrid_case.nc
+    inputs/vessel.txt
+    run/                        # 结果、日志
+    figures/                    # PNG，不混入源码
+</code></pre>
+<p>相对路径以 <strong>TOML 文件所在目录</strong> 为基准，不以当前 shell 的工作目录为基准。安装成功不意味着输入几何通过校验。</p>
+<h2>主程序和后处理</h2>
+<pre><code class="language-bash">hint-debug main.toml
+hint-debug follow.toml
+hint-debug-post post.toml
+# wall 对应 hint-wall / hint-wall-post
+</code></pre>
+<p>没有 Slurm 时可以使用 shell 后台或 screen/tmux。以下启动命令只运行一次，不包含自动重启策略：</p>
+<pre><code class="language-bash">nohup hint-debug main.toml &gt; run/main.log 2&gt;&amp;1 &amp;
+echo $! &gt; run/main.pid
+tail -f run/main.log
+</code></pre>
+<p>停止前确认 PID 对应本次任务。若有 MPI 子进程，按作业/进程组管理，而不是只杀一个任意 Python 进程。不要同时对同一个结果启动 initial、follow 或写入后处理。</p>
+<p>MPI 示例：<code>mpiexec -n 4 hint-debug main.toml</code>。这只演示启动语法，不代表四个 rank 对任意 GPU/网格都更快。GPU 必须合理绑定设备；多节点由启动器/调度系统分配主机，程序不会自行申请资源。</p>
+<h2>推荐准备顺序</h2>
+<ol>
+<li>确认 wout 的 nfp、对称性、自由边界平衡及物理剖面，保留其生成信息。</li>
+<li>核对 mgrid 模式、电流组数量和实际电流，保证空间覆盖整个矩形域。</li>
+<li>准备严格包围初始 LCFS 的真实壁，并使矩形域留足壁外网格余量。</li>
+<li>选 debug/wall、zero/vmec、scale_after，再设网格、时间步和保存策略。</li>
+<li>阅读启动诊断：几何残差、背景场限幅/散度、VMEC 响应场投影修正和边界误差。</li>
+<li>按完整 checkpoint 评估力、速度、散度和轴闭合，不仅看日志是否继续输出。</li>
+</ol>
+<p>文档内提供<a href="docs-data/examples/debug/main.toml">debug 示例目录</a>和<a href="docs-data/examples/wall/main.toml">wall 示例目录</a>的源码原样副本。它们不是包含 wout/mgrid 的自足 benchmark。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/pyproject.toml#L1">安装元数据</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/cli.py#L1">命令行</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/docs/EXECUTION.md#L1">执行约定</a>。</p></section><section class="chapter" id="model" data-title="物理模型与归一化"><h1>物理模型与归一化</h1>
+<h2>哪些量在演化</h2>
+<p>采用柱坐标 (R,φ,Z)，网格数组轴序为 <strong>(R,Z,φ)</strong>，矢量分量顺序为 <strong>(R,φ,Z)</strong>。两者不能混淆。B₀ 是线圈背景场，B₁ 是全部等离子体响应场：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi mathvariant="bold">B</mi><mo>&#x0003D;</mo><msub><mi mathvariant="bold">B</mi><mn>0</mn></msub><mo>&#x0002B;</mo><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mspace width="2em" /><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x0003D;</mo><mo>&#x02207;</mo><mo>&#x000D7;</mo><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub><mo>&#x0002E;</mo></mrow></math></div>
+<p>本章未特别标 SI 的方程均为程序归一化形式，因而安培定律没有 μ₀。SI 电流为 curl(B₁)/μ₀。响应场包含 VMEC 初始响应场及其后续变化，不仅指“相对 VMEC 的新增量”。</p>
+<p>稳态目标是静态 MHD 力平衡、压力沿磁力线一致、磁场无散：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>p</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width="2em" /><mi mathvariant="bold">B</mi><mo>&#x000B7;</mo><mo>&#x02207;</mo><mi>p</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width="2em" /><mo>&#x02207;</mo><mo>&#x000B7;</mo><mi mathvariant="bold">B</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>
+<p>程序将它们分为两种松弛：Step-A 沿磁力线平均压力；Step-B 固定该次压力，推进速度和磁场。</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mo>&#x02202;</mo><mi mathvariant="bold">v</mi></mrow><mrow><mo>&#x02202;</mo><mi>&#x003C4;</mi></mrow></mfrac><mo>&#x0003D;</mo><mi>C</mi><mo stretchy="false">&#x00028;</mo><mi mathvariant="bold">x</mi><mo stretchy="false">&#x00029;</mo><mrow><mo stretchy="true" fence="true" form="prefix">[</mo><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>p</mi><mo>&#x0002B;</mo><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo>&#x0002B;</mo><mi>&#x003BD;</mi><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi mathvariant="bold">v</mi><mo stretchy="true" fence="true" form="postfix">]</mo></mrow><mo>&#x0002C;</mo></mrow></math></div>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mo>&#x02202;</mo><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub></mrow><mrow><mo>&#x02202;</mo><mi>&#x003C4;</mi></mrow></mfrac><mo>&#x0003D;</mo><mo>&#x02207;</mo><mo>&#x000D7;</mo><mrow><mo stretchy="true" fence="true" form="prefix">[</mo><mi mathvariant="bold">v</mi><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo stretchy="false">&#x00028;</mo><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x02212;</mo><msub><mi mathvariant="bold">J</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi></mrow></msub><mo stretchy="false">&#x00029;</mo><mo stretchy="true" fence="true" form="postfix">]</mo></mrow><mo>&#x0002B;</mo><msub><mi mathvariant="script">Q</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi></mrow></msub><mo>&#x0002E;</mo></mrow></math></div>
+<p><code>C</code> 是数值松弛预条件系数；ν 是黏性；η 是电阻形式的松弛系数；<code>Q_div</code> 是与版本边界相容的数值散度控制。<code>Jnet</code> 是维持环向电流的外加平行电流目标，不是另一个应与 J₁ 相加的真实等离子体电流。</p>
+<p><strong>模型中没有</strong>完整密度连续方程、温度/能量输运方程、速度对流惯性项、旋转平衡驱动、可演化外部线圈电流或有限电阻壁电流方程。因此输出 v 是松弛速度；“几秒弛豫时间”不能直接解释为真实装置的输运时间。</p>
+<h2>归一化标度</h2>
+<p>当前代码取 <code>L_ref=(R_min+R_max)/2</code>，<code>B_ref</code> 为准备后的 B₀ 在网格中央索引 <code>((nr-1)//2,(nz-1)//2,0)</code> 的模，密度参考值固定为 1 kg/m³。<strong>B_ref 不是磁轴场强</strong>；极强场限幅用的轴上参考是另外一个量。</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub></mrow><mrow><msqrt><mrow><msub><mi>&#x003BC;</mi><mn>0</mn></msub><msub><mi>&#x003C1;</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub></mrow></msqrt></mrow></mfrac><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>t</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub></mrow><mrow><msub><mi>v</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub></mrow></mfrac><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>p</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><msubsup><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow><mn>2</mn></msubsup></mrow><mrow><msub><mi>&#x003BC;</mi><mn>0</mn></msub></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>数量</th>
+<th>归一化量乘此标度得到 SI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>坐标、弧长</td>
+<td>L_ref，m</td>
+</tr>
+<tr>
+<td>时间</td>
+<td>t_ref，s；仍为弛豫时间</td>
+</tr>
+<tr>
+<td>B / v / p</td>
+<td>B_ref / v_ref / p_ref</td>
+</tr>
+<tr>
+<td>J</td>
+<td>B_ref/(μ₀ L_ref)，A/m²</td>
+</tr>
+<tr>
+<td>力密度</td>
+<td>B_ref²/(μ₀ L_ref)，N/m³</td>
+</tr>
+<tr>
+<td>div B</td>
+<td>B_ref/L_ref，T/m</td>
+</tr>
+<tr>
+<td>电阻率</td>
+<td>μ₀ L_ref v_ref，Ω·m</td>
+</tr>
+<tr>
+<td>运动黏性、散度扩散系数</td>
+<td>L_ref v_ref，m²/s</td>
+</tr>
+<tr>
+<td>体积分能量</td>
+<td>B_ref² L_ref³/μ₀，J</td>
+</tr>
+</tbody>
+</table></div>
+<p>归一化 η=0.001 不是 0.001 Ω·m。原版日志、Step-B 存储诊断和后处理 SI 数据必须先对齐标度与统计区域，才可比较数量级。</p>
+<h2>哪些约束“天然满足”</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>关系</th>
+<th>当前实现</th>
+<th>仍需注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B=B₀+B₁</td>
+<td>直接代数定义</td>
+<td>背景场插值/限幅后可能已有散度</td>
+</tr>
+<tr>
+<td>J₁=curl B₁</td>
+<td>由离散旋度计算，无独立 J 演化</td>
+<td>安培关系成立不意味着电流足够准确；导数放大误差</td>
+</tr>
+<tr>
+<td>div(curl)=0</td>
+<td>共同差分算子在兼容内域可达到舍入级</td>
+<td>端点延拓、壁掩膜、投影和不同算子会破坏恒等式</td>
+</tr>
+<tr>
+<td>B·grad p=0</td>
+<td>有限长度双向平均近似</td>
+<td>开放线、随机区、积分误差、压力壁闭合不保证精确为零</td>
+</tr>
+<tr>
+<td>J₁×B=grad p</td>
+<td>需要实际松弛收敛</td>
+<td>黏性、滤波、轴压反馈、固定边界可能留下残差</td>
+</tr>
+<tr>
+<td>v→0</td>
+<td>是有意义的静态验收目标</td>
+<td>不能仅凭速度变化小判断已经 v=0；非零稳态可能由残余力和耗散平衡</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>scale_after=false</code> 去掉一项外部压力反馈，但不新增能量守恒或保证所有例子最终静止。磁拓扑、源电流、边界和稳定性仍决定能否达到静态平衡。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/pipeline.py#L1">归一化</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_b.py#L1">Step-B</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/numerics.py#L1">差分算子</a>。理论背景为 Suzuki 2006 / 2017；当前实现包含另外的离散修复与边界约束，不宣称是论文每个选项的完整复现。</p></section><section class="chapter" id="input-data" data-title="VMEC、线圈与第一壁"><h1>VMEC、线圈与第一壁</h1>
+<h2>wout 的角色</h2>
+<p>VMEC 用嵌套磁通面坐标表达平衡。本程序从 wout 读取傅里叶几何、nfp、对称性、压力、电流信息，并将它们转换到柱坐标网格；HINT 后续不再要求这些磁面保持存在。</p>
+<p>几何使用 cos/sin 傅里叶展开；非仿星器对称平衡保留相应非对称系数。VMEC 半网格磁场系数在径向插值时排除轴上占位项，奇 m 模按 sqrt(s) 的轴正则性处理。径向插值使用程序封装的插值策略，几何角向导数由傅里叶展开解析计算，不用随意差分 wout 表格。</p>
+<p>VMEC 逆变基矢场转换到物理柱坐标分量：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>B</mi><mi>R</mi></msub><mo>&#x0003D;</mo><msup><mi>B</mi><mi>&#x003B8;</mi></msup><msub><mo>&#x02202;</mo><mi>&#x003B8;</mi></msub><mi>R</mi><mo>&#x0002B;</mo><msup><mi>B</mi><mi>&#x003D5;</mi></msup><msub><mo>&#x02202;</mo><mi>&#x003D5;</mi></msub><mi>R</mi><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>B</mi><mi>Z</mi></msub><mo>&#x0003D;</mo><msup><mi>B</mi><mi>&#x003B8;</mi></msup><msub><mo>&#x02202;</mo><mi>&#x003B8;</mi></msub><mi>Z</mi><mo>&#x0002B;</mo><msup><mi>B</mi><mi>&#x003D5;</mi></msup><msub><mo>&#x02202;</mo><mi>&#x003D5;</mi></msub><mi>Z</mi><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>B</mi><mi>&#x003D5;</mi></msub><mo>&#x0003D;</mo><mi>R</mi><msup><mi>B</mi><mi>&#x003D5;</mi></msup><mo>&#x0002E;</mo></mrow></math></div>
+<p>这就是不能只用某个面的 <code>dI/ds</code> 推出该面所有点电流矢量的原因：还需要三维几何、完整平衡场及其导数。</p>
+<p>压力源采用 wout <code>presf</code> 表；lambda 源采用 <code>jdotb/bdotb</code>，不把 ac 多项式直接当作局部电流密度。VMEC 中用于直磁力线坐标的 λ 与本程序平行电流形状 λ 同名但<strong>物理含义不同</strong>。</p>
+<h2>mgrid 的 R / S 模式</h2>
+<p>设第 g 组的实际输入电流为 I_g=<code>extcur_a[g]</code>，整体倍率 f=<code>field_scale</code>：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="bold">B</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mi>f</mi><munder><mo>&#x02211;</mo><mi>g</mi></munder><msub><mi>I</mi><mi>g</mi></msub><msub><mi mathvariant="bold">B</mi><mi>g</mi></msub><mspace width="1em" /><mo stretchy="false">&#x00028;</mo><mi>S</mi><mtext>&#x000A0;模式：组场单位&#x000A0;T/A</mtext><mo stretchy="false">&#x00029;</mo><mo>&#x0002C;</mo></mrow></math></div>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="bold">B</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mi>f</mi><munder><mo>&#x02211;</mo><mi>g</mi></munder><mfrac><mrow><msub><mi>I</mi><mi>g</mi></msub></mrow><mrow><msub><mi>I</mi><mrow><mi>g</mi><mo>&#x0002C;</mo><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">w</mi></mrow></msub></mrow></mfrac><msub><mi mathvariant="bold">B</mi><mi>g</mi></msub><mspace width="1em" /><mo stretchy="false">&#x00028;</mo><mi>R</mi><mtext>&#x000A0;模式：组场为原参考电流产生的&#x000A0;T</mtext><mo stretchy="false">&#x00029;</mo><mo>&#x0002E;</mo></mrow></math></div>
+<p><code>raw_coil_cur</code> 为 R 模式参考电流。参考电流为零而用户要求非零电流无法缩放，程序报错。旧文件缺少模式元数据时会警告并按兼容约定解释；显式未知模式不应猜测。<code>extcur_a</code> 长度按文件线圈组数确定，不再引入模糊的“group-current 倍率”。</p>
+<p>mgrid 一个场周期内的数据应当已由<strong>全装置线圈</strong>计算得到；HINT 不会把一个周期的近场线圈单独当成全装置真空场。只有目标网格是一个场周期。</p>
+<p>插值将源 mgrid 的合成场重采样到 HINT 网格。<code>cubic</code> 与 <code>linear</code> 影响采样误差和耗时；源点数量、坐标方向、范围必须合法，不外推填充矩形域。</p>
+<h2>极强场限幅与散度</h2>
+<p>先在未限幅背景场中求 VMEC 磁轴 φ=0 处模 B_axis，设置 B_cap=<code>max_field_axis_ratio</code>×B_axis。超过阈值的向量乘 B_cap/|B|，保持方向。源 mgrid 合成场和最终插值场都受该限制。</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="bold">B</mi><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow></msub><mo>&#x0003D;</mo><mi mathvariant="bold">B</mi><mo>min</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><msub><mi>B</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">p</mi></mrow></msub><mo>&#x0002F;</mo><mo stretchy="false">&#x0007C;</mo><mi mathvariant="bold">B</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002E;</mo></mrow></math></div>
+<p><strong>限幅不保散度，也不保持原线圈精确解。</strong> 它是线圈附近奇异/极强场的数值处理，阈值过低可能影响等离子体附近的真实场。应检查限幅点数、阈值、最大场、插值后散度及其空间位置。程序不自动清除 B₀ 的全部离散散度。</p>
+<h2>壁文本协议</h2>
+<p>所有壁信息在一个文本中，当前主程序不要求用户先生成壁 NetCDF：</p>
+<pre><code class="language-text">HINT_WALL 1
+nfp = 3
+stellarator_symmetric = true
+toroidal_planes = 4
+poloidal_points = 64
+DATA
+# 每行 phi_rad R_m Z_m；此处仅说明布局，不是完整壁数据
+</code></pre>
+<p>DATA 后必须有 <code>toroidal_planes*poloidal_points</code> 行，按平面优先排列。同一平面所有行的 φ 相同；R&gt;0，数值有限，使用 e/E 浮点指数而不是 Fortran D 指数。支持 # 注释和空行。不要把注释布局示意当作完整可运行壁。</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>壁类型</th>
+<th>φ 数据范围</th>
+<th>端点处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轴对称 2D</td>
+<td>单平面，φ=0</td>
+<td>一个闭合 R–Z 轮廓</td>
+</tr>
+<tr>
+<td>仿星器对称 3D</td>
+<td>0 到 π/nfp，均匀，至少 4 平面</td>
+<td>包含两端，端面对称一致；内部补为一场周期</td>
+</tr>
+<tr>
+<td>非对称 3D</td>
+<td>0 到 2π/nfp，均匀，至少 6 平面</td>
+<td>包含末端且与首端逐点闭合，内部去掉重复平面</td>
+</tr>
+</tbody>
+</table></div>
+<p>极向每平面至少 4 点，不重复首点作为末点；各平面对应点需表示同一极向序列，方向一致。建议角度保留约 17 位有效数字。壁 <code>nfp</code> 必须等于 wout，壁对称性必须等于 <code>not lasym</code>，不能由文件名猜测。</p>
+<p>主程序检查 <strong>LCFS 严格在壁内、壁严格在矩形域内</strong>，并要求壁外至少配置的网格层余量。壁几何生成 signed distance（正值在内）、外法向、有效掩膜，写入统一结果。即使 debug 的磁边界在矩形上，真实壁仍参与压力、源项支撑区域和后处理可用区。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/vmec.py#L1">VMEC</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/vacuum.py#L1">mgrid</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/wall_file.py#L1">壁协议</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/preprocess/wall.py#L1">几何</a>。</p></section><section class="chapter" id="sources" data-title="压力、电流源与 s 标签"><h1>压力、电流源与 s 标签</h1>
+<h2>压力不是固定的三维源场</h2>
+<p>初始 p(s) 来自 VMEC（或 input 的同样升幂/分段线性定义），在柱坐标网格赋值。之后 Step-A 沿<strong>当前</strong>磁力线松弛压力，s 也根据当前压力和磁场重建。因此最终同一空间点的压力、s 和电流源都不必等于初始 VMEC 值。</p>
+<p><code>profiles.pressure_scale</code> 是准备阶段的倍率；<code>solver.scale_after</code> 决定攀升后是否保留轴压反馈；输出 <code>pressure_scale</code> 是记录的攀升进度。三者不相同。</p>
+<h3>zero 起点</h3>
+<p>B₁=0、v=0。初始压力是整个目标剖面的缩小版本。小压力尺度由真空磁轴处 beta=10⁻³ 对应的压力与目标值取较小者：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>3</mn></mrow></msup></mrow><mrow><mn>2</mn><msub><mi>&#x003BC;</mi><mn>0</mn></msub></mrow></mfrac><mo stretchy="false">&#x0007C;</mo><msub><mi mathvariant="bold">B</mi><mrow><mn>0</mn><mo>&#x0002C;</mo><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">s</mi></mrow></msub><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>a</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mo>min</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><msub><mi>p</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>&#x0002F;</mo><msub><mi>p</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mo>&#x0002C;</mo><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">s</mi></mrow></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002E;</mo></mrow></math></div>
+<p>当 a₀&gt;0 且小于 1 时，每个外迭代的目标比例按几何因子 a₀^(−1/N) 提高，N=<code>pressure_ramp_iterations</code>，到达 1 后停止攀升。初始和随后反馈以插值的当前磁轴压力为依据作统一倍率修正。零目标压力的退化情形不应用这个比例公式直接相除。</p>
+<p>攀升改变整体幅度，不把每个网格的 p 强行重置回初始 VMEC p(s)。在变化后的磁结构、标签分布下，压力形状会继续变化。只保证执行所选的轴压反馈，不保证每一个原磁面的 p 值或全空间单调性。</p>
+<h3>vmec 起点</h3>
+<p><code>start_point="vmec"</code> 要求 <code>profiles.source="vmec"</code>、<code>profiles.pressure_scale=1</code>。初始直接使用完整 VMEC 压力和重建的等离子体响应场，v=0，不再将初始压力缩小。<code>pressure_ramp_iterations</code> 在物理流程中不起作用。</p>
+<ul>
+<li><code>scale_after=true</code>：从后续完整外迭代起，仍把当前轴压统一反馈到目标值。</li>
+<li><code>scale_after=false</code>：不再施加目标轴压反馈，压力由现有 Step-A/B 和边界流程继续演化。</li>
+</ul>
+<p>false 不会取消每步的磁轴定位，也不会停止 s 重建；它不是切换为完整绝热/等温输运方程。原 VMEC p(0) 与离散网格最大 p 未必精确重合。</p>
+<h2>电流源的实际定义</h2>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>&#x003BB;</mi><mrow><mi mathvariant="normal">V</mi><mi mathvariant="normal">M</mi><mi mathvariant="normal">E</mi><mi mathvariant="normal">C</mi></mrow></msub><mo stretchy="false">&#x00028;</mo><mi>s</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mi>&#x027E8;</mi><mi mathvariant="bold">J</mi><mo>&#x000B7;</mo><mi mathvariant="bold">B</mi><mi>&#x027E9;</mi></mrow><mrow><mi>&#x027E8;</mi><msup><mi>B</mi><mn>2</mn></msup><mi>&#x027E9;</mi></mrow></mfrac><mo>&#x0002C;</mo><mspace width="2em" /><msub><mi mathvariant="bold">J</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>&#x0003D;</mo><mi>A</mi><mi>&#x003BB;</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mo stretchy="false">&#x00029;</mo><mi mathvariant="bold">B</mi><mo>&#x0002E;</mo></mrow></math></div>
+<p>wout 的 <code>jdotb/bdotb</code> 给出上述形状；该比值在 SI 下量纲 A/(m²·T)。在本程序中其整体幅度由 ctor 再归一化，输入形状的共同倍数会消去。<code>input.current</code> 用相同的 <strong>lambda 形状</strong>，不是 jcurv，也不是 I(s) 或 dI/ds。这比“所有 VMEC ac 与 HINT input 完全同义”更严格：这里只共享升幂多项式的数学表示，因变量须按 lambda 定义转换。</p>
+<p>每个 Step-B RKG 阶段根据当前 B、冻结于本次 Step-B 的 s，在壁内 0≤s&lt;1 建立源项并按 φ=0 截面总电流调整 A：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>&#x0003D;</mo><mfrac><mrow><msub><mi>&#x003BC;</mi><mn>0</mn></msub><msub><mi>I</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><msub><mi>L</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo stretchy="false">&#x00029;</mo></mrow><mrow><msub><mo>&#x02211;</mo><mrow><mi>R</mi><mo>&#x0002C;</mo><mi>Z</mi></mrow></msub><mo stretchy="false">[</mo><mi>&#x003BB;</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mo stretchy="false">&#x00029;</mo><msub><mi>B</mi><mi>&#x003D5;</mi></msub><msub><mo stretchy="false">]</mo><mrow><mi>&#x003D5;</mi><mo>&#x0003D;</mo><mn>0</mn></mrow></msub><mspace width="0.167em" /><mi>&#x00394;</mi><mi>R</mi><mi>&#x00394;</mi><mi>Z</mi></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<p>该积分是环向电流穿过 R–Z 截面的通量，<strong>没有 R 权重或 2π 因子</strong>。分母严重正负抵消时不能安全归一化，代码拒绝近退化归一化。源电流不乘压力攀升比例。</p>
+<p>电阻项是 η(J₁−Jnet)，体现维持平行净电流的驱动。J₁由完整响应场的旋度决定，还包含力平衡所需的横向/其他电流成分。不能据此认为 J₁在每点完整地趋于 Jnet，也不能把 Jnet+J₁作为总等离子体电流。</p>
+<h2>演化中的 s 如何定义</h2>
+<p>初始 <code>norm_s_initial</code> 是 VMEC 归一化环向磁通。演化的 s 是压力排序所重建的标签，不需要预先识别每一张闭合磁面：</p>
+<ol>
+<li>在 φ=0 截面、壁内且排除矩形两层差分保护节点，选 501 个压力层，范围为 0.01 p_axis 到 p_axis。</li>
+<li>对每个压力阈值 p_k，积分满足 p≥p_k 的区域内的 Bφ dR dZ，得到包围该高压区域的环向磁通标签。</li>
+<li>以最低压力层包围的磁通归一化，轴端设 0、边端设 1，施加单调累积约束。</li>
+<li>通过压力到标签的插值给三维点赋 s；低于压力底层取 1，高于轴压取 0。</li>
+</ol>
+<p>实现采用排序、累积和及二分索引，避免对每个压力层重复扫描全域。0.01 乘的是<strong>压力底层阈值</strong>，不是 s=1 处磁场的倍率。它沿用模型的低压边界标签约定。</p>
+<p>在磁岛、随机区或压力平台，s 不再是唯一、严格的磁通面坐标。图上的 <code>rho=sqrt(s)</code> 也只是该标签的变换，不是独立几何小半径。保存态中的 <code>s</code> 应作为后处理和 follow 的依据，不能用 <code>norm_s_initial</code> 覆盖。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/vmec.py#L1">剖面准备</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/flux.py#L1">标签重建</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/equilibrium.py#L1">外迭代</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_b.py#L1">电流归一化</a>。</p></section><section class="chapter" id="initial-restart" data-title="VMEC 响应场与续算"><h1>VMEC 响应场与续算</h1>
+<h2>VMEC 初始响应场不是简单相减</h2>
+<p>直接将 wout 内部场减去 B₀，只在 VMEC 内部可定义；无法给出壁和矩形域附近的整个响应场，也可能混入背景场不一致。当前实现使用<strong>内置的正则化 virtual-casing 边界积分</strong>，从 LCFS 完整场和几何求等离子体电流在内外区域产生的场。</p>
+<p>积分源展开覆盖完整 2π 装置，目标点只在一个场周期取样。即使使用仿星器对称性减少目标点，也不能省略其余周期的源贡献。外部 <code>hiddenSymmetries/virtual-casing</code> 是方法参考，不是运行依赖。</p>
+<p>定义 r=x−y，外向面积矢量 dS，核心积分为：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi mathvariant="script">V</mi><mo stretchy="false">[</mo><mi mathvariant="bold">B</mi><mo stretchy="false">]</mo><mo stretchy="false">&#x00028;</mo><mi mathvariant="bold">x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>4</mn><mi>&#x003C0;</mi></mrow></mfrac><msub><mo>&#x0222B;</mo><mi>S</mi></msub><mfrac><mrow><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi mathvariant="bold">S</mi><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo stretchy="false">&#x00029;</mo><mo>&#x000D7;</mo><mi mathvariant="bold">r</mi><mo>&#x0002B;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi mathvariant="bold">S</mi><mo>&#x000B7;</mo><mi mathvariant="bold">B</mi><mo stretchy="false">&#x00029;</mo><mi mathvariant="bold">r</mi></mrow><mrow><mo stretchy="false">&#x0007C;</mo><mi mathvariant="bold">r</mi><msup><mo stretchy="false">&#x0007C;</mo><mn>3</mn></msup></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<p>近表面采用局部常矢量 C 的减法正则化，结合常场内外/主值跳跃关系恢复解。外点为 V[B−C]，内点为 V[B−C]−C+B_VMEC(x)，表面按主值处理。使用成对 16×16 / 24×24 Gauss 面板误差估计与自适应细分；这些是当前内部精度控制，不是用户可填的 TOML 参数，也不是对全局物理误差的保证。</p>
+<h2>离散无散约束</h2>
+<p>积分得到的连续意义磁场再采样到差分网格后，D·B 不会自动精确为零。当前程序对初始响应场作加权最小范数离散 Helmholtz 修正：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub><mo>&#x0003D;</mo><msub><mi mathvariant="bold">B</mi><mo>&#x0002A;</mo></msub><mo>&#x02212;</mo><msup><mi>D</mi><mi>&#x02020;</mi></msup><mo stretchy="false">&#x00028;</mo><mi>D</mi><msup><mi>D</mi><mi>&#x02020;</mi></msup><msup><mo stretchy="false">&#x00029;</mo><mrow><mo>&#x02212;</mo><mn>1</mn></mrow></msup><mi>D</mi><msub><mi mathvariant="bold">B</mi><mo>&#x0002A;</mo></msub><mo>&#x0002E;</mo></mrow></math></div>
+<p>D 为所用离散散度，D†是对应加权伴随。柱坐标权重包含 R。矩形初始化求解使用环向 FFT 和 R–Z 小算子的谱分解，CPU 根进程处理后广播；<strong>不是后续全程改为演化矢势 A</strong>。</p>
+<p>必须同时检查初始散度、投影修正相对大小、VMEC 内部总场匹配和投影前后电流变化。即使投影残差达到舍入级，若修正很大或 B₀ 与 wout 不一致，也不能宣称物理场正确。深内部相容导数能保护 curl-grad 恒等式，但保护层附近仍需关注导数误差。</p>
+<p>两版都冻结<strong>数值准备/约束后的初始响应场法向分量</strong>。zero 为零法向；vmec 通常非零。后续力平衡仍用完整 J₁×(B₀+B₁)，不减去这部分初始电流。</p>
+<h2>follow 读取顺序</h2>
+<p><code>paths.output_file</code> 同时是恢复源和追加目标。schema 7 文件保存了预处理数据、归一化、完整状态、初始响应场边界参考、压力攀升阶段和每记录求解配置。</p>
+<p>恢复时使用最后一个 <code>record_complete=1</code> 的状态，跳过未完成写入记录；加载实际 p、s、v、B₁和轴热启动。初始 VMEC 标签和初始压力不会覆盖它们。<code>outer_steps=N</code> 表示再做 N 步，而非跑到编号 N。</p>
+<pre><code class="language-toml">[paths]
+output_file = &quot;run/equilibrium.nc&quot;
+
+[solver]
+mode = &quot;follow&quot;
+backend = &quot;gpu&quot;
+engine = &quot;jax&quot;
+outer_steps = 20
+save_every = 1
+</code></pre>
+<p>上例省略了外部 wout、mgrid、vessel。<strong>只对被明确继承的设置</strong>可以省略：Step-A/B 参数、轴位置/容差、scale_after 等从保存配置恢复；起点语义不可冲突。backend、engine、追加步数、保存策略属于本次调用设置，不能假定所有参数都自动继承。</p>
+<p>旧 schema 4–6 在兼容条件下升级到当前状态格式；更旧格式和旧电流剖面语义不可盲目恢复。debug 与 wall 的 schema 标识及边界含义不同，不支持把同一个输出当作另一版本的 follow 文件。</p>
+<h2>写入与并发</h2>
+<p>主程序先写数组、同步，再提交完整标记；这能识别部分写入，不等价于任意并发读取均安全。重要结果先备份；监控正在写的文件时优先使用安全副本，并检查最后完整记录。后处理写独立文件且有写锁，不要自行删除一个仍有进程持有的锁。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/vmec_field.py#L1">响应场重建</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/casing.py#L1">casing</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/preprocess/solenoidal.py#L1">投影</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/storage.py#L1">状态存储</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/solver/boundary_reference.py#L1">边界参考</a>。</p></section><section class="chapter" id="numerics" data-title="外迭代与数值方法"><h1>外迭代与数值方法</h1>
+<h2>一次完整外迭代</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>更新内容</th>
+<th>冻结/依赖关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>边界闭合、压力有效域</td>
+<td>当前完整 B₁、v、p</td>
+</tr>
+<tr>
+<td>2：Step-A</td>
+<td>沿当前 B 的双向磁力线平均 p</td>
+<td>B 固定；不重新读取初始压力剖面</td>
+</tr>
+<tr>
+<td>3</td>
+<td>定位该场磁轴、测量松弛后轴压</td>
+<td>热启动，但不能把旧轴直接当成新轴</td>
+</tr>
+<tr>
+<td>4</td>
+<td>由 p 和 B 重建 s</td>
+<td>压力排序/磁通积分</td>
+</tr>
+<tr>
+<td>5：Step-B</td>
+<td>inner_steps 次 RKG，推进 B₁、v</td>
+<td>本次 p 和 s 固定；J₁/B/Jnet 随 RKG 阶段变化</td>
+</tr>
+<tr>
+<td>6</td>
+<td>在更新后的 B 中再次跟踪轴</td>
+<td>scale_after=false 也执行</td>
+</tr>
+<tr>
+<td>7</td>
+<td>按攀升/维持策略统一缩放 p（若应执行）</td>
+<td>不恢复旧 s；false 且已完成攀升则不缩放</td>
+</tr>
+<tr>
+<td>8</td>
+<td>保存完整状态及可用诊断</td>
+<td>内部诊断和结束反馈后的状态时刻不同</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Step-A 双向平均</h3>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mi>&#x000B1;</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><msub><mo>&#x0222B;</mo><mrow><msub><mi>&#x00393;</mi><mi>&#x000B1;</mi></msub></mrow></msub><mi>p</mi><mspace width="0.167em" /><mi>d</mi><mi>l</mi><mo>&#x0002F;</mo><mo stretchy="false">&#x0007C;</mo><mi>B</mi><mo stretchy="false">&#x0007C;</mo></mrow><mrow><msub><mo>&#x0222B;</mo><mrow><msub><mi>&#x00393;</mi><mi>&#x000B1;</mi></msub></mrow></msub><mi>d</mi><mi>l</mi><mo>&#x0002F;</mo><mo stretchy="false">&#x0007C;</mo><mi>B</mi><mo stretchy="false">&#x0007C;</mo></mrow></mfrac><mo>&#x0002C;</mo><mspace width="2em" /><msub><mi>p</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><msub><mi>p</mi><mo>&#x0002B;</mo></msub><mo>&#x0002B;</mo><msub><mi>p</mi><mo>&#x02212;</mo></msub></mrow><mrow><mn>2</mn></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<p>两个方向独立追踪；出壁/失败方向贡献零，另一个方向仍保留其自身平均。<strong>不是</strong>把两方向积分的分子分母分别相加再求比值。若两侧积分权重不同，这两种离散平均并不等价。</p>
+<p>沿线快速压力均衡是模型假设，有限追踪长度、开放线处理、权重及积分误差共同决定近似质量。JAX 路径使用自适应 Dormand–Prince 5 和 FSAL，native CPU 使用 SciPy DOP853。试探步越壁时先缩步重试以区分真实穿壁和粗步越界；最终失败需结合诊断解读，不伪造一条闭合线。</p>
+<h3>空间差分</h3>
+<p>内域一阶/二阶导数采用四阶五点中心模板：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><msub><mi>f</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><mo>&#x02212;</mo><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mn>2</mn></mrow></msub><mo>&#x0002B;</mo><mn>8</mn><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><mn>8</mn><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x02212;</mo><mn>2</mn></mrow></msub></mrow><mrow><mn>12</mn><mi>h</mi></mrow></mfrac><mo>&#x0002C;</mo></mrow></math></div>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>D</mi><mn>2</mn></msup><msub><mi>f</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><mo>&#x02212;</mo><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mn>2</mn></mrow></msub><mo>&#x0002B;</mo><mn>16</mn><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><mn>30</mn><msub><mi>f</mi><mi>i</mi></msub><mo>&#x0002B;</mo><mn>16</mn><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><msub><mi>f</mi><mrow><mi>i</mi><mo>&#x02212;</mo><mn>2</mn></mrow></msub></mrow><mrow><mn>12</mn><msup><mi>h</mi><mn>2</mn></msup></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<p>φ 周期环绕；R/Z 保护层使用相应闭合。柱坐标散度按守恒组合：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>&#x000B7;</mo><mi mathvariant="bold">B</mi><mo>&#x0003D;</mo><mfrac><mrow><msub><mi>D</mi><mi>R</mi></msub><mo stretchy="false">&#x00028;</mo><mi>R</mi><msub><mi>B</mi><mi>R</mi></msub><mo stretchy="false">&#x00029;</mo></mrow><mi>R</mi></mfrac><mo>&#x0002B;</mo><mfrac><mrow><msub><mi>D</mi><mi>&#x003D5;</mi></msub><msub><mi>B</mi><mi>&#x003D5;</mi></msub></mrow><mi>R</mi></mfrac><mo>&#x0002B;</mo><msub><mi>D</mi><mi>Z</mi></msub><msub><mi>B</mi><mi>Z</mi></msub><mo>&#x0002E;</mo></mrow></math></div>
+<p>旋度的 R/φ/Z 分量分别为 <code>Dphi(BZ)/R−DZ(Bphi)</code>、<code>DZ(BR)−DR(BZ)</code>、<code>DR(RBphi)/R−Dphi(BR)/R</code>。速度黏性采用柱坐标<strong>矢量</strong>拉普拉斯，包含曲率和分量交叉项，不能对三个分量简单套笛卡尔标量拉普拉斯。</p>
+<p>规则内域四阶并不等于三维扭曲壁附近整体四阶；壁的距离、法向、插值和 ghost 延拓另有误差。</p>
+<h3>Step-B 时间推进</h3>
+<p>使用四阶段低存储 Runge–Kutta–Gill。对 u=(v,B₁)，每阶段先计算 δu=Δτ·RHS(u)，然后：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo>&#x02190;</mo><mi>u</mi><mo>&#x0002B;</mo><msub><mi>c</mi><mn>0</mn></msub><mo stretchy="false">&#x00028;</mo><mi>&#x003B4;</mi><mi>u</mi><mo>&#x0002B;</mo><msub><mi>c</mi><mn>1</mn></msub><mi>q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002C;</mo><mspace width="2em" /><mi>q</mi><mo>&#x02190;</mo><msub><mi>c</mi><mn>2</mn></msub><mi>q</mi><mo>&#x0002B;</mo><msub><mi>c</mi><mn>3</mn></msub><mi>&#x003B4;</mi><mi>u</mi><mo>&#x0002E;</mo></mrow></math></div>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>c₀</th>
+<th>c₁</th>
+<th>c₂</th>
+<th>c₃</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1/2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1−√(1/2)</td>
+<td>−1</td>
+<td>1−3c₀</td>
+<td>2c₀</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1+√(1/2)</td>
+<td>−1</td>
+<td>1−3c₀</td>
+<td>2c₀</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1/6</td>
+<td>−2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>阶段间重新施加相容边界。此形式推进的是人工松弛方程；压力分裂、滤波、投影和边界闭合使得“RKG 四阶”不能直接推导整套外迭代的四阶时间误差。</p>
+<h3>预条件和滤波</h3>
+<p>C 的场因子是 min(1,(Bcrit/|B₀|)²)；电流指标来自 curl(B₀)，小于 j_low 因子为 1，大于 j_high 为 0.1，中间线性过渡。合成后执行配置的邻域平滑。它不是对 Jnet 或 J₁ 作削顶。</p>
+<p>速度滤波针对相对参考场的增量，五点邻域值为 <code>(−f[-2]+4f[-1]+4f[+1]−f[+2])/6</code>，以 mfil=0.375 混合。<code>reference_every</code> 只是更新滤波参考，不将 v 清零。它仍是一种数值耗散，不能因删除了旧 nvreset 就视为速度完全没有额外处理。</p>
+<p>当前时间步固定，无通用自适应 CFL 控制。增大 inner_steps 延长松弛区间，不会修复过大 time_step 导致的不稳定。细化网格后，显式扩散约束通常更严格。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_a.py#L1">Step-A</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_a_jax.py#L1">JAX 追踪</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_b.py#L1">Step-B</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/numerics.py#L1">空间算子</a>。</p></section><section class="chapter" id="boundaries" data-title="两种边界与散度控制"><h1>两种边界与散度控制</h1>
+<p><img alt="矩形边界与第一壁边界的对比示意" src="assets/boundaries.png" /></p>
+<p>图是任意 R–Z 截面的定性示意，不是实际 NCSX 几何。黄色区域在 debug 中仍有磁场/速度演化，在 wall 中不是物理演化域。</p>
+<h2>共同物理约定</h2>
+<p>静止理想导体要求边界法向磁通不随时间改变，不一般要求总 Bn=0。线圈背景场 B₀ 已穿透壁，且固定。响应场满足：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi mathvariant="bold">n</mi><mo>&#x000B7;</mo><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub><mo stretchy="false">&#x00028;</mo><mi>&#x003C4;</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi mathvariant="bold">n</mi><mo>&#x000B7;</mo><msub><mi mathvariant="bold">B</mi><mrow><mn>1</mn><mo>&#x0002C;</mo><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>&#x0002C;</mo><mspace width="1em" /><mi mathvariant="bold">v</mi><msub><mo stretchy="false">&#x0007C;</mo><mi>S</mi></msub><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>
+<p>zero 起点的右端为 0；vmec 起点通常非零。两者是不同的冻结磁通初值，不能比较时忽略这一约束差异。总法向场为 B₀n 加该冻结值。</p>
+<p>理想壁、真空开放边界和不导电材料不是同一数学条件。真实不导电外域通常需要内外磁场匹配/势场求解，不能简单以局部 Bn=0 代替。本版本没有有限电阻壁的表面电流演化模型。</p>
+<h2>debug：矩形域</h2>
+<p>R–Z 外边界两层保护节点施加冻结响应法向场、零速度；切向分量按层使用二阶/四阶外推。环向周期。真实壁限制压力和源电流，但壁外至矩形边界仍演化响应场和速度，采用 eta1（0 表示继承 eta0）。这不是完整无质量真空 Maxwell 求解。</p>
+<p>保证兼容性的关键在于<strong>取旋度之前</strong>约束切向感应通量。这样离散 curl 更新本身满足矩形法向增量要求，不再先形成无散增量、随后用不相容的法向硬截断破坏它。</p>
+<p>散度扩散为 <code>kappa*grad(div B1)</code>，边界标量处理与矩形算子一致；可选状态投影默认关闭，具有有限值/不恶化保护。固定 B₀ 不随这些清理改变。</p>
+<p>矩形边界离等离子体太近时会强烈限制响应场；“边界设置与原版相同”不能保证它是可信的无限空间自由边界。需以域大小/边界影响的收敛性判断，这不在本次文档构建中做算例测试。</p>
+<h2>wall：扭曲第一壁</h2>
+<p>壁由 signed distance、法向与插值构成浸入式延拓 E；跨周期处理包含柱坐标基矢旋转。全状态使用仿射延拓以维持非零初始法向参考，增量和伴随使用齐次延拓，不能混淆。</p>
+<p>实际散度算子含壁延拓，D†是带 R 体积权重的对应伴随。数值散度扩散采用：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="script">Q</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi></mrow></msub><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>&#x003BA;</mi><msup><mi>D</mi><mi>&#x02020;</mi></msup><mi>D</mi><msub><mi mathvariant="bold">B</mi><mn>1</mn></msub><mo>&#x0002E;</mo></mrow></math></div>
+<p>它具有半离散能量非增性质；显式时间积分仍须满足稳定性限制。不能把算子里的负号误换成笛卡尔梯度符号后随意套用。</p>
+<p>每个 RKG 阶段，对感应旋度增量 q 作齐次壁约束和最小改动投影：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>q</mi><mi>c</mi></msub><mo>&#x0003D;</mo><msub><mi>M</mi><mn>0</mn></msub><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x02212;</mo><msup><mi>D</mi><mi>&#x02020;</mi></msup><mi>&#x003C8;</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002C;</mo><mspace width="2em" /><mi>D</mi><msup><mi>D</mi><mi>&#x02020;</mi></msup><mi>&#x003C8;</mi><mo>&#x0003D;</mo><mi>D</mi><mi>q</mi><mo>&#x0002E;</mo></mrow></math></div>
+<p>这里 M₀表示齐次边界闭合；程序使用相容的复合算子。此步骤独立于用户可选全状态投影，<strong><code>divergence_projection_iterations=0</code> 不能关闭它</strong>。阶段求解上限为配置值、400 和网格相关上限中的最大值；容差兼顾相对残差与机器舍入尺度，不允许明显不满足约束的增量静默进入后续步骤。</p>
+<p>可选状态 PCG 在配置间隔及 Step-B 末尾修正剩余散度，保留有效改善的解。投影不是新的物理驱动，但若每步修正很大，就说明原始离散更新/网格精度不能被忽略，不能只看投影后残差小。</p>
+<h2>精度边界</h2>
+<p>wall 的每阶段求解意味着它在同网格下可能明显慢于 debug。这不是遗漏了一个 GPU 开关。更高阶几何、拟合网格或兼容有限元可能改善边界表达，但当前代码使用的是柱坐标规则网格与浸入边界，不宣称具备有限元精确曲面拟合。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/box.py#L1">debug 矩形闭合</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/solver/wall.py#L1">wall 延拓</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/solver/divergence.py#L1">wall 散度算子</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/solver/step_b.py#L1">wall 阶段推进</a>。</p></section><section class="chapter" id="acceleration" data-title="加速、并行与资源"><h1>加速、并行与资源</h1>
+<h2>执行组合</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>engine / backend</th>
+<th>Step-A</th>
+<th>Step-B</th>
+<th>使用条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jax / cpu</td>
+<td>JIT 批量自适应 DOPRI5</td>
+<td>JIT RKG/差分</td>
+<td>默认；启用 float64</td>
+</tr>
+<tr>
+<td>jax / gpu</td>
+<td>GPU 批量磁力线</td>
+<td>GPU JIT，减少主机往返</td>
+<td>安装兼容 JAX CUDA extra</td>
+</tr>
+<tr>
+<td>native / cpu</td>
+<td>SciPy DOP853</td>
+<td>NumPy/SciPy</td>
+<td>对照与调试路径</td>
+</tr>
+<tr>
+<td>native / gpu</td>
+<td>仍为 CPU 磁力线</td>
+<td>CuPy</td>
+<td>不代表全部阶段上 GPU</td>
+</tr>
+</tbody>
+</table></div>
+<p>JAX/native 的积分器不同，因此差异不只有浮点加法顺序；应按容差与离散误差进行比较，不要求逐位相同。两者仍应实现相同物理方程和边界含义。</p>
+<h2>各环节的实际加速</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>已实现</th>
+<th>仍可能成为瓶颈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VMEC/壁预处理</td>
+<td>向量化、共享插值、线程库、可分配几何任务</td>
+<td>非线性反解、几何判断及根进程工作</td>
+</tr>
+<tr>
+<td>初始 casing 场</td>
+<td>全周期源缓存、批量目标、JAX CPU/GPU、MPI 分块</td>
+<td>近边界自适应面板、CPU 控制、内存带宽</td>
+</tr>
+<tr>
+<td>初始离散投影</td>
+<td>FFT/分离算子避免大稠密全空间矩阵</td>
+<td>CPU 根进程求解与广播</td>
+</tr>
+<tr>
+<td>Step-A</td>
+<td>FSAL、自适应批处理、MPI 起点分配、设备并行</td>
+<td>长/短磁力线负载不均，壁附近退步</td>
+</tr>
+<tr>
+<td>Step-B</td>
+<td>JIT 内循环、低存储 RKG、缓冲复用、分片通信</td>
+<td>wall 每阶段约束求解与通信</td>
+</tr>
+<tr>
+<td>s 标签</td>
+<td>排序和累积和代替层数×网格全扫描</td>
+<td>根进程统计/广播</td>
+</tr>
+<tr>
+<td>磁轴</td>
+<td>热启动、共享场插值</td>
+<td>周期固定点仍有串行部分</td>
+</tr>
+<tr>
+<td>NetCDF</td>
+<td>根进程写、可调保存/压缩频率</td>
+<td>压缩、网络文件系统与完整 3D 场体量</td>
+</tr>
+<tr>
+<td>数值后处理</td>
+<td>JAX/GPU 采样/导数、MPI 独立种子</td>
+<td>拓扑判断、磁面求积、根进程写入</td>
+</tr>
+<tr>
+<td>Notebook</td>
+<td>可使用 JAX/GPU 数值路径</td>
+<td>Matplotlib CPU；普通调用不自动启动 MPI</td>
+</tr>
+</tbody>
+</table></div>
+<p>当前程序不是“每一个 Python 循环都 OpenMP 化”。NumPy/BLAS/OpenMP 库线程与 MPI 是不同层次：前者通常共享内存，后者为进程间通信，可跨节点；二者可混合，错误叠加会造成超额线程竞争。</p>
+<h2>自动分配与约束</h2>
+<p>程序参考 CPU affinity、cgroup 和调度环境控制线程预算。MPI 主程序多 rank 路径要求 JAX；分片网格根据可分解的 R/Z/φ 维度和设备资源构造，不合适时可能出现多余副本并警告。增加 rank 不保证加速。</p>
+<p>GPU 通常按一 rank 一设备绑定，避免多个进程重复抢同一设备。多节点必须由 OpenMPI/MPICH 或调度系统实际启动，pip 安装 mpi4py 不会自己创建跨节点作业。</p>
+<p>多进程 JAX 初始化要求与当前分片实现兼容的常量提升行为。CLI 会设置需要的 <code>JAX_USE_SIMPLIFIED_JAXPR_CONSTANTS=true</code>；自写 Python 入口应在导入 JAX 前设置。源码有能力检查，不应只依据最低依赖版本就假定某个旧 JAX 支持全部多机路径。</p>
+<p>后处理 MPI 按种子分配，<strong>每个 rank 可能保留整个输入场</strong>；不能把它当作自动降低单 rank 内存的域分解。wall 阶段投影和一些全局归约使其并行扩展规律不同于 debug。</p>
+<h2>性能测量的正确方式</h2>
+<p>分别记录首次 JIT 编译、VMEC 初始化、每步 Step-A/Step-B、轴/标签处理和 I/O。GPU 异步执行须同步后计时，否则只测到提交开销。总耗时不能简单用 Step-A+Step-B 代替。</p>
+<p>本次文档制作没有重新测量吞吐量，也不把旧 NCSX 单机数据推广为所有设备/多节点性能保证。合理的并行设置不应牺牲边界约束、积分容差或双精度来制造表面加速。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/backend.py#L1">硬件后端</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/parallel.py#L1">MPI/线程管理</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/docs/EXECUTION.md#L1">wall 执行说明</a>。</p></section><section class="chapter" id="output" data-title="NetCDF 与 IPO 管理"><h1>NetCDF 与 IPO 管理</h1>
+<h2>输入 → 过程 → 输出</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>任务</th>
+<th>输入</th>
+<th>输出</th>
+<th>是否需要外部 wout/mgrid/壁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>initial</td>
+<td>main.toml + wout.nc + mgrid.nc + 壁文本</td>
+<td>一个统一 equilibrium.nc + stdout 日志</td>
+<td>都需要</td>
+</tr>
+<tr>
+<td>follow</td>
+<td>follow.toml + 已有统一结果</td>
+<td>向同一文件追加完整状态</td>
+<td>不需要；使用内嵌准备数据</td>
+</tr>
+<tr>
+<td>数值后处理 CLI</td>
+<td>post.toml + 统一结果</td>
+<td>独立 analysis.nc</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>Notebook 绘图</td>
+<td>统一结果 + Python 调用</td>
+<td>PNG/PDF/SVG，可取得返回数组</td>
+<td>VMEC 叠加需 wout；不需 mgrid/壁文本</td>
+</tr>
+</tbody>
+</table></div>
+<p>3 个旧预处理程序已整合进 initial。用户不再手工衔接 flx/vac/lim 三个输出，也不再以旧 NAMELIST 作为新版输入。后处理 TOML 配置的是数值分析内容；它不是所有 Notebook 绘图参数的序列化文件。</p>
+<h2>统一文件 schema 7</h2>
+<p>版本有各自 schema 属性：<code>hint_debug_python_schema</code> / <code>hint_wall_python_schema</code>。以下是数据布局重点；精确字段、属性和单位应以文件自身及 storage.py 为准。</p>
+<pre><code class="language-text">/
+  R, Z, phi, nfp
+  B_reference, length_reference, density_reference, alfven_time_reference
+  preprocess/
+    initial_response_B          # VMEC 起点时保存；T
+    flux/norm_s_initial
+    vacuum/B                   # 固定背景场；T
+    wall/inside, signed_distance, normal
+    profiles/pressure_s, pressure, current_s, current_shape
+    profiles/total_toroidal_current
+  equilibrium/
+    time, outer_step, record_complete
+    B, velocity, pressure, norm_s
+    pressure_scale, pressure_ramp_step
+    axis_seed_R, axis_seed_Z, axis_seed_valid
+    solver_configuration
+    stepb_diagnostics/
+      time, outer_step, inner_step, sample_complete
+      kinetic_energy, response_magnetic_energy, force_max, force_rms
+      divb_max, divb_rms, boundary_bn_max, boundary_velocity_max
+      force_volume_rms, divb_volume_rms, parallel_pressure_volume_rms
+</code></pre>
+<p><code>equilibrium/B</code> 的含义需特别注意：<strong>保存的是总场 B₀+B₁</strong>；减去 <code>preprocess/vacuum/B</code> 才得到响应 B₁。向量字段形状为 (time,R,Z,phi,component)，分量序 R,phi,Z。p 单位 Pa，速度 m/s，B 单位 T，<code>norm_s</code> 无量纲。<code>time</code> 是归一化弛豫时间；乘根组 <code>alfven_time_reference</code> 得到换算的弛豫秒数。绘图 API 的变量字符串 <code>s</code> 对应文件内 <code>norm_s</code>，不要混淆。</p>
+<p>轴热启动坐标是归一化求解器元数据，不应未经标度直接当作 m；绘图 API 负责使用正确换算。Step-B 标量诊断是归一化量，不因三维数组采用 SI 就自动成为 SI。</p>
+<p><code>preprocess/vacuum</code> 属性包括 mgrid 模式、合成规则、未限幅最大值、磁轴参考、限幅阈值/点数和散度诊断。<code>preprocess/wall</code> 包含周期/对称性、几何余量与来源。<code>initial_response_B</code> 是后续和 follow 的冻结法向参考，不可当作每步应重置的场。</p>
+<p>根组/配置字符串含溯源信息，不要只复制一个 B 数组当作完整可续算文件。主结果内可能存在空的历史兼容 <code>/postprocess</code> 组；新版 CLI 的结果在另一个 analysis.nc 中。</p>
+<h2>analysis.nc</h2>
+<p>数值后处理按内容写入独立文件，包含采样几何、壁信息和 <code>/postprocess/&lt;内容&gt;/run_*</code> 结果。重复分析不直接覆盖输入平衡；每次 run 的完整标志和 latest_run 记录用于识别有效结果。追加时检查来源文件与几何一致性，不能把不同算例悄悄混入一个 analysis.nc。</p>
+<p>分析文件当前使用 <code>hint_analysis_schema=1</code>，根组含 R、Z、phi、nfp 和 <code>source_equilibrium</code>；壁距离场在 <code>/geometry/wall/signed_distance</code>。它不是主程序 schema 7 checkpoint，不能将 analysis.nc 当作 follow 输入。</p>
+<p>fields 的壁外采样约定为 −1；导数量还提供有效节点掩膜。其他结果可使用 NaN/状态码标识失败。统计时必须尊重 mask/status，不能把 −1 当成真实负场强或把失败轨迹当成零旋转变换。</p>
+<h2>存储成本与安全</h2>
+<p>单个 3D 标量 double 原始大小约 <code>8*nr*nz*ntor</code> 字节，矢量为三倍；保存 B、v、p、s 每状态约 8 个标量场，还需坐标/元数据/压缩开销。历史文件大小随保存次数增长，压缩率取决于数据，不是固定保证。</p>
+<p>用 <code>save_every</code> 控制完整状态间隔、<code>diagnostics_every</code> 控制标量密度；关闭标量存储会丢失内部步历史。不要仅为释放空间删除仍用于 follow 的唯一结果。异地备份应在完整状态或稳定副本上操作。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/storage.py#L1">统一存储</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/postprocess/analysis_store.py#L1">独立分析存储</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/postprocess/pipeline.py#L1">后处理流程</a>。</p></section><section class="chapter" id="diagnostics" data-title="收敛性与平均方式"><h1>收敛性与平均方式</h1>
+<h2>先确定量、区域和时刻</h2>
+<p>同名“RMS”可能不是同一个统计。比较两版本、原版日志或不同图片前，应固定：B₁还是总 B、SI 还是归一化、矩形域还是壁内、是否排除差分无效节点、每内步还是完整保存态、点平均还是体平均。</p>
+<p>令有效节点集合为 Ω，柱坐标体元权重 w_i=R_i ΔR ΔZ Δφ：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mover><mi>f</mi><mo accent="true">&#x02015;</mo></mover><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>&#x0003D;</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munder><mo>&#x02211;</mo><mi>i</mi></munder><msub><mi>f</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>f</mi><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mo>&#x0002C;</mo><mi mathvariant="normal">p</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>&#x0003D;</mo><msqrt><mrow><mfrac><mn>1</mn><mi>N</mi></mfrac><msub><mo>&#x02211;</mo><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>f</mi><mi>i</mi></msub><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup></mrow></msqrt><mo>&#x0002C;</mo></mrow></math></div>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>&#x027E8;</mi><mi>f</mi><msub><mi>&#x027E9;</mi><mi>V</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><msub><mi>f</mi><mi>i</mi></msub></mrow><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub></mrow></mfrac><mo>&#x0002C;</mo><mspace width="1em" /><msub><mi>f</mi><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">M</mi><mi mathvariant="normal">S</mi><mo>&#x0002C;</mo><mi mathvariant="normal">V</mi></mrow></msub><mo>&#x0003D;</mo><msqrt><mrow><mfrac><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>f</mi><mi>i</mi></msub><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup></mrow><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub></mrow></mfrac></mrow></msqrt><mo>&#x0002E;</mo></mrow></math></div>
+<p>绝对平均是对 |f| 求平均，有符号平均可能正负抵消；RMS 与最大绝对值则不会。三者不能互换。统计极值不加体积权重。</p>
+<h2>Step-B 诊断</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>定义/解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kinetic_energy</td>
+<td>归一化体积分 1/2 ∫v² dV</td>
+</tr>
+<tr>
+<td>response_magnetic_energy</td>
+<td>归一化体积分 1/2 ∫B₁² dV；不是总场能量</td>
+</tr>
+<tr>
+<td>force_max / force_rms</td>
+<td>F=J₁×B−grad p 的最大模 / 点 RMS，不含黏性和预条件因子</td>
+</tr>
+<tr>
+<td>divb_max / divb_rms</td>
+<td>div B₁ 最大绝对值 / 点 RMS；不是 div B₀ 或总场</td>
+</tr>
+<tr>
+<td>force_volume_rms / divb_volume_rms</td>
+<td>上述量的 R 加权体 RMS</td>
+</tr>
+<tr>
+<td>parallel_pressure_volume_rms</td>
+<td>b·grad p 的体 RMS</td>
+</tr>
+<tr>
+<td>boundary_bn_max</td>
+<td>相对冻结法向参考的最大边界误差，不是绝对 Bn</td>
+</tr>
+<tr>
+<td>boundary_velocity_max</td>
+<td>适用边界上的速度模最大值</td>
+</tr>
+</tbody>
+</table></div>
+<p>debug 的常规内域诊断排除矩形保护层，包含数值壁外区；wall 在其有效内域统计。因此同网格两版本的诊断范围也可能不同。实际 mask 由相应算子决定。</p>
+<p>内部最后一步诊断可能发生在外迭代末尾轴压反馈之前；保存态压力可能已反馈。<code>scale_after=false</code> 不再有该压力倍率，但重新计算导数、掩膜及 SI 换算仍可造成差异。</p>
+<h2>相对力残差</h2>
+<p>绘图的局域相对量为：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>&#x003F5;</mi><mi>F</mi></msub><mo stretchy="false">&#x00028;</mo><mi mathvariant="bold">x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mo stretchy="false">&#x0007C;</mo><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>p</mi><mo stretchy="false">&#x0007C;</mo></mrow><mrow><mo>max</mo><mo stretchy="false">&#x00028;</mo><mo stretchy="false">&#x0007C;</mo><msub><mi mathvariant="bold">J</mi><mn>1</mn></msub><mo>&#x000D7;</mo><mi mathvariant="bold">B</mi><mo stretchy="false">&#x0007C;</mo><mo>&#x0002C;</mo><mo stretchy="false">&#x0007C;</mo><mo>&#x02207;</mo><mi>p</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x00029;</mo></mrow></mfrac><mo>&#x0002E;</mo></mrow></math></div>
+<p>在分母有效时范围为 [0,2]。两项同时低于相对数值门槛时掩膜，而不是人为给小分母制造很大的比值。它与“所有点绝对残差 RMS 再除全局梯度 RMS”不同：</p>
+<div class="equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>&#x003F5;</mi><mrow><mi>F</mi><mo>&#x0002C;</mo><mi mathvariant="normal">g</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>&#x0003D;</mo><msqrt><mrow><mfrac><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>R</mi><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>F</mi><mi>i</mi></msub><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup></mrow><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>R</mi><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><mo>&#x02207;</mo><msub><mi>p</mi><mi>i</mi></msub><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup></mrow></mfrac></mrow></msqrt><mo>&#x0002E;</mo></mrow></math></div>
+<p>后一式是另一种可解释的归一化，不能把当前 <code>force_rms</code> 自动称为这个比值。局域相对图在低压真空附近往往无定义，不宜据此说真空不平衡极大。</p>
+<h2>磁场散度解读</h2>
+<p>保存态可分别计算 D·B₀、D·B₁、D·(B₀+B₁)。相同线性算子下三者相加关系成立，但插值、掩膜、采样网格改变会影响数值。B₁ 的舍入级散度不能消除 B₀ 的限幅/插值散度。</p>
+<p>fields/MAGVAL 类输出用 T/m，其相对最大散度指标还乘特征域尺度再除最大场强；这不是 Step-B 的 B_ref/L_ref 归一化。没有给出离散精度、网格和场梯度时，不存在对所有 mgrid 都必须满足的绝对 10⁻¹⁰ 阈值。</p>
+<h2>如何判断趋于平衡</h2>
+<p>同时观察力残差、平行压力梯度、速度/动能、响应能量、散度和边界误差，结合晚期变化趋势。v 变化很小只说明近稳态，不说明 v 已趋零；固定非零流速也可能与残余力/耗散平衡。单一残差小也可能来自压力整体衰减，需一起看轴压/峰值及目标剖面。</p>
+<p>对 signed 分量使用线性或 symlog；严格非负且跨数量级量适合 log。包含零或舍入噪声的曲线不要偷偷加偏移量。zero 攀升可在第 N 外迭代画垂线；vmec 无攀升，不应套用“第 20 步攀升结束”标记。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/solver/step_b.py#L1">Step-B 统计</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/postprocess/quantities.py#L1">后处理量</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/postprocess/hint_debug_plotting/data.py#L1">绘图数据</a>。</p></section><section class="chapter" id="postprocess" data-title="后处理与 Notebook"><h1>后处理与 Notebook</h1>
+<h2>数值 CLI 按内容分类</h2>
+<p>后处理读取统一结果，<code>selection.record=-1</code> 默认选择最后完整状态；<code>requested_time</code> 提供时选最近完整时间，不做状态插值。至少启用一个内容。</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>TOML 表</th>
+<th>内容</th>
+<th>关键限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fields</td>
+<td>场采样、导数与磁场指标</td>
+<td>壁外 −1；导数有效区需额外掩膜</td>
+</tr>
+<tr>
+<td>force_balance</td>
+<td>力平衡、梯度、电流等</td>
+<td>使用响应电流与当前总场；不是重复读初始源项</td>
+</tr>
+<tr>
+<td>magnetic_axis</td>
+<td>当前场磁轴</td>
+<td>保存轴作热启动，并重新验证闭合</td>
+</tr>
+<tr>
+<td>field_lines</td>
+<td>普通弧长磁力线及兼容边界模式</td>
+<td>线性 R–Z 起点序列</td>
+</tr>
+<tr>
+<td>poincare</td>
+<td>周期截面交点</td>
+<td>一个场周期，不是每步都输出完整环向圈</td>
+</tr>
+<tr>
+<td>flux_surfaces</td>
+<td>可解析磁面的积分量</td>
+<td>散布/积分精度不合格需保留失败状态</td>
+</tr>
+<tr>
+<td>boundary_trace</td>
+<td>边界曲线追踪</td>
+<td>内部固定 mode=vmec；名字不表示调用 VMEC 求解器</td>
+</tr>
+<tr>
+<td>convergence</td>
+<td>保存的 Step-B 历史</td>
+<td>无法恢复没有存储的内部诊断</td>
+</tr>
+</tbody>
+</table></div>
+<p>旧 <code>magval/gprts/hmag</code> 分别是 <code>fields/force_balance/field_lines</code> 的兼容别名，同一输入不能同时给新旧表。共有 HMAGConfig 中某些参数被内容分支覆盖或不使用，完整参数表逐项说明，不建议把所有公共字段都复制到每个表。</p>
+<p>追踪圈数的接口差异：CLI <code>flux_surfaces.surface_circuits</code> 按完整 2π 环向圈计，源码乘 nfp 扩展到场周期；CLI <code>poincare.boundary_points</code> 和 Notebook <code>crossings</code> 按场周期回归计。三个量不能直接等值替换。</p>
+<h2>Python 绘图入口</h2>
+<pre><code class="language-python">from hint_debug_plotting import HintPlots, variable_catalog
+
+plots = HintPlots(
+    &quot;run/equilibrium.nc&quot;,         # 稳定结果或安全副本
+    wout=&quot;inputs/wout_case.nc&quot;,    # 可选；叠加 VMEC 时必需
+    outer_step=100,               # 可省略，使用最后完整状态
+    backend=&quot;cpu&quot;, engine=&quot;jax&quot;,
+)
+print(variable_catalog())
+</code></pre>
+<p>wall 使用 <code>hint_wall_plotting</code>。<code>outer_step</code> 与 <code>record</code> 不可同时给出；record 是保存记录序号，不是步号。构造对象不会启动主程序，不修改结果。传入的 wout 需同一算例、周期与对称性一致；仅凭 nfp 匹配仍不能替代用户确认正确文件。</p>
+<h3>二维截面</h3>
+<pre><code class="language-python">figure = plots.sections(
+    &quot;pressure&quot;, levels=48, contour_lines=12,
+    vmec_surfaces=(0, .25, .5, .75, 1),
+)
+figure.save(&quot;figures/pressure.png&quot;, dpi=300)
+plots.sections(&quot;force_residual_relative&quot;).save(&quot;figures/relative_force.png&quot;, dpi=300)
+</code></pre>
+<p>默认截面 φ=0、π/(2nfp)、π/nfp，纵向排列，contourf+contour、统一色标、壁与矩形边界。角度是弧度。非对称算例也保留这一默认值，查看整周期需显式改 angles。LCFS 是<strong>初始 VMEC 边界</strong>，不是演化后的 s=1 平台。</p>
+<p><code>show_lcfs=true</code> 需 wout；默认叠加 VMEC 磁轴、三张内部面与 LCFS。壁来自保存的距离场零等值线，不要求再次读取壁文本。不存在可比 VMEC 量时不伪造速度/残差参考。</p>
+<h3>一维剖面和时间曲线</h3>
+<pre><code class="language-python">plots.profiles(&quot;pressure&quot;, coordinate=&quot;s&quot;, bins=50).save(&quot;figures/p_s.png&quot;, dpi=300)
+plots.profiles(&quot;toroidal_current_density&quot;, coordinate=&quot;R&quot;, z_m=0.0)
+plots.profiles(&quot;field_strength&quot;, coordinate=&quot;Z&quot;, r_m=1.5)
+plots.profiles(&quot;speed&quot;, coordinate=&quot;phi&quot;, r_m=1.5, z_m=0.0)
+plots.time_series([&quot;force_rms&quot;, &quot;divb_rms&quot;, &quot;kinetic_energy&quot;], scale=&quot;auto&quot;)
+plots.time_series(&quot;speed&quot;, reduction=&quot;mean&quot;, scope=&quot;wall&quot;)
+</code></pre>
+<p>示例 R/Z 位置必须按装置调整。R/Z 剖面是指定物理线上的采样；φ 剖面覆盖一个场周期，不能再同时给 angles。矢量先插值分量再求模/投影，避免把模的插值误当矢量插值。</p>
+<p>s/ρ 剖面用保存的演化标签，按截面<strong>等面积</strong>分箱，显示平均与箱内标准差，不是体平均或严格磁面平均；ρ=sqrt(s)，分箱仍均匀于 s，s=1 外侧桶排除。±标准差不是数值误差棒。点数不足的箱不强行插值补齐。</p>
+<p>wout 压力参考用原始 presf；无 wout 时可用内嵌的缩放后目标压力作有限参考。s 图两套曲线分别用自己的标签，不宣称 HINT s 与 VMEC s 为同一磁面；R/Z/φ 参考在相同实空间位置独立反解 VMEC，不外推到 LCFS 外。</p>
+<p><code>toroidal_current_density</code> 是点值 J₁φ，A/m²；<code>toroidal_current</code> 是标签阈值内 ∫J₁φ dR dZ，A。VMEC 对比用其完整场导数/安培环路积分，不把 jcurv 当局部 Jφ，也不为强行匹配 ctor 再缩放曲线。</p>
+<h3>庞加莱</h3>
+<pre><code class="language-python">result = plots.poincare(crossings=256, toroidal_steps=128)
+result.save(&quot;figures/poincare.png&quot;, dpi=300)
+</code></pre>
+<p>可通过 <code>poincare_data</code> 指定种子和更长追踪，再传 <code>data=</code> 重画。有效种子位于第一壁内，不受初始 LCFS 限制；扩大种子范围/加密可显示外侧磁岛，但空白可能是出壁、奇异积分或取样不足，不应人工连接成磁面。启动种子不冒充回归交点。</p>
+<h3>旋转变换 iota</h3>
+<pre><code class="language-python">data = plots.rotational_transform_data(
+    seed_s=[.02, .1, .2, .4, .6, .8, .95, .99],
+    crossings=256, toroidal_steps=128,
+    rtol=1e-8, atol=1e-10,
+    convergence_tolerance=.002, surface_tolerance=.02,
+)
+plots.rotational_transform(data=data, coordinate=&quot;s&quot;)
+</code></pre>
+<p>先在<strong>当前磁场</strong>定位磁轴，再连续追踪、展开相对磁轴的极向角，计算长程 Δθ/Δφ，并转换到 VMEC 的角向约定。使用密集自适应 RK4 步长加倍，而非仅凭稀疏庞加莱点 unwrap，以免角度混叠。</p>
+<p>默认 32 个初始 VMEC s∈[0.02,0.98]，每个 s、每个环向截面用一个 θ=0 起点。是<strong>同一条磁力线的长程绕转平均</strong>，不是同 s 多起点平均。可加密 seed_s；但随机区里长程绕转存在也不意味着严格磁面存在。</p>
+<p>返回有限长度前后半段一致性、角度分辨、表面散布等标志；未通过的有限值用区别标记，失败值掩膜。坐标轴默认 HINT 的起点演化 s/ρ；不能误标为初始 seed_s。独立的 NCSX 结果网站会说明该次加密扫描的特别参数。</p>
+<h2>输出和变量</h2>
+<p>各绘图方法返回 <code>PlotResult(figure, axes, data)</code>，<code>.save()</code> 支持 PNG/PDF/SVG；不用图时也可读取 field/section/line/point/temporal。Notebook <strong>不自动创建 analysis.nc</strong>。绘图可用变量名、单位和适用功能由源码自动提取在下方变量索引中。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/postprocess/hint_debug_plotting/plots.py#L1">绘图 API</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/postprocess/hint_debug_plotting/variables.py#L1">变量</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/postprocess/hint_debug_plotting/rotational_transform.py#L1">iota</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/postprocess/hint_debug_plotting/vmec_reference.py#L1">VMEC 对比</a>。</p></section><section class="chapter" id="validation" data-title="合法性、诊断与局限"><h1>合法性、诊断与局限</h1>
+<h2>运行前应能解释的检查</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>检查</th>
+<th>应采取的动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未知 TOML key / 类型错误</td>
+<td>修正拼写和类型；布尔值是 true/false，不是字符串或 0/1</td>
+</tr>
+<tr>
+<td>nfp / 对称性不一致</td>
+<td>统一 wout、壁、真空场，不能关闭检查掩盖错配</td>
+</tr>
+<tr>
+<td>LCFS 穿壁 / 壁超出矩形域</td>
+<td>调整真实几何或合理扩大数据/计算范围，不在无数据处外推</td>
+</tr>
+<tr>
+<td>网格/谐波点数不足</td>
+<td>增加离散点；只满足最小点数不代表分辨率充分</td>
+</tr>
+<tr>
+<td>RAW 电流参考非法</td>
+<td>复核 raw_coil_cur 与实际 extcur_a；不得重复乘电流</td>
+</tr>
+<tr>
+<td>磁轴闭合残差大</td>
+<td>核对种子、当前磁结构、积分/网格精度；容差放宽不等于问题消失</td>
+</tr>
+<tr>
+<td>初始化投影改变量大</td>
+<td>同时检查 wout/B₀一致性、近表面积分和边界参考</td>
+</tr>
+<tr>
+<td>Step-B 非有限或快速增大</td>
+<td>停止把它当健康运行；检查时间步、空间导数、边界、源项和日志</td>
+</tr>
+<tr>
+<td>iota/磁面追踪失败</td>
+<td>保留状态，扩大/改进采样需有物理理由，不强制插值成平滑曲线</td>
+</tr>
+</tbody>
+</table></div>
+<p>程序会对部分可改善但不完美的求解给警告和最优有效结果，对非法输入/明显违反约束则拒绝。容错不意味着可以忽略精度诊断，也不应让所有小警告都变成物理失效判断。</p>
+<h2>本手册的验证范围</h2>
+<p>本次建立文档时核对两版当前源码、参数默认值、调用分支、文件字段、例子及已有测试说明；对网站执行参数覆盖、链接/公式、构建可复现和桌面/移动浏览检查。<strong>未在本次重新运行 MHD 算例、扫参、GPU 基准或跨节点验证。</strong> 不作“已证明不存在 bug”或“所有平衡均收敛”的声明。</p>
+<p>库中的 tests 包含离散算子、边界、重启、源项、I/O、执行后端及后处理契约等回归测试。测试通过只能支持其覆盖的条件；复杂三维物理正确性还需要网格/时间步/边界收敛研究和独立平衡比较。</p>
+<h2>需要保留的限制</h2>
+<ul>
+<li>固定背景场的有限差分散度可非零，线圈场限幅会改变原物理解；响应场投影不替它修正。</li>
+<li>规则内域高阶差分不保证浸入曲壁整体同阶精度。</li>
+<li>松弛模型未包含完整能量/质量方程，数值时间和速度不能直接作为实验输运量。</li>
+<li>压力重建标签不保证严格磁面，不能把所有 s 图当作磁面平均。</li>
+<li>理想壁冻结初始法向磁通，与有限电阻壁、无限真空边界、真实耗散壁不是一回事。</li>
+<li>VMEC 初始化非零冻结磁通与 zero 初始化边界状态不同；比较结果时要注明。</li>
+<li>加速能力不等于已验证所有设备和多节点拓扑，资源超额分配可能更慢。</li>
+</ul>
+<h2>源码地图</h2>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>入口</th>
+<th>责任</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>config.py / cli.py</td>
+<td>TOML 严格解析、默认值、命令行</td>
+</tr>
+<tr>
+<td>pipeline.py / model.py</td>
+<td>准备、归一化、运行选择和状态类型</td>
+</tr>
+<tr>
+<td>preprocess/</td>
+<td>VMEC、mgrid、壁、casing 与初始无散投影</td>
+</tr>
+<tr>
+<td>solver/equilibrium.py</td>
+<td>压力策略、轴热启动、外循环</td>
+</tr>
+<tr>
+<td>solver/step_a*.py / flux.py</td>
+<td>磁力线平均、演化标签</td>
+</tr>
+<tr>
+<td>solver/step_b.py / numerics.py</td>
+<td>RKG、差分、源电流、滤波、诊断</td>
+</tr>
+<tr>
+<td>solver/box.py（debug）</td>
+<td>矩形边界</td>
+</tr>
+<tr>
+<td>solver/wall.py / divergence.py（wall）</td>
+<td>浸入壁延拓、相容伴随/散度约束</td>
+</tr>
+<tr>
+<td>parallel.py / backend.py</td>
+<td>线程预算、MPI/JAX、CPU/GPU</td>
+</tr>
+<tr>
+<td>storage.py / postprocess/analysis_store.py</td>
+<td>主结果和分析文件事务标记</td>
+</tr>
+<tr>
+<td>postprocess/ 与可安装 plotting 包</td>
+<td>数值后处理、变量/绘图接口</td>
+</tr>
+</tbody>
+</table></div>
+<h2>参考与版本维护</h2>
+<p>模型背景：<a href="https://doi.org/10.1088/0029-5515/46/11/L01">Suzuki 等，Nuclear Fusion 46 L19 (2006)</a>、<a href="https://doi.org/10.1088/1361-6587/aa5adc">Suzuki 等，PPCF 59 054008 (2017)</a>。VMEC 坐标/平衡背景：<a href="https://princetonuniversity.github.io/STELLOPT/VMEC">STELLOPT VMEC</a>。表面积分方法参考：<a href="https://github.com/hiddenSymmetries/virtual-casing">virtual-casing</a>。文献是原理依据，当前 Python 的分支、默认值和数值保护以本仓库为准。</p>
+<p>源码更新后重新运行 <code>Documents/tools/build_docs.py</code>。参数/类型/默认值直接从配置 AST 提取，手工含义缺失会令构建失败；示例从源码复制并记录 SHA-256。公式是构建时生成的 MathML，网站无 CDN 依赖。结果网站的数据来源和数字验收与程序手册分开维护。</p>
+<p>源码：<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/docs/VERIFICATION.md#L1">debug 验证说明</a>、<a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/docs/VERIFICATION.md#L1">wall 验证说明</a>。这些文件包含历史检查经过，不能将其中某次旧警告不加版本区分地当作当前状态。</p></section><section class="chapter" id="main-parameters" data-title="主程序参数全表"><h1>主程序参数全表</h1><p>默认值来自源码配置类；0/空值可能只是必填占位。默认值链接到对应定义行。条件不生效不一定意味着可以输入非法类型。TOML 的 None 表示省略该键。</p><div class="param-tools"><label>参数检索<input class="param-search" type="search" placeholder="名称、物理量、单位"></label><label>适用版本<select class="param-version"><option value="all">两个版本</option><option value="debug">HINT-debug</option><option value="wall">HINT-wall</option><option value="different">差异项</option></select></label><output class="param-count" aria-live="polite"></output></div><div class="table-scroll"><table class="parameters"><thead><tr><th scope="col">参数 / Python 类型</th><th scope="col">debug 默认</th><th scope="col">wall 默认</th><th scope="col">单位、适用条件与含义</th></tr></thead><tbody><tr data-version="debug wall" id="param-main-paths.output_file"><td><code>paths.output_file</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L105"><code>&quot;hint_debug.nc&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L105"><code>&quot;hint_wall.nc&quot;</code></a></td><td><strong>.nc 路径</strong><p>主程序统一结果文件。initial 会创建/重建该文件；follow 从该文件读取最后完整状态并向同一文件追加。不得与其他运行共用写入路径。</p></td></tr><tr data-version="debug wall" id="param-main-paths.vmec_wout"><td><code>paths.vmec_wout</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L106"><code>&quot;&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L106"><code>&quot;&quot;</code></a></td><td><strong>.nc 路径</strong><p>initial 必需：VMEC wout 几何、平衡场与剖面。空字符串不是可运行输入。follow 不需要外部 wout。</p></td></tr><tr data-version="debug wall" id="param-main-paths.mgrid"><td><code>paths.mgrid</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L107"><code>&quot;&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L107"><code>&quot;&quot;</code></a></td><td><strong>.nc 路径</strong><p>initial 必需：覆盖整个计算矩形域的 mgrid，含各组线圈场。follow 使用结果文件保存的背景场。</p></td></tr><tr data-version="debug wall" id="param-main-paths.vessel"><td><code>paths.vessel</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L108"><code>&quot;&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L108"><code>&quot;&quot;</code></a></td><td><strong>.txt / .dat 路径</strong><p>initial 必需：HINT_WALL 1 壁文本。不是 MKLIM 的旧 .nc 文件。follow 使用结果内嵌的壁几何。</p></td></tr><tr data-version="debug wall" id="param-main-grid.nr"><td><code>grid.nr</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L113"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L113"><code>0</code></a></td><td><strong>整数，至少 6</strong><p>R 方向等间距节点数，包含矩形域两端。默认 0 是待填写占位值，不表示自动选择。</p></td></tr><tr data-version="debug wall" id="param-main-grid.nz"><td><code>grid.nz</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L114"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L114"><code>0</code></a></td><td><strong>整数，至少 6</strong><p>Z 方向等间距节点数，包含两端。四阶中心差分需要五点，程序还要求额外一个点。</p></td></tr><tr data-version="debug wall" id="param-main-grid.ntor"><td><code>grid.ntor</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L115"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L115"><code>0</code></a></td><td><strong>整数，至少 6</strong><p>一个完整场周期的等间距环向节点数，不重复终点；还必须严格大于 VMEC 最高环向谐波序数的两倍。不是场周期数。</p></td></tr><tr data-version="debug wall" id="param-main-grid.nfp"><td><code>grid.nfp</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L116"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L116"><code>0</code></a></td><td><strong>整数，至少 0</strong><p>场周期数。0 从 wout 自动取得；显式非零值必须与 wout 和壁一致。</p></td></tr><tr data-version="debug wall" id="param-main-grid.r_min"><td><code>grid.r_min</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L117"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L117"><code>0.0</code></a></td><td><strong>m</strong><p>矩形计算域 R 下界，必须大于 0；与其他边界共同严格包围第一壁。</p></td></tr><tr data-version="debug wall" id="param-main-grid.r_max"><td><code>grid.r_max</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L118"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L118"><code>0.0</code></a></td><td><strong>m</strong><p>矩形计算域 R 上界，必须大于 r_min；mgrid 必须覆盖。</p></td></tr><tr data-version="debug wall" id="param-main-grid.z_min"><td><code>grid.z_min</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L119"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L119"><code>0.0</code></a></td><td><strong>m</strong><p>矩形计算域 Z 下界，必须小于 z_max。</p></td></tr><tr data-version="debug wall" id="param-main-grid.z_max"><td><code>grid.z_max</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L120"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L120"><code>0.0</code></a></td><td><strong>m</strong><p>矩形计算域 Z 上界；壁外还需满足 minimum_exterior_layers 的离散余量。</p></td></tr><tr data-version="debug wall" id="param-main-flux.ntheta"><td><code>flux.ntheta</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L137"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L137"><code>0</code></a></td><td><strong>整数，0 自动</strong><p>VMEC 极向几何采样点数。0 使用 2*mpol+6；显式设置须满足几何采样要求，包含周期端点。不是演化网格数量。</p></td></tr><tr data-version="debug wall" id="param-main-flux.inverse_tolerance_m"><td><code>flux.inverse_tolerance_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L138"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L138"><code>1e-08</code></a></td><td><strong>m，正数</strong><p>柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。</p></td></tr><tr data-version="debug wall" id="param-main-flux.max_inverse_iterations"><td><code>flux.max_inverse_iterations</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L139"><code>500</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L139"><code>500</code></a></td><td><strong>正整数</strong><p>单点 VMEC 坐标非线性反解的最大迭代次数。</p></td></tr><tr data-version="debug wall" id="param-main-vacuum.enforce_stellarator_symmetry"><td><code>vacuum.enforce_stellarator_symmetry</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L144"><code>true</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L144"><code>true</code></a></td><td><strong>布尔值</strong><p>对背景场施加与 VMEC 一致的仿星器对称性。非对称 wout 必须设 false；不能用 true 将非对称平衡随意对称化。</p></td></tr><tr data-version="debug wall" id="param-main-vacuum.extcur_a"><td><code>vacuum.extcur_a</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L146"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L146"><code>[]</code></a></td><td><strong>A，数值数组</strong><p>各 mgrid 线圈组的实际电流，长度必须等于组数。S 模式直接乘组场；R 模式先除 raw_coil_cur 再乘组场。两种模式输入都不是无量纲倍率。</p></td></tr><tr data-version="debug wall" id="param-main-vacuum.field_scale"><td><code>vacuum.field_scale</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L147"><code>1.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L147"><code>1.0</code></a></td><td><strong>无量纲</strong><p>合成背景场的整体倍率。不会同步改变 VMEC 平衡和压力，因此偏离 1 时需重新检查初始化一致性。</p></td></tr><tr data-version="debug wall" id="param-main-vacuum.max_field_axis_ratio"><td><code>vacuum.max_field_axis_ratio</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L148"><code>5.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L148"><code>5.0</code></a></td><td><strong>无量纲，至少 1</strong><p>极强真空场的上限倍数：参考为未限幅的 VMEC 磁轴位置真空场模。合成后的源 mgrid 场和插值到 HINT 的场均限幅，保持方向；此参考不等于主程序归一化 B_ref。</p></td></tr><tr data-version="debug wall" id="param-main-vacuum.interpolation"><td><code>vacuum.interpolation</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L149"><code>&quot;cubic&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L149"><code>&quot;cubic&quot;</code></a></td><td><strong>linear / cubic</strong><p>把各组电流合成后的 mgrid 磁场插值到 HINT 网格。控制的是空间插值，不是 VMEC 剖面插值。源网格需满足插值节点数要求。</p></td></tr><tr data-version="debug wall" id="param-main-wall.periodic_closure_rtol"><td><code>wall.periodic_closure_rtol</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L154"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L154"><code>1e-10</code></a></td><td><strong>无量纲，正数</strong><p>壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。</p></td></tr><tr data-version="debug wall" id="param-main-wall.minimum_exterior_layers"><td><code>wall.minimum_exterior_layers</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L155"><code>3</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L155"><code>3</code></a></td><td><strong>整数，至少 3</strong><p>第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.source"><td><code>profiles.source</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L168"><code>&quot;vmec&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L168"><code>&quot;vmec&quot;</code></a></td><td><strong>vmec / input</strong><p>vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用下面的两个剖面定义及 total_toroidal_current_a 替代。input.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.pressure_scale"><td><code>profiles.pressure_scale</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L169"><code>1.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L169"><code>1.0</code></a></td><td><strong>无量纲，非负</strong><p>准备阶段对目标压强的整体倍率。start_point=vmec 时必须为 1。与 solver.scale_after、文件内 pressure_scale 攀升进度不同。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.total_toroidal_current_a"><td><code>profiles.total_toroidal_current_a</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L170"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L170"><code>0.0</code></a></td><td><strong>A</strong><p>仅 source=input 时作为有符号总环向源电流目标；source=vmec 时使用 wout 总电流，不通过此值覆盖。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.pressure.kind"><td><code>profiles.pressure.kind</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L160"><code>&quot;power_series&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L160"><code>&quot;power_series&quot;</code></a></td><td><strong>power_series / line_segment</strong><p>仅 source=input 生效。power_series 使用升幂多项式；line_segment 使用分段线性表格。拼写是单数 line_segment。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.pressure.coefficients"><td><code>profiles.pressure.coefficients</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L161"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L161"><code>[]</code></a></td><td><strong>数值数组</strong><p>power_series 必填非空数组 [c0,c1,...]，f(s)=sum(c_n*s^n)。pressure 为 Pa；current 为 lambda(s) 的相对形状，最终按总电流归一化，不是 I(s) 的多项式。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.pressure.s"><td><code>profiles.pressure.s</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L162"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L162"><code>[]</code></a></td><td><strong>无量纲数组</strong><p>line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.pressure.values"><td><code>profiles.pressure.values</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L163"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L163"><code>[]</code></a></td><td><strong>数值数组</strong><p>line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.current.kind"><td><code>profiles.current.kind</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L160"><code>&quot;power_series&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L160"><code>&quot;power_series&quot;</code></a></td><td><strong>power_series / line_segment</strong><p>仅 source=input 生效。power_series 使用升幂多项式；line_segment 使用分段线性表格。拼写是单数 line_segment。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.current.coefficients"><td><code>profiles.current.coefficients</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L161"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L161"><code>[]</code></a></td><td><strong>数值数组</strong><p>power_series 必填非空数组 [c0,c1,...]，f(s)=sum(c_n*s^n)。pressure 为 Pa；current 为 lambda(s) 的相对形状，最终按总电流归一化，不是 I(s) 的多项式。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.current.s"><td><code>profiles.current.s</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L162"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L162"><code>[]</code></a></td><td><strong>无量纲数组</strong><p>line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。</p></td></tr><tr data-version="debug wall" id="param-main-profiles.current.values"><td><code>profiles.current.values</code><small>list[float]</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L163"><code>[]</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L163"><code>[]</code></a></td><td><strong>数值数组</strong><p>line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。</p></td></tr><tr data-version="debug wall" id="param-main-solver.mode"><td><code>solver.mode</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L205"><code>&quot;initial&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L204"><code>&quot;initial&quot;</code></a></td><td><strong>initial / follow</strong><p>initial 准备数据并建立新结果；follow 恢复已有完整状态。follow 的 outer_steps 是追加步数，不是最终外迭代编号。</p></td></tr><tr data-version="debug wall" id="param-main-solver.start_point"><td><code>solver.start_point</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L206"><code>&quot;zero&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L205"><code>&quot;zero&quot;</code></a></td><td><strong>zero / vmec</strong><p>zero 从零响应场和小压力开始；vmec 以完整 VMEC 压力及等离子体响应场开始且不攀升。follow 从 checkpoint 恢复，不能改起点语义。</p></td></tr><tr data-version="debug wall" id="param-main-solver.backend"><td><code>solver.backend</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L207"><code>&quot;cpu&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L206"><code>&quot;cpu&quot;</code></a></td><td><strong>cpu / gpu</strong><p>计算硬件选择。GPU 需要相应 CUDA/JAX 或 CuPy 环境；不会因为存在 GPU 而自动忽略 cpu 设置。</p></td></tr><tr data-version="debug wall" id="param-main-solver.engine"><td><code>solver.engine</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L208"><code>&quot;jax&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L207"><code>&quot;jax&quot;</code></a></td><td><strong>jax / native</strong><p>jax 使用双精度 JIT/批处理/分布式路径；native 为 NumPy/SciPy 或 CuPy 路径。主程序多 MPI rank 要求 jax。</p></td></tr><tr data-version="debug wall" id="param-main-solver.outer_steps"><td><code>solver.outer_steps</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L209"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L208"><code>1</code></a></td><td><strong>正整数</strong><p>本次调用执行的外迭代次数；每次含 Step-A 和一个 Step-B 内循环。follow 为新增次数。</p></td></tr><tr data-version="debug wall" id="param-main-solver.save_every"><td><code>solver.save_every</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L210"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L209"><code>1</code></a></td><td><strong>正整数</strong><p>外迭代完整三维场的保存间隔；本次调用最后一步也保存。与内部诊断记录间隔独立。</p></td></tr><tr data-version="debug wall" id="param-main-solver.pressure_ramp_iterations"><td><code>solver.pressure_ramp_iterations</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L211"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L210"><code>1</code></a></td><td><strong>正整数</strong><p>zero 起点将轴上压力目标由初始小值按几何比例提高到完整目标的外迭代步数。vmec 起点不使用攀升，但输入类型/正数检查仍执行。</p></td></tr><tr data-version="debug wall" id="param-main-solver.scale_after"><td><code>solver.scale_after</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L212"><code>true</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L211"><code>true</code></a></td><td><strong>布尔值</strong><p>true：攀升结束后每个外迭代仍用单一倍率维持目标轴上压力；false：结束后取消此反馈。vmec 从开始就视为攀升完成。不会冻结 s 或关闭轴搜索。</p></td></tr><tr data-version="debug wall" id="param-main-solver.axis_seed_r_m"><td><code>solver.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L213"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L212"><code>0.0</code></a></td><td><strong>m</strong><p>initial 磁轴定位的初始 R 猜测，须大于 0；follow 默认继承保存的热启动位置。不是固定磁轴。</p></td></tr><tr data-version="debug wall" id="param-main-solver.axis_seed_z_m"><td><code>solver.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L214"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L213"><code>0.0</code></a></td><td><strong>m</strong><p>磁轴初始 Z 猜测。随迭代由当前磁场重新定位。</p></td></tr><tr data-version="debug wall" id="param-main-solver.axis_residual_tolerance_scale"><td><code>solver.axis_residual_tolerance_scale</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L215"><code>1.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L214"><code>1.0</code></a></td><td><strong>正数</strong><p>磁轴周期闭合检查的容差倍率；增大可容忍更大闭合误差，不等于提高定位精度。follow 未给出时继承。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_a.max_step"><td><code>solver.step_a.max_step</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L177"><code>0.002</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L177"><code>0.002</code></a></td><td><strong>归一化长度，正数</strong><p>磁力线自适应积分的最大弧长步长，长度以 L_ref 归一化。减小提高采样能力但增加成本。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_a.trace_length"><td><code>solver.step_a.trace_length</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L178"><code>10.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L178"><code>10.0</code></a></td><td><strong>归一化长度，正数</strong><p>每个方向的最大追踪长度。正向和反向分别计算压力平均，失败方向贡献零。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_a.relative_tolerance"><td><code>solver.step_a.relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L179"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L179"><code>1e-08</code></a></td><td><strong>正数</strong><p>磁力线常微分方程积分的相对误差控制。不是最终平衡残差。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_a.absolute_tolerance"><td><code>solver.step_a.absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L180"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L180"><code>1e-10</code></a></td><td><strong>归一化状态容差，正数</strong><p>Step-A 自适应积分绝对误差控制；不同引擎使用不同积分阶数，容差不代表逐位一致。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.inner_steps"><td><code>solver.step_b.inner_steps</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L185"><code>1000</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L185"><code>1000</code></a></td><td><strong>正整数</strong><p>每次外迭代内磁场/流速 RKG 更新次数；p 和 s 在该内循环冻结。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.time_step"><td><code>solver.step_b.time_step</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L186"><code>0.001</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L186"><code>0.001</code></a></td><td><strong>归一化 Alfvén 时间，正数</strong><p>固定内部时间步。需满足网格、磁场及显式扩散稳定性，程序不保证任意设置均满足 CFL。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.resistivity"><td><code>solver.step_b.resistivity</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L187"><code>0.001</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L187"><code>0.001</code></a></td><td><strong>归一化电阻率，非负</strong><p>内部 eta0；电阻项为 curl[-eta*(J1-Jnet)]。换成 SI 的标度为 mu0*L_ref*v_ref。</p></td></tr><tr data-version="debug" id="param-main-solver.step_b.eta1"><td><code>solver.step_b.eta1</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L188"><code>0.0</code></a></td><td>不接受</td><td><strong>归一化电阻率，非负；仅 debug</strong><p>第一壁外至矩形边界的数值真空区电阻率。0 是继承 eta0 的哨兵值，不是无电阻真空；与 eta0 不同时平滑界面。wall 不接受此参数。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.viscosity"><td><code>solver.step_b.viscosity</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L189"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L188"><code>0.0</code></a></td><td><strong>归一化运动黏性，非负</strong><p>速度方程中柱坐标矢量拉普拉斯系数。SI 标度 L_ref*v_ref。默认 0，仍可能存在速度滤波的数值耗散。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.divb_diffusion"><td><code>solver.step_b.divb_diffusion</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L190"><code>0.0001</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L189"><code>0.0001</code></a></td><td><strong>归一化扩散系数，非负</strong><p>响应场散度清理系数。debug 用 grad(div B1)，wall 用相容的负伴随形式。不是物理电阻率，也不修正固定 B0。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.divergence_projection_iterations"><td><code>solver.step_b.divergence_projection_iterations</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L191"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L190"><code>200</code></a></td><td><strong>整数，非负</strong><p>可选全状态散度投影的迭代上限，0 关闭该可选步骤。debug 默认 0，wall 默认 200；wall 每个 RKG 阶段的增量约束仍强制执行，不能由 0 关闭。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.divergence_projection_tolerance"><td><code>solver.step_b.divergence_projection_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L192"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L191"><code>1e-08</code></a></td><td><strong>正数</strong><p>可选状态投影相对散度目标。不是 VMEC 几何/磁轴容差；wall 还有内部数值下限与独立的阶段投影准则。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.divergence_projection_every"><td><code>solver.step_b.divergence_projection_every</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L193"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L192"><code>100</code></a></td><td><strong>正整数</strong><p>可选状态投影的内部步间隔；末步也处理。只有可选投影启用时控制此项。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.smoothing_every"><td><code>solver.step_b.smoothing_every</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L194"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L193"><code>1</code></a></td><td><strong>正整数</strong><p>对速度相对参考场的增量执行五点滤波的内部步间隔。不是压力 reset，也不是把速度设为零。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.reference_every"><td><code>solver.step_b.reference_every</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L195"><code>1000</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L194"><code>1000</code></a></td><td><strong>正整数</strong><p>更新速度滤波参考场的内部步间隔。保留当前速度，仅改变后续滤波的参考。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.diagnostics_every"><td><code>solver.step_b.diagnostics_every</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L196"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L195"><code>100</code></a></td><td><strong>正整数</strong><p>内部能量/力/散度/边界误差诊断的间隔，末步也记录；是否写入由 output.store_stepb_diagnostics 控制。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.preconditioner_smoothing_passes"><td><code>solver.step_b.preconditioner_smoothing_passes</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L197"><code>10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L196"><code>10</code></a></td><td><strong>整数，非负</strong><p>对由真空场及其旋度建立的局部松弛系数执行邻域平滑的次数；0 不平滑。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.preconditioner_b_critical"><td><code>solver.step_b.preconditioner_b_critical</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L198"><code>1.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L197"><code>1.0</code></a></td><td><strong>归一化 B，正数</strong><p>大背景磁场区的松弛系数阈值，场强因子 min(1,(Bcrit/|B0|)^2)。与真空场限幅参数不是一回事。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.preconditioner_j_low"><td><code>solver.step_b.preconditioner_j_low</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L199"><code>4.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L198"><code>4.0</code></a></td><td><strong>归一化电流，非负</strong><p>以 curl(B0) 模作为预条件指标的下阈值；低于此值电流因子为 1。不是 Jnet 阈值。</p></td></tr><tr data-version="debug wall" id="param-main-solver.step_b.preconditioner_j_high"><td><code>solver.step_b.preconditioner_j_high</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L200"><code>8.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L199"><code>8.0</code></a></td><td><strong>归一化电流，大于 j_low</strong><p>预条件电流指标上阈值；两阈值之间线性降低，高于上阈值因子 0.1。</p></td></tr><tr data-version="debug wall" id="param-main-output.compression_level"><td><code>output.compression_level</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L222"><code>4</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L221"><code>4</code></a></td><td><strong>整数，0–9</strong><p>NetCDF 数组压缩级别；0 不压缩。高压缩可能增加写入耗时，不改变物理数据精度。</p></td></tr><tr data-version="debug wall" id="param-main-output.store_stepb_diagnostics"><td><code>output.store_stepb_diagnostics</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L223"><code>true</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L222"><code>true</code></a></td><td><strong>布尔值</strong><p>保存 Step-B 标量诊断历史。false 时后处理不能凭最终场恢复未存下来的内部步历史。</p></td></tr></tbody></table></div></section><section class="chapter" id="post-parameters" data-title="后处理参数全表"><h1>后处理参数全表</h1><p>默认值来自源码配置类；0/空值可能只是必填占位。默认值链接到对应定义行。条件不生效不一定意味着可以输入非法类型。TOML 的 None 表示省略该键。</p><div class="param-tools"><label>参数检索<input class="param-search" type="search" placeholder="名称、物理量、单位"></label><label>适用版本<select class="param-version"><option value="all">两个版本</option><option value="debug">HINT-debug</option><option value="wall">HINT-wall</option><option value="different">差异项</option></select></label><output class="param-count" aria-live="polite"></output></div><div class="table-scroll"><table class="parameters"><thead><tr><th scope="col">参数 / Python 类型</th><th scope="col">debug 默认</th><th scope="col">wall 默认</th><th scope="col">单位、适用条件与含义</th></tr></thead><tbody><tr data-version="debug wall" id="param-post-execution.backend"><td><code>execution.backend</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L565"><code>&quot;cpu&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L564"><code>&quot;cpu&quot;</code></a></td><td><strong>cpu / gpu</strong><p>后处理计算硬件，与主程序运行时硬件可以不同。绘图渲染仍在 CPU。</p></td></tr><tr data-version="debug wall" id="param-post-execution.engine"><td><code>execution.engine</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L566"><code>&quot;jax&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L565"><code>&quot;jax&quot;</code></a></td><td><strong>jax / native</strong><p>后处理数值引擎；JAX 批量追踪可 GPU/MPI，几何拟合及部分积分仍为 CPU。</p></td></tr><tr data-version="debug wall" id="param-post-fields.enabled"><td><code>fields.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-fields.nr"><td><code>fields.nr</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L521"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L520"><code>0</code></a></td><td><strong>0 或至少 6</strong><p>输出采样网格 R 节点数。0 使用输入结果网格数量。</p></td></tr><tr data-version="debug wall" id="param-post-fields.nz"><td><code>fields.nz</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L522"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L521"><code>0</code></a></td><td><strong>0 或至少 6</strong><p>输出采样网格 Z 节点数。0 使用输入结果网格数量。</p></td></tr><tr data-version="debug wall" id="param-post-fields.ntor"><td><code>fields.ntor</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L523"><code>0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L522"><code>0</code></a></td><td><strong>0 或至少 6</strong><p>一个场周期的采样环向节点数。0 使用输入结果数量。</p></td></tr><tr data-version="debug wall" id="param-post-fields.r_min_m"><td><code>fields.r_min_m</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L524"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L523"><code>省略 (None)</code></a></td><td><strong>m；省略自动</strong><p>采样域 R 下界；默认 None，TOML 中应省略而不是写 null。不得请求输入网格外插。</p></td></tr><tr data-version="debug wall" id="param-post-fields.r_max_m"><td><code>fields.r_max_m</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L525"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L524"><code>省略 (None)</code></a></td><td><strong>m；省略自动</strong><p>采样域 R 上界，默认源结果上界。</p></td></tr><tr data-version="debug wall" id="param-post-fields.z_min_m"><td><code>fields.z_min_m</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L526"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L525"><code>省略 (None)</code></a></td><td><strong>m；省略自动</strong><p>采样域 Z 下界，默认源结果下界。</p></td></tr><tr data-version="debug wall" id="param-post-fields.z_max_m"><td><code>fields.z_max_m</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L527"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L526"><code>省略 (None)</code></a></td><td><strong>m；省略自动</strong><p>采样域 Z 上界，默认源结果上界。</p></td></tr><tr data-version="debug wall" id="param-post-force_balance.enabled"><td><code>force_balance.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-force_balance.axis_seed_r_m"><td><code>force_balance.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L532"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L531"><code>0.0</code></a></td><td><strong>m；兼容项</strong><p>当前 force_balance 计算不使用该轴猜测；为兼容旧配置仍解析。磁轴定位应使用 magnetic_axis 表。</p></td></tr><tr data-version="debug wall" id="param-post-force_balance.axis_seed_z_m"><td><code>force_balance.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L533"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L532"><code>0.0</code></a></td><td><strong>m；兼容项</strong><p>同 axis_seed_r_m，当前局部力残差计算不依赖此参数。</p></td></tr><tr data-version="debug wall" id="param-post-magnetic_axis.enabled"><td><code>magnetic_axis.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-magnetic_axis.axis_seed_r_m"><td><code>magnetic_axis.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L571"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L570"><code>0.0</code></a></td><td><strong>m，非负</strong><p>后处理磁轴搜索猜测。0 优先使用保存的轴信息；不指定新固定磁轴。</p></td></tr><tr data-version="debug wall" id="param-post-magnetic_axis.axis_seed_z_m"><td><code>magnetic_axis.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L572"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L571"><code>0.0</code></a></td><td><strong>m</strong><p>与显式 R 猜测配套的 Z 坐标。</p></td></tr><tr data-version="debug wall" id="param-post-magnetic_axis.residual_tolerance_scale"><td><code>magnetic_axis.residual_tolerance_scale</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L573"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L572"><code>省略 (None)</code></a></td><td><strong>正数；省略继承</strong><p>磁轴闭合容差倍率，默认从结果内保存的求解器配置继承。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.enabled"><td><code>field_lines.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.field_source"><td><code>field_lines.field_source</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L538"><code>&quot;hint&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L537"><code>&quot;hint&quot;</code></a></td><td><strong>hint / vacuum</strong><p>hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.mode"><td><code>field_lines.mode</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L539"><code>&quot;3d&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L538"><code>&quot;3d&quot;</code></a></td><td><strong>3d / vmec</strong><p>field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.trace_both_directions"><td><code>field_lines.trace_both_directions</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L540"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L539"><code>false</code></a></td><td><strong>布尔值</strong><p>普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.calculate_flux_quantities"><td><code>field_lines.calculate_flux_quantities</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L541"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L540"><code>false</code></a></td><td><strong>布尔值</strong><p>field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_count"><td><code>field_lines.seed_count</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L542"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L541"><code>1</code></a></td><td><strong>正整数</strong><p>线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_r_m"><td><code>field_lines.seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L543"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L542"><code>0.0</code></a></td><td><strong>m，正数</strong><p>第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_z_m"><td><code>field_lines.seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L544"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L543"><code>0.0</code></a></td><td><strong>m</strong><p>第一条磁力线的 Z 起点。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_phi_fraction"><td><code>field_lines.seed_phi_fraction</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L545"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L544"><code>0.0</code></a></td><td><strong>[0,1)</strong><p>起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_delta_r_m"><td><code>field_lines.seed_delta_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L546"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L545"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 R 增量，R_i=R_0+i*delta_R。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.seed_delta_z_m"><td><code>field_lines.seed_delta_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L547"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L546"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.axis_seed_r_m"><td><code>field_lines.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L548"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L547"><code>0.0</code></a></td><td><strong>m</strong><p>涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.axis_seed_z_m"><td><code>field_lines.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L549"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L548"><code>0.0</code></a></td><td><strong>m</strong><p>与轴 R 猜测配套的 Z。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.step_m"><td><code>field_lines.step_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L550"><code>0.01</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L549"><code>0.01</code></a></td><td><strong>m，正数</strong><p>普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.trace_length_m"><td><code>field_lines.trace_length_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L551"><code>1000.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L550"><code>1000.0</code></a></td><td><strong>m，正数</strong><p>普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.toroidal_planes"><td><code>field_lines.toroidal_planes</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L552"><code>128</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L551"><code>128</code></a></td><td><strong>正整数；周期面功能至少 4</strong><p>磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.boundary_points"><td><code>field_lines.boundary_points</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L553"><code>150</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L552"><code>150</code></a></td><td><strong>正整数；相关功能至少 4</strong><p>边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.surface_circuits"><td><code>field_lines.surface_circuits</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L554"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L553"><code>100</code></a></td><td><strong>正整数，完整环向圈数</strong><p>CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.relative_tolerance"><td><code>field_lines.relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L555"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L554"><code>1e-08</code></a></td><td><strong>正数</strong><p>后处理磁力线积分相对误差容差。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.absolute_tolerance"><td><code>field_lines.absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L556"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L555"><code>1e-10</code></a></td><td><strong>正数</strong><p>后处理积分绝对误差容差；物理坐标使用 m。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.surface_scatter_tolerance"><td><code>field_lines.surface_scatter_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L557"><code>0.02</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L556"><code>0.02</code></a></td><td><strong>正数</strong><p>截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.quadrature_relative_tolerance"><td><code>field_lines.quadrature_relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L558"><code>1e-06</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L557"><code>1e-06</code></a></td><td><strong>正数</strong><p>磁面量自适应积分的相对误差目标，普通轨迹不使用。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.quadrature_absolute_tolerance"><td><code>field_lines.quadrature_absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L559"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L558"><code>1e-10</code></a></td><td><strong>正数</strong><p>磁面量积分绝对误差目标；适用量的尺度须结合输出理解。</p></td></tr><tr data-version="debug wall" id="param-post-field_lines.quadrature_max_depth"><td><code>field_lines.quadrature_max_depth</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L560"><code>10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L559"><code>10</code></a></td><td><strong>整数，至少 1</strong><p>磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.enabled"><td><code>poincare.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.field_source"><td><code>poincare.field_source</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L538"><code>&quot;hint&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L537"><code>&quot;hint&quot;</code></a></td><td><strong>hint / vacuum</strong><p>hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.mode"><td><code>poincare.mode</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L539"><code>&quot;3d&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L538"><code>&quot;3d&quot;</code></a></td><td><strong>3d / vmec</strong><p>field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.trace_both_directions"><td><code>poincare.trace_both_directions</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L540"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L539"><code>false</code></a></td><td><strong>布尔值</strong><p>普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.calculate_flux_quantities"><td><code>poincare.calculate_flux_quantities</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L541"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L540"><code>false</code></a></td><td><strong>布尔值</strong><p>field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_count"><td><code>poincare.seed_count</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L542"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L541"><code>1</code></a></td><td><strong>正整数</strong><p>线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_r_m"><td><code>poincare.seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L543"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L542"><code>0.0</code></a></td><td><strong>m，正数</strong><p>第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_z_m"><td><code>poincare.seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L544"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L543"><code>0.0</code></a></td><td><strong>m</strong><p>第一条磁力线的 Z 起点。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_phi_fraction"><td><code>poincare.seed_phi_fraction</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L545"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L544"><code>0.0</code></a></td><td><strong>[0,1)</strong><p>起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_delta_r_m"><td><code>poincare.seed_delta_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L546"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L545"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 R 增量，R_i=R_0+i*delta_R。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.seed_delta_z_m"><td><code>poincare.seed_delta_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L547"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L546"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.axis_seed_r_m"><td><code>poincare.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L548"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L547"><code>0.0</code></a></td><td><strong>m</strong><p>涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.axis_seed_z_m"><td><code>poincare.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L549"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L548"><code>0.0</code></a></td><td><strong>m</strong><p>与轴 R 猜测配套的 Z。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.step_m"><td><code>poincare.step_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L550"><code>0.01</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L549"><code>0.01</code></a></td><td><strong>m，正数</strong><p>普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.trace_length_m"><td><code>poincare.trace_length_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L551"><code>1000.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L550"><code>1000.0</code></a></td><td><strong>m，正数</strong><p>普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.toroidal_planes"><td><code>poincare.toroidal_planes</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L552"><code>128</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L551"><code>128</code></a></td><td><strong>正整数；周期面功能至少 4</strong><p>磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.boundary_points"><td><code>poincare.boundary_points</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L553"><code>150</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L552"><code>150</code></a></td><td><strong>正整数；相关功能至少 4</strong><p>边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.surface_circuits"><td><code>poincare.surface_circuits</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L554"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L553"><code>100</code></a></td><td><strong>正整数，完整环向圈数</strong><p>CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.relative_tolerance"><td><code>poincare.relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L555"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L554"><code>1e-08</code></a></td><td><strong>正数</strong><p>后处理磁力线积分相对误差容差。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.absolute_tolerance"><td><code>poincare.absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L556"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L555"><code>1e-10</code></a></td><td><strong>正数</strong><p>后处理积分绝对误差容差；物理坐标使用 m。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.surface_scatter_tolerance"><td><code>poincare.surface_scatter_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L557"><code>0.02</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L556"><code>0.02</code></a></td><td><strong>正数</strong><p>截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.quadrature_relative_tolerance"><td><code>poincare.quadrature_relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L558"><code>1e-06</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L557"><code>1e-06</code></a></td><td><strong>正数</strong><p>磁面量自适应积分的相对误差目标，普通轨迹不使用。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.quadrature_absolute_tolerance"><td><code>poincare.quadrature_absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L559"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L558"><code>1e-10</code></a></td><td><strong>正数</strong><p>磁面量积分绝对误差目标；适用量的尺度须结合输出理解。</p></td></tr><tr data-version="debug wall" id="param-post-poincare.quadrature_max_depth"><td><code>poincare.quadrature_max_depth</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L560"><code>10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L559"><code>10</code></a></td><td><strong>整数，至少 1</strong><p>磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.enabled"><td><code>flux_surfaces.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.field_source"><td><code>flux_surfaces.field_source</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L538"><code>&quot;hint&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L537"><code>&quot;hint&quot;</code></a></td><td><strong>hint / vacuum</strong><p>hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.mode"><td><code>flux_surfaces.mode</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L539"><code>&quot;3d&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L538"><code>&quot;3d&quot;</code></a></td><td><strong>3d / vmec</strong><p>field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.trace_both_directions"><td><code>flux_surfaces.trace_both_directions</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L540"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L539"><code>false</code></a></td><td><strong>布尔值</strong><p>普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.calculate_flux_quantities"><td><code>flux_surfaces.calculate_flux_quantities</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L541"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L540"><code>false</code></a></td><td><strong>布尔值</strong><p>field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_count"><td><code>flux_surfaces.seed_count</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L542"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L541"><code>1</code></a></td><td><strong>正整数</strong><p>线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_r_m"><td><code>flux_surfaces.seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L543"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L542"><code>0.0</code></a></td><td><strong>m，正数</strong><p>第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_z_m"><td><code>flux_surfaces.seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L544"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L543"><code>0.0</code></a></td><td><strong>m</strong><p>第一条磁力线的 Z 起点。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_phi_fraction"><td><code>flux_surfaces.seed_phi_fraction</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L545"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L544"><code>0.0</code></a></td><td><strong>[0,1)</strong><p>起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_delta_r_m"><td><code>flux_surfaces.seed_delta_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L546"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L545"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 R 增量，R_i=R_0+i*delta_R。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.seed_delta_z_m"><td><code>flux_surfaces.seed_delta_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L547"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L546"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.axis_seed_r_m"><td><code>flux_surfaces.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L548"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L547"><code>0.0</code></a></td><td><strong>m</strong><p>涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.axis_seed_z_m"><td><code>flux_surfaces.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L549"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L548"><code>0.0</code></a></td><td><strong>m</strong><p>与轴 R 猜测配套的 Z。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.step_m"><td><code>flux_surfaces.step_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L550"><code>0.01</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L549"><code>0.01</code></a></td><td><strong>m，正数</strong><p>普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.trace_length_m"><td><code>flux_surfaces.trace_length_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L551"><code>1000.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L550"><code>1000.0</code></a></td><td><strong>m，正数</strong><p>普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.toroidal_planes"><td><code>flux_surfaces.toroidal_planes</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L552"><code>128</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L551"><code>128</code></a></td><td><strong>正整数；周期面功能至少 4</strong><p>磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.boundary_points"><td><code>flux_surfaces.boundary_points</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L553"><code>150</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L552"><code>150</code></a></td><td><strong>正整数；相关功能至少 4</strong><p>边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.surface_circuits"><td><code>flux_surfaces.surface_circuits</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L554"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L553"><code>100</code></a></td><td><strong>正整数，完整环向圈数</strong><p>CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.relative_tolerance"><td><code>flux_surfaces.relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L555"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L554"><code>1e-08</code></a></td><td><strong>正数</strong><p>后处理磁力线积分相对误差容差。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.absolute_tolerance"><td><code>flux_surfaces.absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L556"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L555"><code>1e-10</code></a></td><td><strong>正数</strong><p>后处理积分绝对误差容差；物理坐标使用 m。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.surface_scatter_tolerance"><td><code>flux_surfaces.surface_scatter_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L557"><code>0.02</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L556"><code>0.02</code></a></td><td><strong>正数</strong><p>截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.quadrature_relative_tolerance"><td><code>flux_surfaces.quadrature_relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L558"><code>1e-06</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L557"><code>1e-06</code></a></td><td><strong>正数</strong><p>磁面量自适应积分的相对误差目标，普通轨迹不使用。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.quadrature_absolute_tolerance"><td><code>flux_surfaces.quadrature_absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L559"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L558"><code>1e-10</code></a></td><td><strong>正数</strong><p>磁面量积分绝对误差目标；适用量的尺度须结合输出理解。</p></td></tr><tr data-version="debug wall" id="param-post-flux_surfaces.quadrature_max_depth"><td><code>flux_surfaces.quadrature_max_depth</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L560"><code>10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L559"><code>10</code></a></td><td><strong>整数，至少 1</strong><p>磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.enabled"><td><code>boundary_trace.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.field_source"><td><code>boundary_trace.field_source</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L538"><code>&quot;hint&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L537"><code>&quot;hint&quot;</code></a></td><td><strong>hint / vacuum</strong><p>hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.mode"><td><code>boundary_trace.mode</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L539"><code>&quot;3d&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L538"><code>&quot;3d&quot;</code></a></td><td><strong>3d / vmec</strong><p>field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.trace_both_directions"><td><code>boundary_trace.trace_both_directions</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L540"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L539"><code>false</code></a></td><td><strong>布尔值</strong><p>普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.calculate_flux_quantities"><td><code>boundary_trace.calculate_flux_quantities</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L541"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L540"><code>false</code></a></td><td><strong>布尔值</strong><p>field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_count"><td><code>boundary_trace.seed_count</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L542"><code>1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L541"><code>1</code></a></td><td><strong>正整数</strong><p>线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_r_m"><td><code>boundary_trace.seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L543"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L542"><code>0.0</code></a></td><td><strong>m，正数</strong><p>第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_z_m"><td><code>boundary_trace.seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L544"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L543"><code>0.0</code></a></td><td><strong>m</strong><p>第一条磁力线的 Z 起点。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_phi_fraction"><td><code>boundary_trace.seed_phi_fraction</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L545"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L544"><code>0.0</code></a></td><td><strong>[0,1)</strong><p>起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_delta_r_m"><td><code>boundary_trace.seed_delta_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L546"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L545"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 R 增量，R_i=R_0+i*delta_R。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.seed_delta_z_m"><td><code>boundary_trace.seed_delta_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L547"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L546"><code>0.0</code></a></td><td><strong>m</strong><p>相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.axis_seed_r_m"><td><code>boundary_trace.axis_seed_r_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L548"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L547"><code>0.0</code></a></td><td><strong>m</strong><p>涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.axis_seed_z_m"><td><code>boundary_trace.axis_seed_z_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L549"><code>0.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L548"><code>0.0</code></a></td><td><strong>m</strong><p>与轴 R 猜测配套的 Z。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.step_m"><td><code>boundary_trace.step_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L550"><code>0.01</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L549"><code>0.01</code></a></td><td><strong>m，正数</strong><p>普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.trace_length_m"><td><code>boundary_trace.trace_length_m</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L551"><code>1000.0</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L550"><code>1000.0</code></a></td><td><strong>m，正数</strong><p>普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.toroidal_planes"><td><code>boundary_trace.toroidal_planes</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L552"><code>128</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L551"><code>128</code></a></td><td><strong>正整数；周期面功能至少 4</strong><p>磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.boundary_points"><td><code>boundary_trace.boundary_points</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L553"><code>150</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L552"><code>150</code></a></td><td><strong>正整数；相关功能至少 4</strong><p>边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.surface_circuits"><td><code>boundary_trace.surface_circuits</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L554"><code>100</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L553"><code>100</code></a></td><td><strong>正整数，完整环向圈数</strong><p>CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.relative_tolerance"><td><code>boundary_trace.relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L555"><code>1e-08</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L554"><code>1e-08</code></a></td><td><strong>正数</strong><p>后处理磁力线积分相对误差容差。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.absolute_tolerance"><td><code>boundary_trace.absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L556"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L555"><code>1e-10</code></a></td><td><strong>正数</strong><p>后处理积分绝对误差容差；物理坐标使用 m。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.surface_scatter_tolerance"><td><code>boundary_trace.surface_scatter_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L557"><code>0.02</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L556"><code>0.02</code></a></td><td><strong>正数</strong><p>截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.quadrature_relative_tolerance"><td><code>boundary_trace.quadrature_relative_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L558"><code>1e-06</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L557"><code>1e-06</code></a></td><td><strong>正数</strong><p>磁面量自适应积分的相对误差目标，普通轨迹不使用。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.quadrature_absolute_tolerance"><td><code>boundary_trace.quadrature_absolute_tolerance</code><small>float</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L559"><code>1e-10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L558"><code>1e-10</code></a></td><td><strong>正数</strong><p>磁面量积分绝对误差目标；适用量的尺度须结合输出理解。</p></td></tr><tr data-version="debug wall" id="param-post-boundary_trace.quadrature_max_depth"><td><code>boundary_trace.quadrature_max_depth</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L560"><code>10</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L559"><code>10</code></a></td><td><strong>整数，至少 1</strong><p>磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。</p></td></tr><tr data-version="debug wall" id="param-post-convergence.enabled"><td><code>convergence.enabled</code><small>bool</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L516"><code>false</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L515"><code>false</code></a></td><td><strong>布尔值</strong><p>是否启动此后处理内容；至少启用一个。</p></td></tr><tr data-version="debug wall" id="param-post-input_file"><td><code>input_file</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L1"><code>&quot;&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L1"><code>&quot;&quot;</code></a></td><td><strong>.nc 路径，必需</strong><p>主程序统一结果文件。后处理不写入此文件。</p></td></tr><tr data-version="debug wall" id="param-post-output_file"><td><code>output_file</code><small>str</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L1"><code>&quot;&quot;</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L1"><code>&quot;&quot;</code></a></td><td><strong>.nc 路径</strong><p>独立后处理结果文件；空字符串自动取 input 文件名加 _analysis.nc。必须不同于 input_file。</p></td></tr><tr data-version="debug wall" id="param-post-selection.record"><td><code>selection.record</code><small>int</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L1"><code>-1</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L1"><code>-1</code></a></td><td><strong>整数</strong><p>完整保存状态的记录选择，-1 为最后完整记录；不是外迭代编号，尤其 save_every&gt;1 时不能混淆。</p></td></tr><tr data-version="debug wall" id="param-post-selection.requested_time"><td><code>selection.requested_time</code><small>float | None</small></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-debug/src/hint_debug/config.py#L1"><code>省略 (None)</code></a></td><td><a href="https://github.com/Yihui-L/HINT-docs/blob/e3c91557c1c38ae8e2ea5dcfae461460a0db3836/HINT-wall/src/hint_wall/config.py#L1"><code>省略 (None)</code></a></td><td><strong>归一化 Alfvén 时间；可省略</strong><p>提供时优先于 record，选择最接近该时间的完整保存态，不在两个状态间插值。TOML 不支持 null，默认应省略。</p></td></tr></tbody></table></div></section><section class="chapter" id="variables" data-title="绘图变量索引"><h1>绘图变量索引</h1><p>字符串区分大小写；profile=剖面、section=二维截面、time_series=历史曲线。英文定义由源码直接提取；中文统计解释见收敛诊断章节。debug/wall 的边界诊断对应各自边界。</p><div class="table-scroll"><table><thead><tr><th>变量名</th><th>单位</th><th>适用功能</th><th>定义</th></tr></thead><tbody><tr><td><code>pressure</code></td><td>Pa</td><td>profile, section, time_series</td><td>Pressure</td></tr><tr><td><code>s</code></td><td>1</td><td>profile, section, time_series</td><td>Evolving s label</td></tr><tr><td><code>rho</code></td><td>1</td><td>profile, section, time_series</td><td>sqrt(s)</td></tr><tr><td><code>field_strength</code></td><td>T</td><td>profile, section, time_series</td><td>Total field strength</td></tr><tr><td><code>response_field_strength</code></td><td>T</td><td>profile, section, time_series</td><td>Response field strength</td></tr><tr><td><code>vacuum_field_strength</code></td><td>T</td><td>profile, section, time_series</td><td>Vacuum field strength</td></tr><tr><td><code>speed</code></td><td>m/s</td><td>profile, section, time_series</td><td>Speed</td></tr><tr><td><code>velocity_change_rate</code></td><td>m/s^2</td><td>profile, section, time_series</td><td>|v-v_previous|/delta_t; converted relaxation seconds, not physical acceleration</td></tr><tr><td><code>speed_change_rate</code></td><td>m/s^2</td><td>profile, section, time_series</td><td>(|v|-|v_previous|)/delta_t; signed secant in converted relaxation seconds</td></tr><tr><td><code>force_residual</code></td><td>N/m^3</td><td>profile, section, time_series</td><td>Force residual magnitude</td></tr><tr><td><code>force_residual_relative</code></td><td>1</td><td>profile, section, time_series</td><td>|J1 x B-grad(p)|/max(|J1 x B|,|grad(p)|); undefined if both forces vanish</td></tr><tr><td><code>lorentz_force</code></td><td>N/m^3</td><td>profile, section, time_series</td><td>Lorentz force magnitude</td></tr><tr><td><code>pressure_gradient</code></td><td>Pa/m</td><td>profile, section, time_series</td><td>Pressure gradient magnitude</td></tr><tr><td><code>parallel_pressure_gradient</code></td><td>Pa/m</td><td>profile, section, time_series</td><td>signed b.grad(p), b=B/|B|</td></tr><tr><td><code>current_density</code></td><td>A/m^2</td><td>profile, section, time_series</td><td>Response current density magnitude</td></tr><tr><td><code>toroidal_current_density</code></td><td>A/m^2</td><td>profile, section, time_series</td><td>signed pointwise J_phi, not VMEC jcurv or dI/ds</td></tr><tr><td><code>parallel_current_density</code></td><td>A/m^2</td><td>profile, section, time_series</td><td>Parallel response current density</td></tr><tr><td><code>field_r</code></td><td>T</td><td>profile, section, time_series</td><td>Total B r</td></tr><tr><td><code>field_phi</code></td><td>T</td><td>profile, section, time_series</td><td>Total B phi</td></tr><tr><td><code>field_z</code></td><td>T</td><td>profile, section, time_series</td><td>Total B z</td></tr><tr><td><code>response_field_r</code></td><td>T</td><td>profile, section, time_series</td><td>Response B r</td></tr><tr><td><code>response_field_phi</code></td><td>T</td><td>profile, section, time_series</td><td>Response B phi</td></tr><tr><td><code>response_field_z</code></td><td>T</td><td>profile, section, time_series</td><td>Response B z</td></tr><tr><td><code>velocity_r</code></td><td>m/s</td><td>profile, section, time_series</td><td>Velocity r</td></tr><tr><td><code>velocity_phi</code></td><td>m/s</td><td>profile, section, time_series</td><td>Velocity phi</td></tr><tr><td><code>velocity_z</code></td><td>m/s</td><td>profile, section, time_series</td><td>Velocity z</td></tr><tr><td><code>divergence_b</code></td><td>T/m</td><td>profile, section, time_series</td><td>div(total B)</td></tr><tr><td><code>divergence_b_abs</code></td><td>T/m</td><td>profile, section, time_series</td><td>|div(total B)|</td></tr><tr><td><code>divergence_b_response</code></td><td>T/m</td><td>profile, section, time_series</td><td>div(response B)</td></tr><tr><td><code>divergence_b_response_abs</code></td><td>T/m</td><td>profile, section, time_series</td><td>|div(response B)|</td></tr><tr><td><code>divergence_b_vacuum</code></td><td>T/m</td><td>profile, section, time_series</td><td>div(vacuum B)</td></tr><tr><td><code>divergence_b_vacuum_abs</code></td><td>T/m</td><td>profile, section, time_series</td><td>|div(vacuum B)|</td></tr><tr><td><code>toroidal_current</code></td><td>A</td><td>profile</td><td>signed integral of J_phi dR dZ below an s/rho threshold; profiles only</td></tr><tr><td><code>rotational_transform</code></td><td>1</td><td>profile</td><td>dense field-line winding with finite-length and surface-resolution flags; not a local field</td></tr><tr><td><code>kinetic_energy</code></td><td>normalized</td><td>time_series</td><td>Kinetic energy; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>response_magnetic_energy</code></td><td>normalized</td><td>time_series</td><td>Response magnetic energy; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>force_max</code></td><td>normalized</td><td>time_series</td><td>Force max; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>force_rms</code></td><td>normalized</td><td>time_series</td><td>Force RMS; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>divb_max</code></td><td>normalized</td><td>time_series</td><td>div(B_response) max; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>divb_rms</code></td><td>normalized</td><td>time_series</td><td>div(B_response) RMS; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>force_volume_rms</code></td><td>normalized</td><td>time_series</td><td>Force volume-weighted RMS; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>divb_volume_rms</code></td><td>normalized</td><td>time_series</td><td>div(B_response) volume-weighted RMS; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>parallel_pressure_volume_rms</code></td><td>normalized</td><td>time_series</td><td>b.grad(p) volume-weighted RMS; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>boundary_bn_max</code></td><td>normalized</td><td>time_series</td><td>Frozen normal-field error max; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>boundary_velocity_max</code></td><td>normalized</td><td>time_series</td><td>Box boundary speed max; stored Step-B diagnostic, not a recomputed checkpoint field</td></tr><tr><td><code>pressure_max</code></td><td>Pa</td><td>time_series</td><td>maximum over valid saved grid nodes in the selected scope; not an axis solve</td></tr><tr><td><code>field_max</code></td><td>T</td><td>time_series</td><td>maximum over valid saved grid nodes in the selected scope; not an axis solve</td></tr><tr><td><code>speed_max</code></td><td>m/s</td><td>time_series</td><td>maximum over valid saved grid nodes in the selected scope; not an axis solve</td></tr></tbody></table></div></section><section class="chapter" id="downloads" data-title="文档与示例文件"><h1>文档与示例文件</h1><p>网站内容均可离线使用。以下为当前源数据，不包含实验输入或计算结果。</p><ul><li><a href="docs-data/parameters.json">参数 JSON</a></li><li><a href="docs-data/parameters.csv">参数 CSV</a></li><li><a href="docs-data/variables.json">绘图变量 JSON</a></li><li><a href="docs-data/source-manifest.json">源码版本与 SHA-256</a></li><li><a href="docs-data/DOCUMENTATION_CHECKS.md">文档检查记录</a></li><li><a href="docs-data/examples/debug/main.toml">HINT-debug / main.toml</a></li><li><a href="docs-data/examples/debug/follow.toml">HINT-debug / follow.toml</a></li><li><a href="docs-data/examples/debug/post.toml">HINT-debug / post.toml</a></li><li><a href="docs-data/examples/debug/postprocess_demo.ipynb">HINT-debug / postprocess_demo.ipynb</a></li><li><a href="docs-data/examples/wall/main.toml">HINT-wall / main.toml</a></li><li><a href="docs-data/examples/wall/follow.toml">HINT-wall / follow.toml</a></li><li><a href="docs-data/examples/wall/post.toml">HINT-wall / post.toml</a></li><li><a href="docs-data/examples/wall/postprocess_demo.ipynb">HINT-wall / postprocess_demo.ipynb</a></li></ul><p><a href="README.md">维护与重建说明</a> · <a href="SOURCE_VERSION.md">版本说明</a></p></section><p id="no-results" hidden>未找到匹配章节。</p><footer>源代码定义行为，离散诊断支持判断；本文不代替算例验证。<br>HINT-debug 0.8.8 / HINT-wall 0.15.8</footer></main>
+</body></html>

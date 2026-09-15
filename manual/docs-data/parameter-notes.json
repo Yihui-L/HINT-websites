@@ -1,0 +1,144 @@
+{
+  "PathsConfig": {
+    "output_file": [".nc 路径", "主程序统一结果文件。initial 会创建/重建该文件；follow 从该文件读取最后完整状态并向同一文件追加。不得与其他运行共用写入路径。"],
+    "vmec_wout": [".nc 路径", "initial 必需：VMEC wout 几何、平衡场与剖面。空字符串不是可运行输入。follow 不需要外部 wout。"],
+    "mgrid": [".nc 路径", "initial 必需：覆盖整个计算矩形域的 mgrid，含各组线圈场。follow 使用结果文件保存的背景场。"],
+    "vessel": [".txt / .dat 路径", "initial 必需：HINT_WALL 1 壁文本。不是 MKLIM 的旧 .nc 文件。follow 使用结果内嵌的壁几何。"]
+  },
+  "GridConfig": {
+    "nr": ["整数，至少 6", "R 方向等间距节点数，包含矩形域两端。默认 0 是待填写占位值，不表示自动选择。"],
+    "nz": ["整数，至少 6", "Z 方向等间距节点数，包含两端。四阶中心差分需要五点，程序还要求额外一个点。"],
+    "ntor": ["整数，至少 6", "一个完整场周期的等间距环向节点数，不重复终点；还必须严格大于 VMEC 最高环向谐波序数的两倍。不是场周期数。"],
+    "nfp": ["整数，至少 0", "场周期数。0 从 wout 自动取得；显式非零值必须与 wout 和壁一致。"],
+    "r_min": ["m", "矩形计算域 R 下界，必须大于 0；与其他边界共同严格包围第一壁。"],
+    "r_max": ["m", "矩形计算域 R 上界，必须大于 r_min；mgrid 必须覆盖。"],
+    "z_min": ["m", "矩形计算域 Z 下界，必须小于 z_max。"],
+    "z_max": ["m", "矩形计算域 Z 上界；壁外还需满足 minimum_exterior_layers 的离散余量。"]
+  },
+  "FluxConfig": {
+    "ntheta": ["整数，0 自动", "VMEC 极向几何采样点数。0 使用 2*mpol+6；显式设置须满足几何采样要求，包含周期端点。不是演化网格数量。"],
+    "inverse_tolerance_m": ["m，正数", "柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。"],
+    "max_inverse_iterations": ["正整数", "单点 VMEC 坐标非线性反解的最大迭代次数。"]
+  },
+  "VacuumConfig": {
+    "enforce_stellarator_symmetry": ["布尔值", "对背景场施加与 VMEC 一致的仿星器对称性。非对称 wout 必须设 false；不能用 true 将非对称平衡随意对称化。"],
+    "extcur_a": ["A，数值数组", "各 mgrid 线圈组的实际电流，长度必须等于组数。S 模式直接乘组场；R 模式先除 raw_coil_cur 再乘组场。两种模式输入都不是无量纲倍率。"],
+    "field_scale": ["无量纲", "合成背景场的整体倍率。不会同步改变 VMEC 平衡和压力，因此偏离 1 时需重新检查初始化一致性。"],
+    "max_field_axis_ratio": ["无量纲，至少 1", "极强真空场的上限倍数：参考为未限幅的 VMEC 磁轴位置真空场模。合成后的源 mgrid 场和插值到 HINT 的场均限幅，保持方向；此参考不等于主程序归一化 B_ref。"],
+    "interpolation": ["linear / cubic", "把各组电流合成后的 mgrid 磁场插值到 HINT 网格。控制的是空间插值，不是 VMEC 剖面插值。源网格需满足插值节点数要求。"]
+  },
+  "WallConfig": {
+    "periodic_closure_rtol": ["无量纲，正数", "壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。"],
+    "minimum_exterior_layers": ["整数，至少 3", "第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。"]
+  },
+  "ProfilesConfig": {
+    "source": ["vmec / input", "vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用下面的两个剖面定义及 total_toroidal_current_a 替代。input.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。"],
+    "pressure_scale": ["无量纲，非负", "准备阶段对目标压强的整体倍率。start_point=vmec 时必须为 1。与 solver.scale_after、文件内 pressure_scale 攀升进度不同。"],
+    "total_toroidal_current_a": ["A", "仅 source=input 时作为有符号总环向源电流目标；source=vmec 时使用 wout 总电流，不通过此值覆盖。"]
+  },
+  "ProfileDefinition": {
+    "kind": ["power_series / line_segment", "仅 source=input 生效。power_series 使用升幂多项式；line_segment 使用分段线性表格。拼写是单数 line_segment。"],
+    "coefficients": ["数值数组", "power_series 必填非空数组 [c0,c1,...]，f(s)=sum(c_n*s^n)。pressure 为 Pa；current 为 lambda(s) 的相对形状，最终按总电流归一化，不是 I(s) 的多项式。"],
+    "s": ["无量纲数组", "line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。"],
+    "values": ["数值数组", "line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。"]
+  },
+  "SolverConfig": {
+    "mode": ["initial / follow", "initial 准备数据并建立新结果；follow 恢复已有完整状态。follow 的 outer_steps 是追加步数，不是最终外迭代编号。"],
+    "start_point": ["zero / vmec", "zero 从零响应场和小压力开始；vmec 以完整 VMEC 压力及等离子体响应场开始且不攀升。follow 从 checkpoint 恢复，不能改起点语义。"],
+    "backend": ["cpu / gpu", "计算硬件选择。GPU 需要相应 CUDA/JAX 或 CuPy 环境；不会因为存在 GPU 而自动忽略 cpu 设置。"],
+    "engine": ["jax / native", "jax 使用双精度 JIT/批处理/分布式路径；native 为 NumPy/SciPy 或 CuPy 路径。主程序多 MPI rank 要求 jax。"],
+    "outer_steps": ["正整数", "本次调用执行的外迭代次数；每次含 Step-A 和一个 Step-B 内循环。follow 为新增次数。"],
+    "save_every": ["正整数", "外迭代完整三维场的保存间隔；本次调用最后一步也保存。与内部诊断记录间隔独立。"],
+    "pressure_ramp_iterations": ["正整数", "zero 起点将轴上压力目标由初始小值按几何比例提高到完整目标的外迭代步数。vmec 起点不使用攀升，但输入类型/正数检查仍执行。"],
+    "scale_after": ["布尔值", "true：攀升结束后每个外迭代仍用单一倍率维持目标轴上压力；false：结束后取消此反馈。vmec 从开始就视为攀升完成。不会冻结 s 或关闭轴搜索。"],
+    "axis_seed_r_m": ["m", "initial 磁轴定位的初始 R 猜测，须大于 0；follow 默认继承保存的热启动位置。不是固定磁轴。"],
+    "axis_seed_z_m": ["m", "磁轴初始 Z 猜测。随迭代由当前磁场重新定位。"],
+    "axis_residual_tolerance_scale": ["正数", "磁轴周期闭合检查的容差倍率；增大可容忍更大闭合误差，不等于提高定位精度。follow 未给出时继承。"]
+  },
+  "StepAConfig": {
+    "max_step": ["归一化长度，正数", "磁力线自适应积分的最大弧长步长，长度以 L_ref 归一化。减小提高采样能力但增加成本。"],
+    "trace_length": ["归一化长度，正数", "每个方向的最大追踪长度。正向和反向分别计算压力平均，失败方向贡献零。"],
+    "relative_tolerance": ["正数", "磁力线常微分方程积分的相对误差控制。不是最终平衡残差。"],
+    "absolute_tolerance": ["归一化状态容差，正数", "Step-A 自适应积分绝对误差控制；不同引擎使用不同积分阶数，容差不代表逐位一致。"]
+  },
+  "StepBConfig": {
+    "inner_steps": ["正整数", "每次外迭代内磁场/流速 RKG 更新次数；p 和 s 在该内循环冻结。"],
+    "time_step": ["归一化 Alfvén 时间，正数", "固定内部时间步。需满足网格、磁场及显式扩散稳定性，程序不保证任意设置均满足 CFL。"],
+    "resistivity": ["归一化电阻率，非负", "内部 eta0；电阻项为 curl[-eta*(J1-Jnet)]。换成 SI 的标度为 mu0*L_ref*v_ref。"],
+    "eta1": ["归一化电阻率，非负；仅 debug", "第一壁外至矩形边界的数值真空区电阻率。0 是继承 eta0 的哨兵值，不是无电阻真空；与 eta0 不同时平滑界面。wall 不接受此参数。"],
+    "viscosity": ["归一化运动黏性，非负", "速度方程中柱坐标矢量拉普拉斯系数。SI 标度 L_ref*v_ref。默认 0，仍可能存在速度滤波的数值耗散。"],
+    "divb_diffusion": ["归一化扩散系数，非负", "响应场散度清理系数。debug 用 grad(div B1)，wall 用相容的负伴随形式。不是物理电阻率，也不修正固定 B0。"],
+    "divergence_projection_iterations": ["整数，非负", "可选全状态散度投影的迭代上限，0 关闭该可选步骤。debug 默认 0，wall 默认 200；wall 每个 RKG 阶段的增量约束仍强制执行，不能由 0 关闭。"],
+    "divergence_projection_tolerance": ["正数", "可选状态投影相对散度目标。不是 VMEC 几何/磁轴容差；wall 还有内部数值下限与独立的阶段投影准则。"],
+    "divergence_projection_every": ["正整数", "可选状态投影的内部步间隔；末步也处理。只有可选投影启用时控制此项。"],
+    "smoothing_every": ["正整数", "对速度相对参考场的增量执行五点滤波的内部步间隔。不是压力 reset，也不是把速度设为零。"],
+    "reference_every": ["正整数", "更新速度滤波参考场的内部步间隔。保留当前速度，仅改变后续滤波的参考。"],
+    "diagnostics_every": ["正整数", "内部能量/力/散度/边界误差诊断的间隔，末步也记录；是否写入由 output.store_stepb_diagnostics 控制。"],
+    "preconditioner_smoothing_passes": ["整数，非负", "对由真空场及其旋度建立的局部松弛系数执行邻域平滑的次数；0 不平滑。"],
+    "preconditioner_b_critical": ["归一化 B，正数", "大背景磁场区的松弛系数阈值，场强因子 min(1,(Bcrit/|B0|)^2)。与真空场限幅参数不是一回事。"],
+    "preconditioner_j_low": ["归一化电流，非负", "以 curl(B0) 模作为预条件指标的下阈值；低于此值电流因子为 1。不是 Jnet 阈值。"],
+    "preconditioner_j_high": ["归一化电流，大于 j_low", "预条件电流指标上阈值；两阈值之间线性降低，高于上阈值因子 0.1。"]
+  },
+  "OutputConfig": {
+    "compression_level": ["整数，0–9", "NetCDF 数组压缩级别；0 不压缩。高压缩可能增加写入耗时，不改变物理数据精度。"],
+    "store_stepb_diagnostics": ["布尔值", "保存 Step-B 标量诊断历史。false 时后处理不能凭最终场恢复未存下来的内部步历史。"]
+  },
+  "PostExecutionConfig": {
+    "backend": ["cpu / gpu", "后处理计算硬件，与主程序运行时硬件可以不同。绘图渲染仍在 CPU。"],
+    "engine": ["jax / native", "后处理数值引擎；JAX 批量追踪可 GPU/MPI，几何拟合及部分积分仍为 CPU。"]
+  },
+  "FeatureConfig": {
+    "enabled": ["布尔值", "是否启动此后处理内容；至少启用一个。"]
+  },
+  "MagvalConfig": {
+    "nr": ["0 或至少 6", "输出采样网格 R 节点数。0 使用输入结果网格数量。"],
+    "nz": ["0 或至少 6", "输出采样网格 Z 节点数。0 使用输入结果网格数量。"],
+    "ntor": ["0 或至少 6", "一个场周期的采样环向节点数。0 使用输入结果数量。"],
+    "r_min_m": ["m；省略自动", "采样域 R 下界；默认 None，TOML 中应省略而不是写 null。不得请求输入网格外插。"],
+    "r_max_m": ["m；省略自动", "采样域 R 上界，默认源结果上界。"],
+    "z_min_m": ["m；省略自动", "采样域 Z 下界，默认源结果下界。"],
+    "z_max_m": ["m；省略自动", "采样域 Z 上界，默认源结果上界。"]
+  },
+  "GPRTSConfig": {
+    "axis_seed_r_m": ["m；兼容项", "当前 force_balance 计算不使用该轴猜测；为兼容旧配置仍解析。磁轴定位应使用 magnetic_axis 表。"],
+    "axis_seed_z_m": ["m；兼容项", "同 axis_seed_r_m，当前局部力残差计算不依赖此参数。"]
+  },
+  "AxisConfig": {
+    "axis_seed_r_m": ["m，非负", "后处理磁轴搜索猜测。0 优先使用保存的轴信息；不指定新固定磁轴。"],
+    "axis_seed_z_m": ["m", "与显式 R 猜测配套的 Z 坐标。"],
+    "residual_tolerance_scale": ["正数；省略继承", "磁轴闭合容差倍率，默认从结果内保存的求解器配置继承。"]
+  },
+  "HMAGConfig": {
+    "field_source": ["hint / vacuum", "hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。"],
+    "mode": ["3d / vmec", "field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。"],
+    "trace_both_directions": ["布尔值", "普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。"],
+    "calculate_flux_quantities": ["布尔值", "field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。"],
+    "seed_count": ["正整数", "线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。"],
+    "seed_r_m": ["m，正数", "第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。"],
+    "seed_z_m": ["m", "第一条磁力线的 Z 起点。"],
+    "seed_phi_fraction": ["[0,1)", "起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。"],
+    "seed_delta_r_m": ["m", "相邻起点的 R 增量，R_i=R_0+i*delta_R。"],
+    "seed_delta_z_m": ["m", "相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。"],
+    "axis_seed_r_m": ["m", "涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。"],
+    "axis_seed_z_m": ["m", "与轴 R 猜测配套的 Z。"],
+    "step_m": ["m，正数", "普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。"],
+    "trace_length_m": ["m，正数", "普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。"],
+    "toroidal_planes": ["正整数；周期面功能至少 4", "磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。"],
+    "boundary_points": ["正整数；相关功能至少 4", "边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。"],
+    "surface_circuits": ["正整数，完整环向圈数", "CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。"],
+    "relative_tolerance": ["正数", "后处理磁力线积分相对误差容差。"],
+    "absolute_tolerance": ["正数", "后处理积分绝对误差容差；物理坐标使用 m。"],
+    "surface_scatter_tolerance": ["正数", "截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。"],
+    "quadrature_relative_tolerance": ["正数", "磁面量自适应积分的相对误差目标，普通轨迹不使用。"],
+    "quadrature_absolute_tolerance": ["正数", "磁面量积分绝对误差目标；适用量的尺度须结合输出理解。"],
+    "quadrature_max_depth": ["整数，至少 1", "磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。"]
+  },
+  "PostRoot": {
+    "input_file": [".nc 路径，必需", "主程序统一结果文件。后处理不写入此文件。"],
+    "output_file": [".nc 路径", "独立后处理结果文件；空字符串自动取 input 文件名加 _analysis.nc。必须不同于 input_file。"]
+  },
+  "Selection": {
+    "record": ["整数", "完整保存状态的记录选择，-1 为最后完整记录；不是外迭代编号，尤其 save_every>1 时不能混淆。"],
+    "requested_time": ["归一化 Alfvén 时间；可省略", "提供时优先于 record，选择最接近该时间的完整保存态，不在两个状态间插值。TOML 不支持 null，默认应省略。"]
+  }
+}

@@ -1,0 +1,243 @@
+# Notebook plotting variable catalog (case-sensitive strings, not TOML keys).
+# Spatial variables below work with profiles(), sections(), and time_series().
+# toroidal_current is a profile-only s/rho integral; stored metrics and maxima
+# are time-series-only. See postprocess_demo.ipynb for actual calls.
+# profiles: R at fixed Z/phi, Z at fixed R/phi, phi at fixed R/Z, or s/rho bins.
+# time_series: fields use R-volume-weighted RMS by default; reduction='mean',
+# 'min', 'max', or 'rms' overrides this. point=(R_m,Z_m,phi_rad) samples a point.
+# Stored Step-B metrics retain solver normalization. Spatial derivatives are SI.
+# scope='wall' (default) or 'plasma' (inside wall with saved evolving 0<=s<1).
+# pressure_max is a sampled grid maximum, not a magnetic-axis reconstruction.
+# With solver.scale_after=false in the MAIN configuration, post-ramp pressure
+# may vary freely. The saved pressure_scale=1 is a schedule label, not a measured
+# pressure ratio. Compare pressure/content as well as force and speed histories.
+# Reusing a post output requires matching source grid, period and wall geometry.
+# Rates use differences between saved complete checkpoints / converted relaxation
+# seconds, not physical acceleration or wall-clock time. Missing history is NaN.
+# Local force ratio uses max(|J_response x B_total|,|grad(p)|), range [0,2].
+# Denominators <=1e-10 of their valid-domain maximum are masked, not replaced.
+# pressure: Pa; Pressure.
+# s: 1; Evolving s label.
+# rho: 1; sqrt(s).
+# field_strength: T; Total field strength.
+# response_field_strength: T; Response field strength.
+# vacuum_field_strength: T; Vacuum field strength.
+# speed: m/s; Speed.
+# velocity_change_rate: m/s^2; |v-v_previous|/delta_t; converted relaxation seconds, not
+#   physical acceleration.
+# speed_change_rate: m/s^2; (|v|-|v_previous|)/delta_t; signed secant in converted relaxation
+#   seconds.
+# force_residual: N/m^3; Force residual magnitude.
+# force_residual_relative: 1; |J1 x B-grad(p)|/max(|J1 x B|,|grad(p)|); undefined if both forces
+#   vanish.
+# lorentz_force: N/m^3; Lorentz force magnitude.
+# pressure_gradient: Pa/m; Pressure gradient magnitude.
+# parallel_pressure_gradient: Pa/m; signed b.grad(p), b=B/|B|.
+# current_density: A/m^2; Response current density magnitude.
+# toroidal_current_density: A/m^2; signed pointwise J_phi, not VMEC jcurv or dI/ds.
+# parallel_current_density: A/m^2; Parallel response current density.
+# field_r: T; Total B r.
+# field_phi: T; Total B phi.
+# field_z: T; Total B z.
+# response_field_r: T; Response B r.
+# response_field_phi: T; Response B phi.
+# response_field_z: T; Response B z.
+# velocity_r: m/s; Velocity r.
+# velocity_phi: m/s; Velocity phi.
+# velocity_z: m/s; Velocity z.
+# divergence_b: T/m; div(total B).
+# divergence_b_abs: T/m; |div(total B)|.
+# divergence_b_response: T/m; div(response B).
+# divergence_b_response_abs: T/m; |div(response B)|.
+# divergence_b_vacuum: T/m; div(vacuum B).
+# divergence_b_vacuum_abs: T/m; |div(vacuum B)|.
+# toroidal_current: A; signed integral of J_phi dR dZ below an s/rho threshold; profiles only.
+# rotational_transform: 1; trace-derived profile, not a local 2-D field or saved history.
+# Use plots.rotational_transform(crossings=128,toroidal_steps=128) with wout,
+# or explicit R-Z seeds. Mask failed traces; inspect finite-window/surface flags.
+# wout= on HintPlots enables axis + s=.25,.5,.75 + LCFS geometry, VMEC pressure,
+# total-B and current references. s profiles compare each dataset's own labels;
+# R/Z/phi profiles sample identical spatial positions. No exterior extrapolation.
+# kinetic_energy: normalized; Kinetic energy; stored Step-B diagnostic, not a recomputed
+#   checkpoint field.
+# response_magnetic_energy: normalized; Response magnetic energy; stored Step-B diagnostic, not
+#   a recomputed checkpoint field.
+# force_max: normalized; Force max; stored Step-B diagnostic, not a recomputed checkpoint field.
+# force_rms: normalized; Force RMS; stored Step-B diagnostic, not a recomputed checkpoint field.
+# divb_max: normalized; div(B_response) max; stored Step-B diagnostic, not a recomputed
+#   checkpoint field.
+# divb_rms: normalized; div(B_response) RMS; stored Step-B diagnostic, not a recomputed
+#   checkpoint field.
+# force_volume_rms: normalized; Force volume-weighted RMS; stored Step-B diagnostic, not a
+#   recomputed checkpoint field.
+# divb_volume_rms: normalized; div(B_response) volume-weighted RMS; stored Step-B diagnostic,
+#   not a recomputed checkpoint field.
+# parallel_pressure_volume_rms: normalized; b.grad(p) volume-weighted RMS; stored Step-B
+#   diagnostic, not a recomputed checkpoint field.
+# boundary_bn_max: normalized; Frozen normal-field error max; stored Step-B diagnostic, not a
+#   recomputed checkpoint field.
+# boundary_velocity_max: normalized; Box boundary speed max; stored Step-B diagnostic, not a
+#   recomputed checkpoint field.
+# pressure_max: Pa; maximum over valid saved grid nodes in the selected scope; not an axis
+#   solve.
+# field_max: T; maximum over valid saved grid nodes in the selected scope; not an axis solve.
+# speed_max: m/s; maximum over valid saved grid nodes in the selected scope; not an axis solve.
+# Plot helpers return figures/data and never change this TOML or the main NetCDF.
+# These names do not enable plots in the numerical CLI: use the notebook API.
+
+# Content-oriented HINT-debug analysis. The equilibrium input is READ ONLY.
+# TOML has no null value: omit an optional key to retain its default None value.
+
+# string; required; a finished equilibrium file or a stable snapshot.
+input_file = "hint_debug.nc"
+# string; default <input_stem>_analysis.nc; must not alias input_file.
+# Contains geometry, provenance, and versioned /postprocess/<content>/run_* groups.
+output_file = "hint_debug_analysis.nc"
+
+[execution]
+# strings; defaults cpu/jax; cpu or gpu, jax or native (NumPy/CuPy).
+# JAX compiles float64 trace batches and grid derivative kernels.
+# MPI partitions seeds; use mpiexec -n N hint-debug-post post.toml.
+# One device per rank is used for postprocessing; request one MPI rank per GPU.
+# CPU thread budgets are automatic. Geometry checks and NetCDF I/O remain CPU.
+backend = "cpu"
+engine = "jax"
+
+[selection]
+# integer; default -1; nonnegative indices address complete raw record positions;
+# negative indices count completed records backward (-1 is the last complete one).
+record = -1
+# Optional float in normalized Alfven time; default None (omit).
+# If supplied, the nearest completed record wins and record is ignored.
+# requested_time = 10.0
+
+[fields]
+# boolean; default false; resample B, velocity, pressure, and s inside the first
+# wall and diagnose div(B). Values outside the wall are written as -1.
+enabled = true
+# integers; default 0 preserves each native count. Nonzero values must be >=6.
+nr = 0
+nz = 0
+ntor = 0
+# Optional floats [m]; omit a bound to preserve the corresponding native bound.
+# Explicit bounds must remain inside the stored HINT grid.
+# r_min_m = 2.6
+# r_max_m = 4.9
+# z_min_m = -1.4
+# z_max_m = 1.4
+
+[force_balance]
+# boolean; default false; calculate J, grad(p) using the solver's fourth-order
+# regular-grid operators and applicable boundary closure, then diagnose
+# JxB-grad(p), B.grad(p), perpendicular current, and velocity-Laplacian diagnostics.
+enabled = true
+# No magnetic-axis solve is required for force diagnostics.
+
+[magnetic_axis]
+# boolean; default false; independently locate the axis of the selected HINT field.
+enabled = false
+# floats [m]; defaults 0/0. R=0 uses the record's saved axis (unit converted),
+# then stored solver seed, finally the pressure maximum as an initial guess.
+axis_seed_r_m = 0.0
+axis_seed_z_m = 0.0
+# Optional positive float; omission inherits the selected record's solver value.
+# residual_tolerance_scale = 1.0
+
+[field_lines]
+# boolean; default false; enable magnetic-geometry analysis.
+enabled = false
+# string; default "hint"; selected equilibrium, or "vacuum" for stored coil field.
+field_source = "hint"
+# string; default "3d"; traces all R-Z seeds. "vmec" traces one boundary field line only
+# and does not generate internal magnetic surfaces.
+mode = "3d"
+# boolean; default false; trace both +B and -B in 3d mode.
+trace_both_directions = false
+# boolean; default false; reconstruct nested-surface quantities in 3d mode only.
+# Legacy switch; prefer the independent [flux_surfaces] block below.
+calculate_flux_quantities = false
+# integer; default 1; number of 3d R-Z seeds; >=4 for flux quantities.
+seed_count = 30
+# floats [m]; defaults 0/0; first R-Z seed; R must be positive when enabled.
+seed_r_m = 3.76
+seed_z_m = 0.0
+# float; default 0; starting angle as a fraction of one field period in [0,1).
+seed_phi_fraction = 0.0
+# floats [m]; defaults 0/0; seed n=(seed_r+n*delta_r, seed_z+n*delta_z). Multiple seeds
+# must not coincide.
+seed_delta_r_m = 0.01
+seed_delta_z_m = 0.0
+# floats [m]; defaults 0/0; axis guess on seed_phi_fraction plane; R=0 uses history.
+axis_seed_r_m = 0.0
+axis_seed_z_m = 0.0
+# float [m]; default 0.01; maximum requested output interval. Adaptive RK4
+# step doubling subdivides internally, including trial-stage wall overshoots.
+step_m = 0.01
+# float [m]; default 1000; maximum arc length per trace direction.
+trace_length_m = 1000.0
+# integer; default 128; phi steps per field period for vmec mode or flux recovery;
+# must be >=4 when used.
+toroidal_planes = 128
+# integer; default 150; Poincare points retained by one-line vmec mode; >=4.
+boundary_points = 150
+# integer; default 100; full-machine toroidal circuits per flux diagnostic.
+surface_circuits = 100
+# Positive floats; defaults below; local trajectory error control in R,Z,phi.
+# absolute_tolerance is applied numerically to metres (R,Z) and radians (phi).
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+# Positive float; default .02; allowed relative radius scatter between two
+# independent trace halves. Unresolved/stochastic surfaces are marked invalid.
+surface_scatter_tolerance = 0.02
+# Positive floats; defaults below; area quadrature rtol and absolute tolerance [Wb].
+# These do not bound interpolation or polygon-boundary reconstruction errors.
+quadrature_relative_tolerance = 1e-6
+quadrature_absolute_tolerance = 1e-10
+# integer >=1; default 10; maximum longest-edge triangle subdivision depth.
+quadrature_max_depth = 10
+
+[poincare]
+# boolean; default false; integrate to exact field-period crossing planes.
+# B_phi must stay nonsingular; use field_lines for toroidal reversals.
+enabled = true
+# Same field_source, seed_*, trace_both_directions and error controls as above.
+# Each block is independent: omitted values use defaults, not field_lines values.
+field_source = "hint"
+seed_count = 30
+seed_r_m = 3.76
+seed_z_m = 0.0
+seed_phi_fraction = 0.0
+seed_delta_r_m = 0.01
+seed_delta_z_m = 0.0
+trace_both_directions = false
+# integers >=4; defaults 128/150. Substeps per field period / number of crossings.
+toroidal_planes = 128
+boundary_points = 150
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[flux_surfaces]
+# boolean; default false; nested-surface flux, iota, volume, well, and averages.
+# Uses the same seed/axis/tolerance controls as field_lines. Requires >=4 seeds
+# ordered outward, adequate angular coverage and nfp*surface_circuits >=16.
+# No long arc-length trace is performed. Rejects surfaces that fail validity checks.
+enabled = false
+seed_count = 30
+seed_r_m = 3.76
+seed_delta_r_m = 0.01
+toroidal_planes = 128
+surface_circuits = 100
+
+[boundary_trace]
+# boolean; default false; one seed traces a candidate boundary, not a VMEC reader.
+# Equivalent to the legacy mode=vmec; this does not establish that it is the LCFS.
+# Same seed position/axis/error controls as field_lines; no internal surfaces.
+enabled = false
+seed_r_m = 4.05
+toroidal_planes = 128
+boundary_points = 150
+
+[convergence]
+# boolean; default false; copy completed solver diagnostics through selected outer
+# step. Original solver normalization is retained, including every saved inner step.
+enabled = true

@@ -1,0 +1,58 @@
+# Numerical postprocessing example only; not submitted with the main calculation.
+# Input must be a stopped result or a stable snapshot, never a concurrently written file.
+input_file = "run/hint_debug_ncsx_vmec.nc"
+output_file = "run/hint_debug_ncsx_analysis.nc"
+
+[execution]
+backend = "gpu"
+engine = "jax"
+
+[selection]
+# Last complete saved equilibrium; optional requested_time overrides this index.
+record = -1
+
+[fields]
+# Native grid B, p, v and s, with wall mask and field-divergence diagnostics.
+enabled = true
+nr = 0
+nz = 0
+ntor = 0
+
+[force_balance]
+# Fourth-order cylindrical derivatives: JxB-grad(p), parallel pressure gradient.
+enabled = true
+
+[magnetic_axis]
+enabled = false
+# Zero R selects the saved magnetic-axis seed; tolerance inherits the checkpoint.
+axis_seed_r_m = 0.0
+axis_seed_z_m = 0.0
+
+[poincare]
+enabled = true
+field_source = "hint"
+# R-Z seeds [m]; inboard scan from near the axis, selected independently of LCFS.
+seed_count = 30
+seed_r_m = 1.6
+seed_z_m = 0.0
+seed_phi_fraction = 0.0
+seed_delta_r_m = -0.01
+seed_delta_z_m = 0.0
+trace_both_directions = false
+toroidal_planes = 128
+boundary_points = 150
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[field_lines]
+enabled = false
+
+[flux_surfaces]
+enabled = false
+
+[boundary_trace]
+enabled = false
+
+[convergence]
+# Copy all saved inner-step diagnostic histories through the selected outer step.
+enabled = true

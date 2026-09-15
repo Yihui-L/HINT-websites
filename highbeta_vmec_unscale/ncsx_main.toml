@@ -1,0 +1,96 @@
+# NCSX comparison run, HINT-debug 0.8.8 / e3c9155.
+# Paths are relative to this file. Input data are unchanged from the preceding
+# VMEC-start run; the archived nonnegative wout is intentionally retained.
+# New run: full VMEC initialization, no ramp, no later pressure-amplitude feedback.
+
+[paths]
+output_file = "run/hint_debug_ncsx_vmec.nc"
+vmec_wout = "inputs/wout_ncsx_c09r00_free_nonnegative.nc"
+mgrid = "inputs/mgrid_c09r00.nc"
+vessel = "inputs/NCSX_physical_vessel_half_period.txt"
+
+[grid]
+# Uniform cylindrical grid: one full field period, physical coordinates in metres.
+nr = 144
+nz = 144
+ntor = 144
+nfp = 3
+r_min = 0.35
+r_max = 2.5
+z_min = -1.1
+z_max = 1.1
+
+[flux]
+# VMEC flux mapping: poloidal sampling, inversion tolerance [m], iteration limit.
+ntheta = 181
+inverse_tolerance_m = 0.0001
+max_inverse_iterations = 500
+
+[vacuum]
+enforce_stellarator_symmetry = true
+# mgrid mode S: group fields are per ampere. B0 = field_scale * sum(I_g * B_g).
+# Mode R, when used, is converted using raw_coil_cur; no double multiplication.
+extcur_a = [652271.9419853, 651868.5693674, 537743.5886473, 2.5e-7, 2.5e-7, 28094.975, -54804.95, 30122.895, 94240.91, 45513.87376532]
+field_scale = 1.0
+# Preserve direction, cap extreme coil-field magnitude at 5 * axis vacuum field.
+max_field_axis_ratio = 5.0
+# Interpolate the mgrid cylindrical field onto the HINT cylindrical grid.
+interpolation = "cubic"
+
+[wall]
+# True NCSX wall, nfp=3 and stellarator symmetry: text covers a half period.
+periodic_closure_rtol = 1e-10
+minimum_exterior_layers = 3
+
+[profiles]
+# Pressure and current-profile definitions, including ctor, come from wout.
+source = "vmec"
+pressure_scale = 1.0
+
+[solver]
+mode = "initial"
+start_point = "vmec"
+# Full target pressure initially; Step-A/B may subsequently change its amplitude.
+# No pressure_ramp_iterations entry: the zero-start ramp is not used here.
+scale_after = false
+backend = "gpu"
+engine = "jax"
+outer_steps = 200
+save_every = 1
+# Axis-search seeds [m] and tolerance scale, unchanged from the preceding run.
+axis_seed_r_m = 1.57
+axis_seed_z_m = 0.0
+axis_residual_tolerance_scale = 100.0
+
+[solver.step_a]
+# Normalized maximum trace step and trace length; adaptive trajectory tolerances.
+max_step = 0.002
+trace_length = 10.0
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[solver.step_b]
+# Inner iteration count and normalized time step; unchanged for comparison.
+inner_steps = 1000
+time_step = 0.001
+resistivity = 0.0001
+# Exterior resistivity; 0 means use the interior resistivity, not zero resistivity.
+# Unchanged from the preceding run.
+eta1 = 0.0
+viscosity = 1e-8
+divb_diffusion = 0.0001
+# No optional iterative divergence projection; compatible discrete curl remains.
+divergence_projection_iterations = 0
+divergence_projection_tolerance = 1e-8
+divergence_projection_every = 100
+smoothing_every = 1
+reference_every = 1000
+diagnostics_every = 100
+preconditioner_smoothing_passes = 10
+preconditioner_b_critical = 1.0
+preconditioner_j_low = 4.0
+preconditioner_j_high = 8.0
+
+[output]
+compression_level = 4
+store_stepb_diagnostics = true
