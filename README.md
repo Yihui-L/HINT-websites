@@ -4,14 +4,16 @@ This repository contains only the public static websites approved for publicatio
 The original HINT source and NCSX archive repositories remain private.
 
 - [HINT program and user manual](https://yihui-l.github.io/HINT-websites/manual/)
-- [NCSX step 100 results](https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/)
+- [NCSX initialization and step 100 results](https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/)
 
 ## Published Content
 
 - `manual/`: model, numerical methods, inputs, outputs, acceleration, workflow,
   static assets and documented examples for HINT-debug 0.8.8 / HINT-wall 0.15.8.
-- `highbeta_vmec_unscale/`: selected result website, 84 original PNGs, three TOML
-  files, wall text and archive explanations for the NCSX step 100 result.
+- `highbeta_vmec_unscale/`: selected result website, 85 PNGs (84 archived results plus the initialization total-field Poincare), three TOML
+  files, wall text and archive explanations for the NCSX initialization and step 100 results.
+  The new outer-0 figure uses the stored total field before any MHD iteration;
+  tracing, VMEC overlays and limitations are documented on the result website.
 - `index.html`: redirects to the manual, which links to the result website.
 
 Solver source, source repository history, credentials, wout, mgrid, computation

@@ -1,12 +1,13 @@
 # NCSX 结果浏览网站
 
-在线入口：[NCSX 第 100 步结果浏览器](https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/)。网站公开访问，原 GitHub 仓库仍为私有；GitHub 档案和源码链接需要仓库权限。
+在线入口：[NCSX 初始化与第 100 步结果浏览器](https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/)。网站公开访问，原 GitHub 仓库仍为私有；GitHub 档案和源码链接需要仓库权限。
 
-也可在浏览器直接打开 [index.html](index.html)，无需服务器、HINT 环境或网络。网站展示本算例现有 84 张 PNG，可按内容分类、关键词检索、打开大图、前后切换及下载原始 PNG。
+也可在浏览器直接打开 [index.html](index.html)，无需服务器、HINT 环境或网络。网站展示本算例现有 85 张 PNG，可按内容分类、关键词检索、打开大图、前后切换及下载原始 PNG。
 
 ## 范围
 
 - 第 100 步完整空间结果与 0–100 步历史；HINT-debug 0.8.8 / e3c9155。
+- 新增第 0 步总场庞加莱，置于首张；[计算方式](index.html#initial-poincare)列明保存态来源、磁力线方程、起点、插值、积分、触壁规则及限制。原有 84 张图片不变。
 - initial / vmec / scale_after=false；人工按指定步数停止，不是收敛验收。
 - 原图仍保留在 `../figures/`，不复制大文件、不重采样或更改 PNG；网站需与整个算例目录一起使用。
 - 数字摘要来自 `../README.md`，不从图片反推或重算 NetCDF。

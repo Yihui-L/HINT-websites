@@ -1,11 +1,33 @@
-# Outer-100 PNG index
+# Initialization and outer-100 PNG index
 
-84 PNG figures, 300 dpi; HINT-debug 0.8.8; VMEC start; scale_after=false.
+85 PNG figures: 84 archived figures at 300 dpi, plus one initialization Poincare figure at 320 dpi.
+HINT-debug 0.8.8; VMEC start; scale_after=false.
 
-All spatial data: completed outer iteration 100. Histories: available iterations 0-100.
+Spatial data: completed outer iteration 100, EXCEPT the explicitly named initialization figure below.
+Histories: available iterations 0-100.
 See [case README](../README.md) for units, averaging, masks, input hashes, and limitations.
 
-## Field-line trace diagnostics
+## Initialization total-field Poincare (outer 0)
+
+- [poincare_total_initial_three_sections](poincare_total_initial_three_sections.png), 1760x4990 pixels, 320 dpi.
+- [Calculation method and limitations](../Documents/index.html#initial-poincare).
+- Complete record 0, time=0, outer_step=0; saved `/equilibrium/B` is already B0+B1 in tesla. No duplicate B0 addition or new MHD evolution.
+- Sections 0/30/60 deg; actual wout geometry at s=0.25/0.5/0.75/1 and axis, wall and computational box overlaid.
+- Periodic cubic field interpolation, adaptive RK4 step doubling, float64 GPU/JAX, rtol=1e-8 and atol=1e-10.
+- Up to 600 FIELD periods (200 full turns at nfp=3); 128 nominal subintervals per period, internally adaptive.
+- Multi-s, four-theta VMEC seeds plus an exterior grid; distinct trajectories, no same-s averaging.
+- Only actual return crossings; wall hits terminate tracing, not the MHD evolution domain.
+
+| phi [deg] | accepted seeds | valid returns | survive 600 returns | wall hits | singular / unresolved |
+|---|---:|---:|---:|---:|---:|
+| 0 | 547 | 131010 | 213 | 334 | 0 / 0 |
+| 30 | 329 | 129218 | 212 | 117 | 0 / 0 |
+| 60 | 279 | 130414 | 213 | 66 | 0 / 0 |
+
+Seed sets differ from the outer-100 plots; counts are not a controlled confinement comparison.
+VMEC overlays are Fourier geometry, not a second field-line integration. Geometric agreement alone does not establish B magnitude, iota or force balance accuracy.
+
+## Outer-100 field-line trace diagnostics
 
 Each iota value uses one theta=0 seed per initial VMEC s per section, not a multi-seed average.
 Different sections are kept separate. All trace lengths below are FIELD periods, not full toroidal turns.
