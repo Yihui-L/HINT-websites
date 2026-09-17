@@ -110,6 +110,8 @@ output_file = "hint_debug_analysis.nc"
 # One device per rank is used for postprocessing; request one MPI rank per GPU.
 # CPU thread budgets are automatic. Geometry checks and NetCDF I/O remain CPU.
 backend = "cpu"
+# Field resampling overlaps two bounded device batches; field-line seeds remain
+# MPI-partitioned. Figure rendering and rank-zero NetCDF writing remain on CPU.
 engine = "jax"
 
 [selection]

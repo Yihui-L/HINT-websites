@@ -139,6 +139,10 @@ start_point = "zero"
 # Other preprocessing/NetCDF and native Step-A remain CPU work.
 # Postprocessing independently selects execution.backend in post.toml.
 backend = "cpu"
+# Coil A0 near and bulk quadrature run on GPU when backend="gpu"; CPU adaptive
+# fallback is retained with the same tolerance. Logs separate the two costs.
+# CPU threads follow allocated affinity/quota; OpenMP/BLAS teams and MPI ranks
+# are distinct. Launch MPI explicitly, normally one rank per allocated GPU.
 # string; "jax" (default) enables float64 JAX/XLA for batched Step-A traces and
 # compiles complete Step-B RKG intervals. "native" uses NumPy on CPU or
 # CuPy on GPU as a single-process reference path. JAX GPU requires Linux plus
