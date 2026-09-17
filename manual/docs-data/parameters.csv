@@ -1,24 +1,21 @@
 ﻿program,name,type,debug_default,wall_default,unit_condition,description
 main,paths.output_file,str,"""hint_debug.nc""","""hint_wall.nc""",.nc 路径,主程序统一结果文件。initial 会创建/重建该文件；follow 从该文件读取最后完整状态并向同一文件追加。不得与其他运行共用写入路径。
 main,paths.vmec_wout,str,"""""","""""",.nc 路径,initial 必需：VMEC wout 几何、平衡场与剖面。空字符串不是可运行输入。follow 不需要外部 wout。
-main,paths.mgrid,str,"""""","""""",.nc 路径,initial 必需：覆盖整个计算矩形域的 mgrid，含各组线圈场。follow 使用结果文件保存的背景场。
+main,paths.coils,str,"""""","""""",.txt / .dat 路径,initial 必需：HINT_COILS 1 闭合 XYZ 线圈文本，含总电流、nfp、仿星器对称性和每线圈复制规则。follow 不重读该文件。
 main,paths.vessel,str,"""""","""""",.txt / .dat 路径,initial 必需：HINT_WALL 1 壁文本。不是 MKLIM 的旧 .nc 文件。follow 使用结果内嵌的壁几何。
 main,grid.nr,int,0,0,整数，至少 6,R 方向等间距节点数，包含矩形域两端。默认 0 是待填写占位值，不表示自动选择。
 main,grid.nz,int,0,0,整数，至少 6,Z 方向等间距节点数，包含两端。四阶中心差分需要五点，程序还要求额外一个点。
 main,grid.ntor,int,0,0,整数，至少 6,一个完整场周期的等间距环向节点数，不重复终点；还必须严格大于 VMEC 最高环向谐波序数的两倍。不是场周期数。
 main,grid.nfp,int,0,0,整数，至少 0,场周期数。0 从 wout 自动取得；显式非零值必须与 wout 和壁一致。
 main,grid.r_min,float,0.0,0.0,m,矩形计算域 R 下界，必须大于 0；与其他边界共同严格包围第一壁。
-main,grid.r_max,float,0.0,0.0,m,矩形计算域 R 上界，必须大于 r_min；mgrid 必须覆盖。
+main,grid.r_max,float,0.0,0.0,m,矩形计算域 R 上界，必须大于 r_min，且包围第一壁。
 main,grid.z_min,float,0.0,0.0,m,矩形计算域 Z 下界，必须小于 z_max。
 main,grid.z_max,float,0.0,0.0,m,矩形计算域 Z 上界；壁外还需满足 minimum_exterior_layers 的离散余量。
 main,flux.ntheta,int,0,0,整数，0 自动,VMEC 极向几何采样点数。0 使用 2*mpol+6；显式设置须满足几何采样要求，包含周期端点。不是演化网格数量。
 main,flux.inverse_tolerance_m,float,1e-08,1e-08,m，正数,柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。
 main,flux.max_inverse_iterations,int,500,500,正整数,单点 VMEC 坐标非线性反解的最大迭代次数。
-main,vacuum.enforce_stellarator_symmetry,bool,true,true,布尔值,对背景场施加与 VMEC 一致的仿星器对称性。非对称 wout 必须设 false；不能用 true 将非对称平衡随意对称化。
-main,vacuum.extcur_a,list[float],[],[],A，数值数组,各 mgrid 线圈组的实际电流，长度必须等于组数。S 模式直接乘组场；R 模式先除 raw_coil_cur 再乘组场。两种模式输入都不是无量纲倍率。
-main,vacuum.field_scale,float,1.0,1.0,无量纲,合成背景场的整体倍率。不会同步改变 VMEC 平衡和压力，因此偏离 1 时需重新检查初始化一致性。
-main,vacuum.max_field_axis_ratio,float,5.0,5.0,无量纲，至少 1,极强真空场的上限倍数：参考为未限幅的 VMEC 磁轴位置真空场模。合成后的源 mgrid 场和插值到 HINT 的场均限幅，保持方向；此参考不等于主程序归一化 B_ref。
-main,vacuum.interpolation,str,"""cubic""","""cubic""",linear / cubic,把各组电流合成后的 mgrid 磁场插值到 HINT 网格。控制的是空间插值，不是 VMEC 剖面插值。源网格需满足插值节点数要求。
+main,vacuum.current_density_a_mm2,float,0.0,0.0,A/mm²，正数,initial 必填的圆截面均匀有效电流密度；默认0是未设置标记，不能运行。a[m]=sqrt(abs(I)/(pi*J_ref*1e6))。不是材料临界电流密度，不包含额外匝数倍率。
+main,vacuum.quadrature_tolerance,float,1e-05,1e-05,无量纲，1e-10至1e-3,默认1e-5，有限体积磁矢势求积相对容差。控制近源奇点积分及求积加密比较；不等同于最终磁场误差或散度阈值。
 main,wall.periodic_closure_rtol,float,1e-10,1e-10,无量纲，正数,壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。
 main,wall.minimum_exterior_layers,int,3,3,整数，至少 3,第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。
 main,profiles.source,str,"""vmec""","""vmec""",vmec / input,vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用下面的两个剖面定义及 total_toroidal_current_a 替代。input.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。
@@ -49,18 +46,16 @@ main,solver.step_a.relative_tolerance,float,1e-08,1e-08,正数,磁力线常微�
 main,solver.step_a.absolute_tolerance,float,1e-10,1e-10,归一化状态容差，正数,Step-A 自适应积分绝对误差控制；不同引擎使用不同积分阶数，容差不代表逐位一致。
 main,solver.step_b.inner_steps,int,1000,1000,正整数,每次外迭代内磁场/流速 RKG 更新次数；p 和 s 在该内循环冻结。
 main,solver.step_b.time_step,float,0.001,0.001,归一化 Alfvén 时间，正数,固定内部时间步。需满足网格、磁场及显式扩散稳定性，程序不保证任意设置均满足 CFL。
-main,solver.step_b.resistivity,float,0.001,0.001,归一化电阻率，非负,内部 eta0；电阻项为 curl[-eta*(J1-Jnet)]。换成 SI 的标度为 mu0*L_ref*v_ref。
+main,solver.step_b.resistivity,float,0.001,0.001,归一化电阻率，非负,内部 eta0；A1 方程电阻项为 -eta*(J1-Jnet)，取旋度即原 B1 感应方程的电阻项。SI 标度为 mu0*L_ref*v_ref。
 main,solver.step_b.eta1,float,0.0,NOT_ACCEPTED,归一化电阻率，非负；仅 debug,第一壁外至矩形边界的数值真空区电阻率。0 是继承 eta0 的哨兵值，不是无电阻真空；与 eta0 不同时平滑界面。wall 不接受此参数。
 main,solver.step_b.viscosity,float,0.0,0.0,归一化运动黏性，非负,速度方程中柱坐标矢量拉普拉斯系数。SI 标度 L_ref*v_ref。默认 0，仍可能存在速度滤波的数值耗散。
-main,solver.step_b.divb_diffusion,float,0.0001,0.0001,归一化扩散系数，非负,响应场散度清理系数。debug 用 grad(div B1)，wall 用相容的负伴随形式。不是物理电阻率，也不修正固定 B0。
-main,solver.step_b.divergence_projection_iterations,int,0,200,整数，非负,可选全状态散度投影的迭代上限，0 关闭该可选步骤。debug 默认 0，wall 默认 200；wall 每个 RKG 阶段的增量约束仍强制执行，不能由 0 关闭。
-main,solver.step_b.divergence_projection_tolerance,float,1e-08,1e-08,正数,可选状态投影相对散度目标。不是 VMEC 几何/磁轴容差；wall 还有内部数值下限与独立的阶段投影准则。
-main,solver.step_b.divergence_projection_every,int,100,100,正整数,可选状态投影的内部步间隔；末步也处理。只有可选投影启用时控制此项。
+main,solver.step_b.potential_boundary_iterations,int,512,512,正整数，默认 512,wall 每个 RKG 阶段的矢势增量壁面约束 CG 上限；debug 矩形闭合不使用该参数。
+main,solver.step_b.potential_boundary_tolerance,float,1e-11,1e-11,正数，默认 1e-11,"wall 行归一化法向旋度约束 CG 目标，乘 max(1,max(abs(F)))；最终重新计算的残差须不超过该目标的4倍。不是磁场散度或几何容差；debug 不使用。"
 main,solver.step_b.smoothing_every,int,1,1,正整数,对速度相对参考场的增量执行五点滤波的内部步间隔。不是压力 reset，也不是把速度设为零。
 main,solver.step_b.reference_every,int,1000,1000,正整数,更新速度滤波参考场的内部步间隔。保留当前速度，仅改变后续滤波的参考。
 main,solver.step_b.diagnostics_every,int,100,100,正整数,内部能量/力/散度/边界误差诊断的间隔，末步也记录；是否写入由 output.store_stepb_diagnostics 控制。
 main,solver.step_b.preconditioner_smoothing_passes,int,10,10,整数，非负,对由真空场及其旋度建立的局部松弛系数执行邻域平滑的次数；0 不平滑。
-main,solver.step_b.preconditioner_b_critical,float,1.0,1.0,归一化 B，正数,"大背景磁场区的松弛系数阈值，场强因子 min(1,(Bcrit/|B0|)^2)。与真空场限幅参数不是一回事。"
+main,solver.step_b.preconditioner_b_critical,float,1.0,1.0,归一化 B，正数,"大背景磁场区的动量松弛系数阈值，场强因子 min(1,(Bcrit/|B0|)^2)。不改变或限幅背景磁场。"
 main,solver.step_b.preconditioner_j_low,float,4.0,4.0,归一化电流，非负,以 curl(B0) 模作为预条件指标的下阈值；低于此值电流因子为 1。不是 Jnet 阈值。
 main,solver.step_b.preconditioner_j_high,float,8.0,8.0,归一化电流，大于 j_low,预条件电流指标上阈值；两阈值之间线性降低，高于上阈值因子 0.1。
 main,output.compression_level,int,4,4,整数，0–9,NetCDF 数组压缩级别；0 不压缩。高压缩可能增加写入耗时，不改变物理数据精度。

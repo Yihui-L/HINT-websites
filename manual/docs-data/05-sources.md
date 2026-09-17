@@ -27,13 +27,13 @@ false 不会取消每步的磁轴定位，也不会停止 s 重建；它不是�
 
 ## 电流源的实际定义
 
-$$\lambda_{\rm VMEC}(s)=\frac{\langle\mathbf J\cdot\mathbf B\rangle}{\langle B^2\rangle},\qquad \mathbf J_{\rm net}=A\lambda(s)\mathbf B.$$
+$$\lambda_{\rm VMEC}(s)=\frac{\langle\mathbf J\cdot\mathbf B\rangle}{\langle B^2\rangle},\qquad \mathbf J_{\rm net}=\alpha_J\lambda(s)\mathbf B.$$
 
 wout 的 `jdotb/bdotb` 给出上述形状；该比值在 SI 下量纲 A/(m²·T)。在本程序中其整体幅度由 ctor 再归一化，输入形状的共同倍数会消去。`input.current` 用相同的 **lambda 形状**，不是 jcurv，也不是 I(s) 或 dI/ds。这比“所有 VMEC ac 与 HINT input 完全同义”更严格：这里只共享升幂多项式的数学表示，因变量须按 lambda 定义转换。
 
-每个 Step-B RKG 阶段根据当前 B、冻结于本次 Step-B 的 s，在壁内 0≤s<1 建立源项并按 φ=0 截面总电流调整 A：
+每个 Step-B RKG 阶段根据当前 B、冻结于本次 Step-B 的 s，在壁内 0≤s<1 建立源项并按 φ=0 截面总电流调整幅度 α_J（不是磁矢势 A）：
 
-$$A=\frac{\mu_0 I_{\rm target}/(L_{\rm ref}B_{\rm ref})}{\sum_{R,Z}[\lambda(s)B_\phi]_{\phi=0}\,\Delta R\Delta Z}.$$
+$$\alpha_J=\frac{\mu_0 I_{\rm target}/(L_{\rm ref}B_{\rm ref})}{\sum_{R,Z}[\lambda(s)B_\phi]_{\phi=0}\,\Delta R\Delta Z}.$$
 
 该积分是环向电流穿过 R–Z 截面的通量，**没有 R 权重或 2π 因子**。分母严重正负抵消时不能安全归一化，代码拒绝近退化归一化。源电流不乘压力攀升比例。
 

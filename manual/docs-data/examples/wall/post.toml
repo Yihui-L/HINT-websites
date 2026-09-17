@@ -6,6 +6,15 @@
 # time_series: fields use R-volume-weighted RMS by default; reduction='mean',
 # 'min', 'max', or 'rms' overrides this. point=(R_m,Z_m,phi_rad) samples a point.
 # Stored Step-B metrics retain solver normalization. Spatial derivatives are SI.
+# divergence_b* are fourth-order GRID derivatives, not continuous-interpolant
+# divergence. All off-grid magnetic sampling uses curl(A). In a notebook call
+# plots.magnetic_interpolation_diagnostics(vacuum=False) for total-field probes,
+# or vacuum=True for background probes; these are separate diagnostics.
+# The primary divergence_relative_mean is
+# mean(h_i*abs(divB_i))/mean(abs(B_i)), h_i=min(dR,dZ,R_i*dphi).
+# P50/P95/P99 and fraction above 5e-11 show the pointwise error distribution;
+# RMS/max remain auxiliary. Interpolation-probe averages are arithmetic;
+# the time-series reduction rules above are unchanged.
 # scope='wall' (default) or 'plasma' (inside wall with saved evolving 0<=s<1).
 # pressure_max is a sampled grid maximum, not a magnetic-axis reconstruction.
 # With solver.scale_after=false in the MAIN configuration, post-ramp pressure

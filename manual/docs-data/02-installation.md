@@ -29,7 +29,7 @@ work/
     follow.toml
     post.toml
     inputs/wout_case.nc
-    inputs/mgrid_case.nc
+    inputs/coils_case.txt
     inputs/vessel.txt
     run/                        # 结果、日志
     figures/                    # PNG，不混入源码
@@ -61,12 +61,12 @@ MPI 示例：`mpiexec -n 4 hint-debug main.toml`。这只演示启动语法，�
 ## 推荐准备顺序
 
 1. 确认 wout 的 nfp、对称性、自由边界平衡及物理剖面，保留其生成信息。
-2. 核对 mgrid 模式、电流组数量和实际电流，保证空间覆盖整个矩形域。
+2. 核对线圈周期/对称性、闭合点序、带符号总电流和参考电流密度。
 3. 准备严格包围初始 LCFS 的真实壁，并使矩形域留足壁外网格余量。
 4. 选 debug/wall、zero/vmec、scale_after，再设网格、时间步和保存策略。
 5. 阅读启动诊断：几何残差、背景场限幅/散度、VMEC 响应场投影修正和边界误差。
 6. 按完整 checkpoint 评估力、速度、散度和轴闭合，不仅看日志是否继续输出。
 
-文档内提供[debug 示例目录](docs-data/examples/debug/main.toml)和[wall 示例目录](docs-data/examples/wall/main.toml)的源码原样副本。它们不是包含 wout/mgrid 的自足 benchmark。
+文档内提供[debug 示例目录](docs-data/examples/debug/main.toml)和[wall 示例目录](docs-data/examples/wall/main.toml)的源码原样副本。它们不是包含 wout/coils 的自足 benchmark。
 
 源码：[安装元数据](source:debug:pyproject.toml)、[命令行](source:debug:src/hint_debug/cli.py)、[执行约定](source:debug:docs/EXECUTION.md)。

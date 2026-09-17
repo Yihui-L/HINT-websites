@@ -1,3 +1,4 @@
+# Requires a schema-9 A-state checkpoint. Legacy B-only files are analysis-only.
 # Continue the last complete record in an existing HINT-wall main output.
 # Relative paths resolve from this TOML file. Do not run two writers on one file.
 # Static inputs, B/v/p/s, ramp progress and axis warm start come from that NetCDF.
@@ -7,14 +8,14 @@
 
 [paths]
 # string; default "hint_wall.nc"; existing compatible main NetCDF, read then appended.
-# No wout/mgrid/vessel paths are required or reread in follow mode.
+# No wout/coils/vessel paths are required or reread in follow mode.
 output_file = "hint_wall.nc"
 
 [solver]
 # string; default "initial"; explicitly select "follow" to avoid replacing the file.
 mode = "follow"
 # start_point and the immutable initial B1.n reference come from the checkpoint.
-# Omit start_point here; changing it in follow is an error. No wout/mgrid is reread.
+# Omit start_point here; changing it in follow is an error. No wout/coils is reread.
 # string; default "cpu"; "gpu" requires the matching runtime/device.
 # Hardware and engine are invocation settings; they do not inherit automatically.
 backend = "cpu"

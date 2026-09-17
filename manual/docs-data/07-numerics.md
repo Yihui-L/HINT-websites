@@ -4,11 +4,11 @@
 
 | 顺序 | 更新内容 | 冻结/依赖关系 |
 |---|---|---|
-| 1 | 边界闭合、压力有效域 | 当前完整 B₁、v、p |
+| 1 | 边界闭合、压力有效域 | 由当前 A₁导出 B₁，闭合 v、p；不覆盖 B |
 | 2：Step-A | 沿当前 B 的双向磁力线平均 p | B 固定；不重新读取初始压力剖面 |
 | 3 | 定位该场磁轴、测量松弛后轴压 | 热启动，但不能把旧轴直接当成新轴 |
 | 4 | 由 p 和 B 重建 s | 压力排序/磁通积分 |
-| 5：Step-B | inner_steps 次 RKG，推进 B₁、v | 本次 p 和 s 固定；J₁/B/Jnet 随 RKG 阶段变化 |
+| 5：Step-B | inner_steps 次 RKG，推进 A₁、v | 本次 p 和 s 固定；J₁/B/Jnet 随 RKG 阶段变化 |
 | 6 | 在更新后的 B 中再次跟踪轴 | scale_after=false 也执行 |
 | 7 | 按攀升/维持策略统一缩放 p（若应执行） | 不恢复旧 s；false 且已完成攀升则不缩放 |
 | 8 | 保存完整状态及可用诊断 | 内部诊断和结束反馈后的状态时刻不同 |
@@ -29,7 +29,7 @@ $$D f_i=\frac{-f_{i+2}+8f_{i+1}-8f_{i-1}+f_{i-2}}{12h},$$
 
 $$D^2 f_i=\frac{-f_{i+2}+16f_{i+1}-30f_i+16f_{i-1}-f_{i-2}}{12h^2}.$$
 
-φ 周期环绕；R/Z 保护层使用相应闭合。柱坐标散度按守恒组合：
+φ 周期环绕；A 的 R/Z 端点使用四阶单边导数，混合导数保持可交换；速度/压力另用相应 ghost 闭合。柱坐标散度按守恒组合：
 
 $$D\cdot\mathbf B=\frac{D_R(RB_R)}R+\frac{D_\phi B_\phi}R+D_Z B_Z.$$
 
@@ -37,9 +37,17 @@ $$D\cdot\mathbf B=\frac{D_R(RB_R)}R+\frac{D_\phi B_\phi}R+D_Z B_Z.$$
 
 规则内域四阶并不等于三维扭曲壁附近整体四阶；壁的距离、法向、插值和 ghost 延拓另有误差。
 
+### 离网格插值及其检验
+
+所有新 A 状态中的磁场均来自同一 C2 张量五次 Hermite 矢势。插值的是 (A_R,R A_phi,A_Z)，包含柱坐标度量；B 由解析旋度获得。共享节点值、一阶与二阶导数，导数使用演化中的相同四阶模板，因此节点处解析 curl 与 curl_h 一致，跨单元 A 为 C2、B 为 C1。
+
+这同时解决网格散度与连续插值散度的约束，不意味着 B 或 J 本身没有截断误差。测试另外用实际磁场的 JAX Jacobian 验证连续散度，不能用返回常数零代替。构造总场插值器只需合并 A₀+A₁和本地模板表，无每外步全局 B→A 逆问题。
+
+Step-A 的 p 仍为四点张量插值，取样时裁去负值；输出 p/s 线性插值并施加原范围限制。壁 signed distance 为周期线性插值；v 没有不可压约束，不套磁场的保散度条件。旧 B-only 文件只在历史后处理路径使用原经验证的逆拟合。详细公式见“离散系统、插值与一致性”。
+
 ### Step-B 时间推进
 
-使用四阶段低存储 Runge–Kutta–Gill。对 u=(v,B₁)，每阶段先计算 δu=Δτ·RHS(u)，然后：
+使用四阶段低存储 Runge–Kutta–Gill。对 u=(v,A₁)，每阶段先计算 δu=Δτ·RHS(u)，然后：
 
 $$u\leftarrow u+c_0(\delta u+c_1q),\qquad q\leftarrow c_2q+c_3\delta u.$$
 
@@ -50,7 +58,7 @@ $$u\leftarrow u+c_0(\delta u+c_1q),\qquad q\leftarrow c_2q+c_3\delta u.$$
 | 3 | 1+√(1/2) | −1 | 1−3c₀ | 2c₀ |
 | 4 | 1/6 | −2 | 0 | 0 |
 
-阶段间重新施加相容边界。此形式推进的是人工松弛方程；压力分裂、滤波、投影和边界闭合使得“RKG 四阶”不能直接推导整套外迭代的四阶时间误差。
+每阶段对 dA₁/dt 施加相容边界，再由 A 的旋度计算 B；不对 B 事后修补。此形式推进的是人工松弛方程；压力分裂、滤波、投影和边界闭合使得“RKG 四阶”不能直接推导整套外迭代的四阶时间误差。
 
 ### 预条件和滤波
 
@@ -60,4 +68,4 @@ C 的场因子是 min(1,(Bcrit/|B₀|)²)；电流指标来自 curl(B₀)，小�
 
 当前时间步固定，无通用自适应 CFL 控制。增大 inner_steps 延长松弛区间，不会修复过大 time_step 导致的不稳定。细化网格后，显式扩散约束通常更严格。
 
-源码：[Step-A](source:debug:src/hint_debug/solver/step_a.py)、[JAX 追踪](source:debug:src/hint_debug/solver/step_a_jax.py)、[Step-B](source:debug:src/hint_debug/solver/step_b.py)、[空间算子](source:debug:src/hint_debug/numerics.py)。
+源码：[Step-A](source:debug:src/hint_debug/solver/step_a.py)、[JAX 追踪](source:debug:src/hint_debug/solver/step_a_jax.py)、[插值](source:debug:src/hint_debug/interpolation.py)、[Step-B](source:debug:src/hint_debug/solver/step_b.py)、[空间算子](source:debug:src/hint_debug/numerics.py)。

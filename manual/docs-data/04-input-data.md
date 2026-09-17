@@ -14,27 +14,23 @@ $$B_R=B^\theta\partial_\theta R+B^\phi\partial_\phi R,\quad B_Z=B^\theta\partial
 
 压力源采用 wout `presf` 表；lambda 源采用 `jdotb/bdotb`，不把 ac 多项式直接当作局部电流密度。VMEC 中用于直磁力线坐标的 λ 与本程序平行电流形状 λ 同名但**物理含义不同**。
 
-## mgrid 的 R / S 模式
+## 线圈文本与全装置补全
 
-设第 g 组的实际输入电流为 I_g=`extcur_a[g]`，整体倍率 f=`field_scale`：
+新 initial 输入弃用 mgrid；`paths.coils` 提供 `.txt/.dat` 文本，头三行为 `HINT_COILS 1`、`nfp N`、`stellarator_symmetric true/false`，不使用等号。随后每块为 `coil 名称 总电流_A stellarator/periodic/none`、多行 XYZ 米制坐标、`end`。闭合曲线至少八个独立点，末点重复首点。正电流沿点序方向，负电流反向。
 
-$$\mathbf B_0=f\sum_g I_g\mathbf B_g\quad(S\text{ 模式：组场单位 T/A}),$$
+`stellarator` 表示半周期代表线圈，先按 `(x,y,z)->(x,-y,-z)` 且 **I 变号**生成镜像，再旋转补全所有 nfp 周期。`periodic` 只旋转，`none` 不复制；后两种覆盖方式必须在补全后仍满足整个装置的对称性。自对称复制只计一次，不同输入块生成同一物理线圈则报错。提供的是整条闭合线圈，不是裁切到半周期的开弧。线圈、壁、wout 的周期和对称性必须一致。
 
-$$\mathbf B_0=f\sum_g\frac{I_g}{I_{g,\rm raw}}\mathbf B_g\quad(R\text{ 模式：组场为原参考电流产生的 T}).$$
+文件电流是该曲线代表的总有效电流，不再额外乘匝数、电流组倍率、场周期数或全局 scale。完整格式见 [线圈协议](source:debug:docs/COIL_FILE_FORMAT.md)。
 
-`raw_coil_cur` 为 R 模式参考电流。参考电流为零而用户要求非零电流无法缩放，程序报错。旧文件缺少模式元数据时会警告并按兼容约定解释；显式未知模式不应猜测。`extcur_a` 长度按文件线圈组数确定，不再引入模糊的“group-current 倍率”。
+## 有限圆截面与无散磁场
 
-mgrid 一个场周期内的数据应当已由**全装置线圈**计算得到；HINT 不会把一个周期的近场线圈单独当成全装置真空场。只有目标网格是一个场周期。
+`vacuum.current_density_a_mm2` 是必填的模型电流密度，不是超导材料 Jc。由每个非零电流计算
 
-插值将源 mgrid 的合成场重采样到 HINT 网格。`cubic` 与 `linear` 影响采样误差和耗时；源点数量、坐标方向、范围必须合法，不外推填充矩形域。
+$$a=\sqrt{|I|/(\pi J_{\rm ref}10^6)}\;\mathrm m.$$
 
-## 极强场限幅与散度
+截面内均匀电流沿局部线圈切向，体积积分包括曲率度量。程序计算全装置线圈的磁矢势，再得到网格背景场和保无散插值表示。近线圈采用观察点投影为中心的截面极坐标，对径向可积奇点解析积分，配合长度方向自适应求积；不使用任意软化分母，不进行磁场限幅。
 
-先在未限幅背景场中求 VMEC 磁轴 φ=0 处模 B_axis，设置 B_cap=`max_field_axis_ratio`×B_axis。超过阈值的向量乘 B_cap/|B|，保持方向。源 mgrid 合成场和最终插值场都受该限制。
-
-$$\mathbf B_{\rm limited}=\mathbf B\min(1,B_{\rm cap}/|\mathbf B|).$$
-
-**限幅不保散度，也不保持原线圈精确解。** 它是线圈附近奇异/极强场的数值处理，阈值过低可能影响等离子体附近的真实场。应检查限幅点数、阈值、最大场、插值后散度及其空间位置。程序不自动清除 B₀ 的全部离散散度。
+网格取 `B0=curl_h(A0)`，使用与 HINT 四阶散度配套的差分；离网格取周期五次矢势样条的解析旋度。两种散度分别检验，同时比较独立源积分导数得到的场值，不能用无散恒等式代替物理保真检验。壁只选择诊断范围，不参与真空场加权、裁剪或边界投影。`quadrature_tolerance` 默认 1e-5，不等于插值误差或散度阈值。
 
 ## 壁文本协议
 
@@ -62,4 +58,4 @@ DATA 后必须有 `toroidal_planes*poloidal_points` 行，按平面优先排列�
 
 主程序检查 **LCFS 严格在壁内、壁严格在矩形域内**，并要求壁外至少配置的网格层余量。壁几何生成 signed distance（正值在内）、外法向、有效掩膜，写入统一结果。即使 debug 的磁边界在矩形上，真实壁仍参与压力、源项支撑区域和后处理可用区。
 
-源码：[VMEC](source:debug:src/hint_debug/preprocess/vmec.py)、[mgrid](source:debug:src/hint_debug/preprocess/vacuum.py)、[壁协议](source:debug:src/hint_debug/preprocess/wall_file.py)、[几何](source:wall:src/hint_wall/preprocess/wall.py)。
+源码：[VMEC](source:debug:src/hint_debug/preprocess/vmec.py)、[线圈体积分](source:debug:src/hint_debug/preprocess/coils.py)、[背景场](source:debug:src/hint_debug/preprocess/vacuum.py)、[壁协议](source:debug:src/hint_debug/preprocess/wall_file.py)。

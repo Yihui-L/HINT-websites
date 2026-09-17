@@ -2,7 +2,7 @@
 #
 # Types shown below are TOML types. Relative paths are resolved from this file.
 # This example describes an initial run. For follow mode, output_file identifies
-# the existing unified NetCDF restart file; VMEC, MAKEGRID, vessel, grid, wall,
+# the existing unified NetCDF restart file; VMEC, coils, vessel, grid, wall,
 # vacuum, flux, and profile values are then restored from that NetCDF file.
 
 [paths]
@@ -10,8 +10,8 @@
 output_file = "hint_debug.nc"
 # string; required in initial mode; VMEC wout NetCDF input.
 vmec_wout = "../case/wout_case.nc"
-# string; required in initial mode; MAKEGRID coil-field NetCDF input.
-mgrid = "../case/mgrid_case.nc"
+# string; required initial; HINT_COILS 1 closed XYZ coil text (.txt/.dat).
+coils = "../case/coils_case.txt"
 # string; required in initial mode; self-describing HINT_WALL text (.txt/.dat), shared with HINT-wall.
 vessel = "../case/wall_case.txt"
 
@@ -28,7 +28,8 @@ nfp = 0
 # Require 0<r_min<r_max and z_min<z_max. The full first wall must lie strictly
 # inside the box with wall.minimum_exterior_layers points beyond it on each edge.
 # These bounds define the Step-B electromagnetic boundary: response B_normal
-# and velocity remain zero there; B_vacuum is fixed and is not projected.
+# remains fixed at its initial value (zero for zero starts); velocity is zero.
+# B_vacuum is fixed and is not projected onto this boundary condition.
 r_min = 2.5
 r_max = 5.0
 z_min = -1.5
@@ -45,40 +46,23 @@ inverse_tolerance_m = 1e-8
 max_inverse_iterations = 500
 
 [vacuum]
-# boolean; default true; project the complete mgrid coil field onto exact stellarator
-# symmetry. This is the intended default for nfp>=2, lasym=false stellarators.
-# Set false explicitly for lasym=true VMEC; projection requires Z bounds symmetric
-# about zero. The coils file used to create mgrid must already describe the complete
-# physical coil system; this projection removes numerical mismatch but cannot add
-# omitted coils. MAKEGRID stores a completed one-field-period response in kp.
-enforce_stellarator_symmetry = true
-# float array [A]; default [] (unset); required in initial mode.
-# Its length must equal MAKEGRID nextcur exactly.
-# Always enter physical group currents in amperes, for both mgrid S and R.
-# S/SCALE stores unit-current fields [T/A]; R/RAW includes raw_coil_cur [A].
-# Do not copy dimensionless VMEC RAW EXTCUR multipliers directly: first multiply
-# them by the matching signed raw_coil_cur values to obtain extcur_a.
-# "group" here means one br_NNN/bp_NNN/bz_NNN triplet, not an extra current model.
-extcur_a = [1.0]
-# float; default 1; optional global calibration. The effective current attached
-# to mgrid group g is I_g,used=field_scale*extcur_a[g]. Before field limiting:
-# S: B_vac=sum_g(I_g,used*B_g); R: B_vac=sum_g(I_g,used/raw_coil_cur[g]*B_g).
-# Mode is read automatically. RAW requires finite reference currents; a zero
-# reference cannot support a nonzero requested current. Missing mode assumes
-# legacy SCALE with a warning; unknown explicit modes are rejected.
-# During relaxation B_total=B_vac+B_response and the evolved plasma current is
-# J_response=curl(B_response)/mu0; J_target is a resistive source, not an added
-# independent current in the reported total.
-field_scale = 1.0
-# float >=1; default 5. The uncapped combined coil field is sampled at the VMEC
-# magnetic axis (s=0, phi=0). Both mgrid source values and interpolated HINT-grid
-# values above this multiple are scaled to the cap without changing direction.
-max_field_axis_ratio = 5.0
-# string; "linear" or "cubic" (default). This interpolates the combined MAKEGRID
-# coil field from the mgrid R-Z-phi mesh to the HINT R-Z-phi mesh; it does not
-# interpolate extcur or plasma profiles. Active source-grid directions need at
-# least 3 or 5 points respectively; MAKEGRID kp=1 is valid for axisymmetry.
-interpolation = "cubic"
+# float [A/mm^2]; REQUIRED initial (default 0 is invalid). Effective UNIFORM
+# current density over a circular winding-pack cross-section, not a material Jc.
+# Each signed total current I [A] comes from coils_case.txt; no extcur, turns,
+# mgrid R/S conversion, global scale, or field-strength clipping is applied.
+# a [m] = sqrt(abs(I)/(pi * current_density_a_mm2 * 1e6)).
+# 30 below is an illustrative model assumption, NOT a validated coil design.
+current_density_a_mm2 = 30.0
+# float; default 1e-5, range [1e-10,1e-3]; relative finite-volume quadrature
+# tolerance. Controls near-singularity integration and a refinement check.
+# It is not the HINT spatial interpolation error or the allowed div(B).
+quadrature_tolerance = 1e-5
+# All physical coils are generated before summing A. Grid B0=curl_h(A0);
+# off-grid B0=curl(spline(A0)), never independent component interpolation.
+# B_total=B0+B_response; only B_response is evolved. J_target is the plasma
+# resistive source and is NOT added to curl(B_response)/mu0 as another current.
+# The stored A0 is reused by follow/post; neither sources nor radii are rebuilt.
+# See ../docs/COIL_FILE_FORMAT.md for per-coil symmetry and signed-current rules.
 
 [wall]
 # HINT_WALL 1 text header: nfp, stellarator_symmetric, toroidal_planes,
@@ -196,7 +180,7 @@ axis_residual_tolerance_scale = 1.0
 [solver.step_a]
 # floats; field-line pressure averaging uses batched DOPRI5 with JAX and DOP853
 # in the native reference path.
-# A JAX trial stage outside the wall is retried at smaller step size.
+# In both engines, an out-of-wall trial stage is retried at smaller step size.
 # Truly failed directions still contribute zero to the forward/backward average.
 max_step = 0.002              # normalized length; default 0.002
 trace_length = 10.0           # normalized length in each direction; default 10
@@ -213,7 +197,7 @@ inner_steps = 1000
 # timestep refinement; every hardware/engine combination uses the same value and equations.
 time_step = 0.001
 # nonnegative float; default 1e-3; normalized electrical resistivity eta0 inside
-# the first wall in curl[v x B - eta(R,Z,phi)*(J_response-J_target)].
+# the first wall in dA1/dt = v x B - eta(R,Z,phi)*(J_response-J_target).
 resistivity = 0.001
 # nonnegative float; default 0; fixed normalized resistivity outside the first
 # wall and inside the rectangular computational boundary. Zero is the original
@@ -223,19 +207,17 @@ eta1 = 0.0
 # nonnegative float; default 0; normalized coefficient of vector Laplacian(v) in
 # the artificial momentum relaxation. Zero reproduces the retained inviscid form.
 viscosity = 0.0
-# nonnegative float; default 1e-4; normalized divergence-cleaning diffusivity in
-# +kappa_divB*grad(div B_response). It is numerical control, not physical eta.
-divb_diffusion = 0.0001
-# integer and relative float; defaults 0 and 1e-8. Zero preserves the original
-# HINT rectangular-boundary algorithm. A positive value enables an optional
-# divergence projection at divergence_projection_every, independently of diagnostics.
-divergence_projection_iterations = 0
-# Even when optional projection is disabled, tangential induction EMF is zero
-# in global R/Z guards BEFORE curl; zero/vmec starts share this solenoidal update.
-divergence_projection_tolerance = 1e-8
-# positive integer; default 100; cadence used only when the optional projection
-# is enabled. It is independent of diagnostics_every.
-divergence_projection_every = 100
+# A1 is evolved in temporal gauge: dA1/dt = v x (B0+curl A1) - eta*(J1-Jtarget).
+# B1=curl_h(A1), J1=curl_h(B1); no grad(div B) cleaning or magnetic projection.
+# Positive integer/float; defaults 512 and 1e-11. HINT-wall projects each A1
+# increment onto its frozen-normal-flux constraints. This relative tolerance
+# applies to row-normalized boundary curl constraints (absolute floor uses 1).
+# A recomputed final residual above 4 times this target rejects the interval.
+# HINT-debug uses an exact rectangular tangential-increment closure instead;
+# these two parameters are retained for matching input layouts and are unused there.
+# Failure to meet the wall constraint rejects the step rather than changing B.
+potential_boundary_iterations = 512
+potential_boundary_tolerance = 1e-11
 # positive integer; default 1; apply the original fourth-order mixed velocity
 # filter after this many RKG steps. The magnetic field and pressure are not filtered.
 smoothing_every = 1
