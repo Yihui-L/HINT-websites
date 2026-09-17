@@ -1,7 +1,7 @@
 # Source Version
 
 - HINT-debug 1.2.0 / HINT-wall 1.2.0
-- Source commit: `da459289b1c2d3ab2e7f3f2f7efd1f9a047b45bc`
+- Source commit: `a6828bd3854516acbc22d286f5c39fe2d96d9455`
 - NetCDF schema: 9 (variant-specific identifiers)
 - Uncommitted source-tree changes: False. When true, the commit is a base reference, not this complete snapshot.
 - 参数默认值与字段类型由配置 AST 生成，解释为本快照人工核对。

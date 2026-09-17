@@ -24,7 +24,7 @@ $$B_R=B^\theta\partial_\theta R+B^\phi\partial_\phi R,\quad B_Z=B^\theta\partial
 
 文件电流是该曲线代表的总有效电流，不再额外乘匝数、电流组倍率、场周期数或全局 scale。完整格式见 [线圈协议](source:debug:docs/COIL_FILE_FORMAT.md)。
 
-## 有限圆截面与无散磁场
+## 平滑核心与无散磁场
 
 `vacuum.current_density_a_mm2` 是必填的模型电流密度，不是超导材料 Jc。由每个非零电流计算
 
