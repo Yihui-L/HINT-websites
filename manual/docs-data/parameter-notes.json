@@ -94,10 +94,7 @@
     "z_min_m": ["m；省略自动", "采样域 Z 下界，默认源结果下界。"],
     "z_max_m": ["m；省略自动", "采样域 Z 上界，默认源结果上界。"]
   },
-  "GPRTSConfig": {
-    "axis_seed_r_m": ["m；兼容项", "当前 force_balance 计算不使用该轴猜测；为兼容旧配置仍解析。磁轴定位应使用 magnetic_axis 表。"],
-    "axis_seed_z_m": ["m；兼容项", "同 axis_seed_r_m，当前局部力残差计算不依赖此参数。"]
-  },
+  "GPRTSConfig": {},
   "AxisConfig": {
     "axis_seed_r_m": ["m，非负", "后处理磁轴搜索猜测。0 优先使用保存的轴信息；不指定新固定磁轴。"],
     "axis_seed_z_m": ["m", "与显式 R 猜测配套的 Z 坐标。"],

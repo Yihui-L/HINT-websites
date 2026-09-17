@@ -76,6 +76,6 @@ $$ \epsilon_{mean}=\frac{\operatorname{mean}(h_i|\nabla\cdot B_i|)}{\operatornam
 
 CPU/native 与 JAX 共享公式，GPU/JAX 使用 float64；R/Z 内域 roll 可沿原空间分片通信，仅端点作单边 gather。Step-A/后处理 MPI 分配起点，Step-B 使用原 JAX 空间 mesh；wall 稀疏约束通信可能成为瓶颈，不保证线性扩展。无每外步全局逆拟合，但局部 7³ 插值成本仍真实存在。
 
-schema 9 保存 A₀、初始 A₁参考和每记录 A₁/p/v/s，不重复保存可导出的 B/J。follow 不重拟合、不换规范，不重算初始场。旧 B-only schema 4–8 仅保留分析读取；为了不伪称无损续算，新主程序明确拒绝其 follow。派生后处理仍写独立 analysis.nc，变量名称与 SI 单位保持不变。
+schema 9 保存 A₀、初始 A₁参考和每记录 A₁/p/v/s，不重复保存可导出的 B/J。follow 不重拟合、不换规范，不重算初始场。旧 B-only schema 4–8 由全部读取路径明确拒绝，既不自动升级，也不做后处理兼容转换。派生后处理仍写独立 analysis.nc，变量名称与 SI 单位保持不变。
 
 源码：[节点与连续矢势](source:debug:src/hint_debug/vector_potential.py)、[时间推进](source:debug:src/hint_debug/solver/step_b.py)、[壁迹](source:wall:src/hint_wall/solver/potential_boundary.py)、[存储](source:debug:src/hint_debug/storage.py)。

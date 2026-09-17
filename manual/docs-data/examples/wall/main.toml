@@ -160,9 +160,9 @@ pressure_ramp_iterations = 20
 # evolving p, s, B and v, and axis pressure may drift or decay without being restored.
 # For start_point="vmec", the ramp is already complete at initialization:
 # false applies from the first outer cycle; initial wout p is unchanged either way.
-# Follow omission inherits the selected checkpoint's value (legacy default true).
+# Follow omission inherits the selected checkpoint's value (initial default true).
 scale_after = true
-# floats [m]; defaults 0/0; initial axis guess, also a fallback for legacy follow files
+# floats [m]; defaults 0/0; initial axis guess, also used when an initial checkpoint has no located axis yet
 # without a saved axis seed. New checkpoints restore their own normalized seed.
 # R must be positive in initial mode.
 axis_seed_r_m = 3.75

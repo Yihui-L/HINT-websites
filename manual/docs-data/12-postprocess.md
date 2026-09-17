@@ -15,7 +15,7 @@
 | boundary_trace | 边界曲线追踪 | 内部固定 mode=vmec；名字不表示调用 VMEC 求解器 |
 | convergence | 保存的 Step-B 历史 | 无法恢复没有存储的内部诊断 |
 
-旧 `magval/gprts/hmag` 分别是 `fields/force_balance/field_lines` 的兼容别名，同一输入不能同时给新旧表。共有 HMAGConfig 中某些参数被内容分支覆盖或不使用，完整参数表逐项说明，不建议把所有公共字段都复制到每个表。
+输入只接受 `fields/force_balance/field_lines` 等当前表名，旧 `magval/gprts/hmag` 别名已删除。共有 HMAGConfig 中某些参数被内容分支覆盖或不使用，完整参数表逐项说明，不建议把所有公共字段都复制到每个表。
 
 追踪圈数的接口差异：CLI `flux_surfaces.surface_circuits` 按完整 2π 环向圈计，源码乘 nfp 扩展到场周期；CLI `poincare.boundary_points` 和 Notebook `crossings` 按场周期回归计。三个量不能直接等值替换。
 

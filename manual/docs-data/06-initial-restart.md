@@ -42,7 +42,7 @@ save_every = 1
 
 上例省略了外部 wout、线圈文本、vessel。**只对被明确继承的设置**可以省略：Step-A/B 参数、轴位置/容差、scale_after 等从保存配置恢复；起点语义不可冲突。backend、engine、追加步数、保存策略属于本次调用设置，不能假定所有参数都自动继承。
 
-旧 schema 4–8 的 B-only 文件保留后处理读取，但新版拒绝直接 follow：逆拟合转换会改变数值状态，无法保证续算连续性。使用其原版本继续，或建立新的 initial 算例。debug 与 wall 的 schema 标识及边界含义不同，不支持把同一个输出当作另一版本的 follow 文件。
+主程序与后处理仅接受当前 schema 9 的 A-state 文件。旧 schema 4–8、B-only 文件均拒绝，不提供自动升级；需要建立新的 initial 算例。debug 与 wall 的 schema 标识及边界含义不同，不支持把同一个输出当作另一版本的 follow 文件。
 
 ## 写入与并发
 

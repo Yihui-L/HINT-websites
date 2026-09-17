@@ -163,7 +163,7 @@ mode = "3d"
 # boolean; default false; trace both +B and -B in 3d mode.
 trace_both_directions = false
 # boolean; default false; reconstruct nested-surface quantities in 3d mode only.
-# Legacy switch; prefer the independent [flux_surfaces] block below.
+# Combined field-line switch; prefer the independent [flux_surfaces] block below.
 calculate_flux_quantities = false
 # integer; default 1; number of 3d R-Z seeds; >=4 for flux quantities.
 seed_count = 30
@@ -239,7 +239,7 @@ surface_circuits = 100
 
 [boundary_trace]
 # boolean; default false; one seed traces a candidate boundary, not a VMEC reader.
-# Equivalent to the legacy mode=vmec; this does not establish that it is the LCFS.
+# Equivalent to the field_lines mode=vmec; this does not establish that it is the LCFS.
 # Same seed position/axis/error controls as field_lines; no internal surfaces.
 enabled = false
 seed_r_m = 4.05

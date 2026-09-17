@@ -14,7 +14,7 @@ python -m pip install './HINT-debug[plots,distributed]'
 # 另一版本：python -m pip install './HINT-wall[plots,distributed]'
 ```
 
-GPU 路径按驱动兼容性选择包内 extra，例如 `./HINT-debug[jax-cuda12,plots,distributed]` 或 `jax-cuda13`。`native/gpu` 使用 `gpu-cuda11` / `gpu-cuda12` 的 CuPy 路径，不要同时安装多个互相冲突的 CuPy CUDA 包。`vmec` extra 是历史兼容入口，内置响应场算法不需要额外安装 virtual-casing。
+GPU 路径按驱动兼容性选择包内 extra，例如 `./HINT-debug[jax-cuda12,plots,distributed]` 或 `jax-cuda13`。`native/gpu` 使用 `gpu-cuda11` / `gpu-cuda12` 的 CuPy 路径，不要同时安装多个互相冲突的 CuPy CUDA 包。内置 VMEC 响应场算法不需要额外安装 virtual-casing，也不再提供空的 `vmec` extra。
 
 私有仓库需使用用户自己的 GitHub SSH key 或授权凭据；不要把口令、token 写进 TOML、Notebook 或脚本。多节点运行要求每个节点看到一致的代码、环境和输入路径。
 
