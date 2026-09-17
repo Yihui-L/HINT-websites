@@ -16,7 +16,9 @@ $$B_R=B^\theta\partial_\theta R+B^\phi\partial_\phi R,\quad B_Z=B^\theta\partial
 
 ## 线圈文本与全装置补全
 
-新 initial 输入弃用 mgrid；`paths.coils` 提供 `.txt/.dat` 文本，头三行为 `HINT_COILS 1`、`nfp N`、`stellarator_symmetric true/false`，不使用等号。随后每块为 `coil 名称 总电流_A stellarator/periodic/none`、多行 XYZ 米制坐标、`end`。闭合曲线至少八个独立点，末点重复首点。正电流沿点序方向，负电流反向。
+新 initial 输入弃用 mgrid；`paths.coils` 提供 `.txt/.dat` 文本，头三行为 `HINT_COILS 1`、`nfp N`、`stellarator_symmetric true/false`，不使用等号。随后每块为 `coil 名称 总电流_A stellarator/periodic/updown/none`、多行 XYZ 米制坐标、`end`。闭合曲线至少八个独立点，末点重复首点。正电流沿点序方向，负电流反向。
+
+每条线圈可独立选择三种对称生成规则：`stellarator` 同时补全仿星器伙伴和场周期旋转，`periodic` 仅补全场周期旋转，`updown` 仅做 `(x,y,z)->(x,y,-z)` 且保持点序和电流符号不变，不做环向复制。典型 PF 线圈是完整环向圆环，本身轴对称，因此“不做环向复制”不等于破坏场周期性。`none` 表示所有实例已经显式提供。无论哪种规则，补全后的完整电流集合仍须满足文件声明的全局周期性和仿星器对称性；不能把任意不具周期性的线圈放进单周期计算域。
 
 `stellarator` 表示半周期代表线圈，先按 `(x,y,z)->(x,-y,-z)` 且 **I 变号**生成镜像，再旋转补全所有 nfp 周期。`periodic` 只旋转，`none` 不复制；后两种覆盖方式必须在补全后仍满足整个装置的对称性。自对称复制只计一次，不同输入块生成同一物理线圈则报错。提供的是整条闭合线圈，不是裁切到半周期的开弧。线圈、壁、wout 的周期和对称性必须一致。
 
@@ -28,7 +30,14 @@ $$B_R=B^\theta\partial_\theta R+B^\phi\partial_\phi R,\quad B_Z=B^\theta\partial
 
 $$a=\sqrt{|I|/(\pi J_{\rm ref}10^6)}\;\mathrm m.$$
 
-截面内均匀电流沿局部线圈切向，体积积分包括曲率度量。程序计算全装置线圈的磁矢势，再得到网格背景场和保无散插值表示。近线圈采用观察点投影为中心的截面极坐标，对径向可积奇点解析积分，配合长度方向自适应求积；不使用任意软化分母，不进行磁场限幅。
+当前使用近似的平滑核心线圈模型，不再对均匀硬边界圆截面做昂贵体积分：
+
+```text
+A(x) = mu0/(4*pi) sum I integral dl'/sqrt(|x-x'|^2+a^2)
+a = sqrt(abs(I)/(pi*J_ref*1e6))
+```
+
+局部无限长直导线极限下，J(rho)=I*a²/[pi*(rho²+a²)²]，中心密度绝对值为 J_ref，总电流仍为 I；a 是平滑核心尺度，不是工程截面半径。场在核心内有限，远离核心恢复丝状场。每段 A 与其解析 curl(B) 均使用解析积分；周期样条中心线逐级细分，通过 A 和 B 的变化检验精度。全体线圈段共同批处理，不再逐线圈做近场修正。该近似由源模型明确给出，不对最终磁场逐点限幅。模型误差、中心线离散误差和 HINT 网格插值误差需区分，严格无散并不能保证磁面完全正确。
 
 网格取 `B0=curl_h(A0)`，使用与 HINT 四阶散度配套的差分；离网格取周期五次矢势样条的解析旋度。两种散度分别检验，同时比较独立源积分导数得到的场值，不能用无散恒等式代替物理保真检验。壁只选择诊断范围，不参与真空场加权、裁剪或边界投影。`quadrature_tolerance` 默认 1e-5，不等于插值误差或散度阈值。
 
@@ -58,4 +67,4 @@ DATA 后必须有 `toroidal_planes*poloidal_points` 行，按平面优先排列�
 
 主程序检查 **LCFS 严格在壁内、壁严格在矩形域内**，并要求壁外至少配置的网格层余量。壁几何生成 signed distance（正值在内）、外法向、有效掩膜，写入统一结果。即使 debug 的磁边界在矩形上，真实壁仍参与压力、源项支撑区域和后处理可用区。
 
-源码：[VMEC](source:debug:src/hint_debug/preprocess/vmec.py)、[线圈体积分](source:debug:src/hint_debug/preprocess/coils.py)、[背景场](source:debug:src/hint_debug/preprocess/vacuum.py)、[壁协议](source:debug:src/hint_debug/preprocess/wall_file.py)。
+源码：[VMEC](source:debug:src/hint_debug/preprocess/vmec.py)、[平滑核心线圈积分](source:debug:src/hint_debug/preprocess/coils.py)、[背景场](source:debug:src/hint_debug/preprocess/vacuum.py)、[壁协议](source:debug:src/hint_debug/preprocess/wall_file.py)。

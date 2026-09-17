@@ -21,8 +21,8 @@
     "max_inverse_iterations": ["正整数", "单点 VMEC 坐标非线性反解的最大迭代次数。"]
   },
   "VacuumConfig": {
-    "current_density_a_mm2": ["A/mm²，正数", "initial 必填的圆截面均匀有效电流密度；默认0是未设置标记，不能运行。a[m]=sqrt(abs(I)/(pi*J_ref*1e6))。不是材料临界电流密度，不包含额外匝数倍率。"],
-    "quadrature_tolerance": ["无量纲，1e-10至1e-3", "默认1e-5，有限体积磁矢势求积相对容差。控制近源奇点积分及求积加密比较；不等同于最终磁场误差或散度阈值。"]
+    "current_density_a_mm2": ["A/mm²，正数", "initial 必填的平滑核心参考中心电流密度；默认0无效。a[m]=sqrt(abs(I)/(pi*J_ref*1e6)) 是核心尺度，不是均匀截面半径。局部直导线 J(rho)=I*a²/[pi*(rho²+a²)²]。不是材料临界电流密度，不含额外匝数倍率。"],
+    "quadrature_tolerance": ["无量纲，1e-10至1e-3", "默认1e-5，中心线加密容差。线段积分解析计算；独立探针处加密 A/B 的最大变化除以平均模须不超过5倍容差。不等同于最终场误差或散度阈值。"]
   },
   "WallConfig": {
     "periodic_closure_rtol": ["无量纲，正数", "壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。"],

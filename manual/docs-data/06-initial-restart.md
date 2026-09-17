@@ -14,11 +14,11 @@ $$\mathcal V[\mathbf B](\mathbf x)=\frac{1}{4\pi}\int_S\frac{(d\mathbf S\times\m
 
 ## 从初始积分场到矢势状态
 
-已有 virtual-casing 积分仍给出初始 B₁样本。准备阶段保留加权离散 Helmholtz 修正，再作**一次**经场值保真检验的连续矢势拟合。将 A₁取样到 HINT 原网格后，以新的配套 curl_h(A₁) 定义初始响应场。
+virtual-casing 积分给出初始 B₁样本，直接使用后续演化的同一离散 curl 反求节点 A₁，不再经过旧的 Helmholtz 修正、连续样条迭代拟合和重采样链条。设 a=(A_R,A_Z,R A_phi)，F=(-R B_R,-R B_Z,-B_phi)，以离散旋度 C 和梯度 G 求解 (CᵀC+GGᵀ)a=CᵀF。R/Z 采用包含单侧端点的完整四阶导数矩阵 SVD；phi 使用四阶差分符号对应的 FFT，而非连续波数。零空间取最小范数规范。该最小二乘目标是通量分量的未加权范数，不是磁能范数；物理磁场误差另行检查。MPI 分配 Fourier 模式，CPU/GPU 执行张量变换。
 
-转换后矢量差的算术平均除以参考平均场强须不超过 1%；最大矢量差除以该平均场强须不超过 5%。超限报错并要求检查空间分辨率，不靠改变电流归一化掩盖差异。连续积分误差、旧初始离散修正误差、此次 A 转换误差是不同量，均不能仅凭散度小推断为零。
+转换后矢量差的算术平均除以参考平均场强须不超过 1%；最大矢量差除以该平均场强须不超过 5%。超限报错并要求检查空间分辨率，不靠改变电流归一化掩盖差异。积分误差、离散 curl 可表示性误差及网格插值误差是不同量，均不能仅凭散度小推断为零。
 
-从此以后直接推进节点 A₁。Step-A、磁轴、庞加莱与后处理使用同一 C2 五次 Hermite 矢势的解析 curl，不再每外步逆拟合 B。A₀直接来自线圈体积分，且不进入响应场边界条件。
+从此以后直接推进节点 A₁。Step-A、磁轴、庞加莱与后处理使用同一 C2 五次 Hermite 矢势的解析 curl，不再每外步逆拟合 B。A₀直接来自平滑核心线圈解析积分，且不进入响应场边界条件。
 
 zero 初始化 A₁=0；vmec 初始化完整 A₁、p 和 s。两版冻结**最终准备得到的初始响应场**法向值：不可在进入演化时再次把非零初始 B₁n 改成零。洛伦兹力始终使用完整 J₁×(B₀+B₁)。
 
@@ -48,4 +48,4 @@ save_every = 1
 
 主程序先写数组、同步，再提交完整标记；这能识别部分写入，不等价于任意并发读取均安全。重要结果先备份；监控正在写的文件时优先使用安全副本，并检查最后完整记录。后处理写独立文件且有写锁，不要自行删除一个仍有进程持有的锁。
 
-源码：[响应场重建](source:debug:src/hint_debug/preprocess/vmec_field.py)、[casing](source:debug:src/hint_debug/preprocess/casing.py)、[投影](source:debug:src/hint_debug/preprocess/solenoidal.py)、[演化矢势](source:debug:src/hint_debug/vector_potential.py)、[状态存储](source:debug:src/hint_debug/storage.py)、[矢势边界](source:wall:src/hint_wall/solver/potential_boundary.py)。
+源码：[响应场重建](source:debug:src/hint_debug/preprocess/vmec_field.py)、[casing](source:debug:src/hint_debug/preprocess/casing.py)、[配套离散 curl 逆解](source:debug:src/hint_debug/nodal_reconstruction.py)、[演化矢势](source:debug:src/hint_debug/vector_potential.py)、[状态存储](source:debug:src/hint_debug/storage.py)、[矢势边界](source:wall:src/hint_wall/solver/potential_boundary.py)。

@@ -11,6 +11,9 @@ output_file = "hint_wall.nc"
 # string; required in initial mode; VMEC wout NetCDF input.
 vmec_wout = "../case/wout_case.nc"
 # string; required initial; HINT_COILS 1 closed XYZ coil text (.txt/.dat).
+# Per-coil symmetry: stellarator (half-period representative), periodic (full-period
+# representative), updown (Z-reflected pair only, e.g. complete PF rings), or none
+# (already complete). The expanded ensemble must match VMEC/wall symmetry.
 coils = "../case/coils_case.txt"
 # string; required in initial mode; self-describing HINT_WALL text (.txt/.dat), shared with HINT-debug.
 vessel = "../case/wall_case.txt"
@@ -43,20 +46,23 @@ inverse_tolerance_m = 1e-8
 max_inverse_iterations = 500
 
 [vacuum]
-# float [A/mm^2]; REQUIRED initial (default 0 is invalid). Effective UNIFORM
-# current density over a circular winding-pack cross-section, not a material Jc.
+# float [A/mm^2]; REQUIRED initial (default 0 is invalid). Reference CENTERLINE
+# density for a smooth-core regularized loop, not a uniform tube or material Jc.
 # Each signed total current I [A] comes from coils_case.txt; no extcur, turns,
 # mgrid R/S conversion, global scale, or field-strength clipping is applied.
 # a [m] = sqrt(abs(I)/(pi * current_density_a_mm2 * 1e6)).
+# Locally straight: J(rho)=I*a^2/[pi*(rho^2+a^2)^2]; a is a core scale,
+# not a hard-edge radius. A uses 1/sqrt(distance^2+a^2) on every segment.
 # 30 below is an illustrative model assumption, NOT a validated coil design.
 current_density_a_mm2 = 30.0
-# float; default 1e-5, range [1e-10,1e-3]; relative finite-volume quadrature
-# tolerance. Controls near-singularity integration and a refinement check.
+# float; default 1e-5, range [1e-10,1e-3]; centerline refinement tolerance.
+# Segment integrals are analytic; refined A and B must differ by <=5*tolerance.
 # It is not the HINT spatial interpolation error or the allowed div(B).
 quadrature_tolerance = 1e-5
 # All physical coils are generated before summing A. Grid B0=curl_h(A0);
 # off-grid B0=curl(spline(A0)), never independent component interpolation.
-# B_total=B0+B_response; only B_response is evolved. J_target is the plasma
+# B_total=B0+B_response; A_response is evolved, B_response=curl_h(A_response).
+# J_target is the plasma
 # resistive source and is NOT added to curl(B_response)/mu0 as another current.
 # The stored A0 is reused by follow/post; neither sources nor radii are rebuilt.
 # See ../docs/COIL_FILE_FORMAT.md for per-coil symmetry and signed-current rules.
@@ -134,8 +140,8 @@ start_point = "zero"
 # Other preprocessing/NetCDF and native Step-A remain CPU work.
 # Postprocessing independently selects execution.backend in post.toml.
 backend = "cpu"
-# Coil A0 near and bulk quadrature run on GPU when backend="gpu"; CPU adaptive
-# fallback is retained with the same tolerance. Logs separate the two costs.
+# Coil A0 uses analytic smooth-core segments in shared batches across coils.
+# GPU JAX keeps sources resident; CPU uses bounded target workers; MPI splits targets.
 # CPU threads follow allocated affinity/quota; OpenMP/BLAS teams and MPI ranks
 # are distinct. Launch MPI explicitly, normally one rank per allocated GPU.
 # string; "jax" (default) enables float64 JAX/XLA for batched Step-A traces and

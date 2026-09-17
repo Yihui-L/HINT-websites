@@ -14,8 +14,8 @@ main,grid.z_max,float,0.0,0.0,m,矩形计算域 Z 上界；壁外还需满足 mi
 main,flux.ntheta,int,0,0,整数，0 自动,VMEC 极向几何采样点数。0 使用 2*mpol+6；显式设置须满足几何采样要求，包含周期端点。不是演化网格数量。
 main,flux.inverse_tolerance_m,float,1e-08,1e-08,m，正数,柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。
 main,flux.max_inverse_iterations,int,500,500,正整数,单点 VMEC 坐标非线性反解的最大迭代次数。
-main,vacuum.current_density_a_mm2,float,0.0,0.0,A/mm²，正数,initial 必填的圆截面均匀有效电流密度；默认0是未设置标记，不能运行。a[m]=sqrt(abs(I)/(pi*J_ref*1e6))。不是材料临界电流密度，不包含额外匝数倍率。
-main,vacuum.quadrature_tolerance,float,1e-05,1e-05,无量纲，1e-10至1e-3,默认1e-5，有限体积磁矢势求积相对容差。控制近源奇点积分及求积加密比较；不等同于最终磁场误差或散度阈值。
+main,vacuum.current_density_a_mm2,float,0.0,0.0,A/mm²，正数,initial 必填的平滑核心参考中心电流密度；默认0无效。a[m]=sqrt(abs(I)/(pi*J_ref*1e6)) 是核心尺度，不是均匀截面半径。局部直导线 J(rho)=I*a²/[pi*(rho²+a²)²]。不是材料临界电流密度，不含额外匝数倍率。
+main,vacuum.quadrature_tolerance,float,1e-05,1e-05,无量纲，1e-10至1e-3,默认1e-5，中心线加密容差。线段积分解析计算；独立探针处加密 A/B 的最大变化除以平均模须不超过5倍容差。不等同于最终场误差或散度阈值。
 main,wall.periodic_closure_rtol,float,1e-10,1e-10,无量纲，正数,壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。
 main,wall.minimum_exterior_layers,int,3,3,整数，至少 3,第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。
 main,profiles.source,str,"""vmec""","""vmec""",vmec / input,vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用下面的两个剖面定义及 total_toroidal_current_a 替代。input.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。
