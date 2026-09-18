@@ -12,11 +12,19 @@ $$\mathcal V[\mathbf B](\mathbf x)=\frac{1}{4\pi}\int_S\frac{(d\mathbf S\times\m
 
 近表面采用局部常矢量 C 的减法正则化，结合常场内外/主值跳跃关系恢复解。外点为 V[B−C]，内点为 V[B−C]−C+B_VMEC(x)，表面按主值处理。使用成对 16×16 / 24×24 Gauss 面板误差估计与自适应细分；这些是当前内部精度控制，不是用户可填的 TOML 参数，也不是对全局物理误差的保证。
 
-## 从初始积分场到矢势状态
+## 直接积分初始矢势
 
-virtual-casing 积分给出初始 B₁样本，直接使用后续演化的同一离散 curl 反求节点 A₁，不再经过旧的 Helmholtz 修正、连续样条迭代拟合和重采样链条。设 a=(A_R,A_Z,R A_phi)，F=(-R B_R,-R B_Z,-B_phi)，以离散旋度 C 和梯度 G 求解 (CᵀC+GGᵀ)a=CᵀF。R/Z 采用包含单侧端点的完整四阶导数矩阵 SVD；phi 使用四阶差分符号对应的 FFT，而非连续波数。零空间取最小范数规范。该最小二乘目标是通量分量的未加权范数，不是磁能范数；物理磁场误差另行检查。MPI 分配 Fourier 模式，CPU/GPU 执行张量变换。
+1.3.0 不再使用“响应 B → 逆求 A”路径。对满足 curl A_v=B_VMEC 的内部矢势，使用广义 virtual-casing 恒等式直接计算：
 
-转换后矢量差的算术平均除以参考平均场强须不超过 1%；最大矢量差除以该平均场强须不超过 5%。超限报错并要求检查空间分辨率，不靠改变电流归一化掩盖差异。积分误差、离散 curl 可表示性误差及网格插值误差是不同量，均不能仅凭散度小推断为零。
+$$\mathbf A_1(\mathbf x)=\mathbf 1_\Omega\mathbf A_v(\mathbf x)+\mathcal V[\mathbf A_v](\mathbf x)+\frac1{4\pi}\int_S\frac{d\mathbf S\times\mathbf B_{\rm VMEC}}{|\mathbf x-\mathbf y|}.$$
+
+其中 V 是上面定义的通用矢量核，表面使用半跳跃极限。该表达式等于物理电流的体积分矢势加一个纯梯度规范项；不是只使用表面电流单层势。后者单独使用不能恢复 LCFS 内部的等离子体场。原理参考 [Hanson 的广义恒等式](https://sherwoodtheory.org/sw2015/uploads/146/hanson_v1.pdf)。
+
+内部 A 从 wout 的 phipf、chipf、signgs 与角变换 lmns/lmnc 构造，而不是反演 HINT 网格上的 B。基础式为 A_v=psi grad(theta)−chi grad(phi)−psi' lambda_ang grad(s)，再作径向规范变换。这里 lambda_ang 是 VMEC 角坐标变换，**不是电流源项的 lambda(s)**。几何和角变换采用保留原节点系数的 C4 五次径向插值；bsup 参考数据保留独立的轴正则插值。
+
+为降低强规范梯度的离散误差，星形 R-Z 截面可使用物理径向同伦规范，路径与表面表格均检查积分/插值收敛；不能构造有效参考中心时保留一般磁通坐标规范。LCFS 上附加纯标量梯度改善矢势导数连续性，不改变连续磁场。规范平滑不能替代实际 B 精度检查。MPI 分配目标块和规范表格，JAX CPU/GPU 批量计算，环向 Fourier 因子在路径批次内复用。
+
+以独立读取 wout bsup 的直接 **B virtual-casing 积分**为参考，在最多640个分层网格点及256个非网格点分别校验 curl A：平均矢量误差/参考平均场强不超过1%，最大矢量误差/参考平均场强不超过5%。这是抽样保护，不是全网格精度认证。超限时检查数据、规范正则性和网格/积分收敛，不调电流、不放宽阈值。另检验磁通/角变换重建 B 与 bsup B 的一致性。散度很小不能证明场值、磁面或电流准确。
 
 从此以后直接推进节点 A₁。Step-A、磁轴、庞加莱与后处理使用同一 C2 五次 Hermite 矢势的解析 curl，不再每外步逆拟合 B。A₀直接来自平滑核心线圈解析积分，且不进入响应场边界条件。
 
@@ -48,4 +56,4 @@ save_every = 1
 
 主程序先写数组、同步，再提交完整标记；这能识别部分写入，不等价于任意并发读取均安全。重要结果先备份；监控正在写的文件时优先使用安全副本，并检查最后完整记录。后处理写独立文件且有写锁，不要自行删除一个仍有进程持有的锁。
 
-源码：[响应场重建](source:debug:src/hint_debug/preprocess/vmec_field.py)、[casing](source:debug:src/hint_debug/preprocess/casing.py)、[配套离散 curl 逆解](source:debug:src/hint_debug/nodal_reconstruction.py)、[演化矢势](source:debug:src/hint_debug/vector_potential.py)、[状态存储](source:debug:src/hint_debug/storage.py)、[矢势边界](source:wall:src/hint_wall/solver/potential_boundary.py)。
+源码：[响应初始化](source:debug:src/hint_debug/preprocess/vmec_field.py)、[直接A积分核](source:debug:src/hint_debug/preprocess/casing.py)、[内部VMEC矢势](source:debug:src/hint_debug/preprocess/vmec_potential.py)、[独立磁场校验](source:debug:src/hint_debug/preprocess/casing_validation.py)、[演化矢势](source:debug:src/hint_debug/vector_potential.py)、[状态存储](source:debug:src/hint_debug/storage.py)、[矢势边界](source:wall:src/hint_wall/solver/potential_boundary.py)。

@@ -137,7 +137,9 @@ mode = "initial"
 # Initial B1.n is frozen on the boundary, not forced to zero. Velocity starts at zero.
 start_point = "zero"
 # string; hardware for JAX Step-A and Step-B: "cpu" (default) or "gpu".
-# VMEC response initialization uses JAX Fourier/near-field quadrature batches
+# VMEC response initialization directly integrates A, not B followed by inversion.
+# It needs wout phipf/chipf/signgs/lmns (lmnc for lasym), plus bsup for validation.
+# JAX Fourier/near-field quadrature batches
 # on the selected device; CPU keeps vectorized adaptive control and fallback roots.
 # Source panels are cached across targets. Compatible stellarator-symmetric grids
 # evaluate half-period targets, then reflect; sources still cover the full torus.
