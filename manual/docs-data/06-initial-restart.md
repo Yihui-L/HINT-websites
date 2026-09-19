@@ -14,7 +14,7 @@ $$\mathcal V[\mathbf B](\mathbf x)=\frac{1}{4\pi}\int_S\frac{(d\mathbf S\times\m
 
 ## 直接积分初始矢势
 
-1.3.0 不再使用“响应 B → 逆求 A”路径。对满足 curl A_v=B_VMEC 的内部矢势，使用广义 virtual-casing 恒等式直接计算：
+当前不使用“响应 B → 逆求 A”路径。对满足 curl A_v=B_VMEC 的内部矢势，使用广义 virtual-casing 恒等式直接计算：
 
 $$\mathbf A_1(\mathbf x)=\mathbf 1_\Omega\mathbf A_v(\mathbf x)+\mathcal V[\mathbf A_v](\mathbf x)+\frac1{4\pi}\int_S\frac{d\mathbf S\times\mathbf B_{\rm VMEC}}{|\mathbf x-\mathbf y|}.$$
 
@@ -23,6 +23,12 @@ $$\mathbf A_1(\mathbf x)=\mathbf 1_\Omega\mathbf A_v(\mathbf x)+\mathcal V[\math
 内部 A 从 wout 的 phipf、chipf、signgs 与角变换 lmns/lmnc 构造，而不是反演 HINT 网格上的 B。基础式为 A_v=psi grad(theta)−chi grad(phi)−psi' lambda_ang grad(s)，再作径向规范变换。这里 lambda_ang 是 VMEC 角坐标变换，**不是电流源项的 lambda(s)**。几何和角变换采用保留原节点系数的 C4 五次径向插值；bsup 参考数据保留独立的轴正则插值。
 
 为降低强规范梯度的离散误差，星形 R-Z 截面可使用物理径向同伦规范，路径与表面表格均检查积分/插值收敛；不能构造有效参考中心时保留一般磁通坐标规范。LCFS 上附加纯标量梯度改善矢势导数连续性，不改变连续磁场。规范平滑不能替代实际 B 精度检查。MPI 分配目标块和规范表格，JAX CPU/GPU 批量计算，环向 Fourier 因子在路径批次内复用。
+
+### 路径积分自动加密
+
+1.3.1 起，复合16点高斯路径求积从64个节点开始，对未收敛目标逐次加倍，资源保护上限为65536。旧的2048节点不再触发提前退出。保持原判据 `|A_N-A_(N/2)| <= 2e-7*A_reference`，不放宽容差、不调整源场、不改变HINT网格。此差值是收敛估计而非真实误差证明；真正达到上限仍不收敛时报告最大变化、阈值和最差点的s/theta/phi。NaN/Inf不能被视为通过。
+
+高节点数时自动缩小目标批次，少量剩余路径只填充至相邻的2次幂批大小；边界规范的自动微分也使用更小的批次。JAX CPU/GPU核继续批量执行，MPI仅在各自目标内细化，局部不等长循环没有新增集合通信。规范参考点的全局判据则使用集合计算保持各rank一致。没有新增TOML参数，也没有改动Step-A/B、边界条件或follow状态。
 
 以独立读取 wout bsup 的直接 **B virtual-casing 积分**为参考，在最多640个分层网格点及256个非网格点分别校验 curl A：平均矢量误差/参考平均场强不超过1%，最大矢量误差/参考平均场强不超过5%。这是抽样保护，不是全网格精度认证。超限时检查数据、规范正则性和网格/积分收敛，不调电流、不放宽阈值。另检验磁通/角变换重建 B 与 bsup B 的一致性。散度很小不能证明场值、磁面或电流准确。
 

@@ -9,7 +9,7 @@ The original HINT source and NCSX archive repositories remain private.
 ## Published Content
 
 - `manual/`: model, numerical methods, inputs, outputs, acceleration, workflow,
-  static assets and documented examples for HINT-debug 0.8.8 / HINT-wall 0.15.8.
+  static assets and documented examples for HINT-debug 1.3.1 / HINT-wall 1.3.1.
 - `highbeta_vmec_unscale/`: selected result website, 85 PNGs (84 archived results plus the initialization total-field Poincare), three TOML
   files, wall text and archive explanations for the NCSX initialization and step 100 results.
   The new outer-0 figure uses the stored total field before any MHD iteration;

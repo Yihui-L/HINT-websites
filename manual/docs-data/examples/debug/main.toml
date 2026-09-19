@@ -138,6 +138,9 @@ mode = "initial"
 start_point = "zero"
 # string; hardware for JAX Step-A and Step-B: "cpu" (default) or "gpu".
 # VMEC response initialization directly integrates A, not B followed by inversion.
+# Source paths automatically refine 64..65536 quadrature nodes without changing
+# the HINT grid or tolerance; only unresolved targets incur the extra work.
+# High-order target batches shrink to bound memory; no input knob is needed.
 # It needs wout phipf/chipf/signgs/lmns (lmnc for lasym), plus bsup for validation.
 # JAX Fourier/near-field quadrature batches
 # on the selected device; CPU keeps vectorized adaptive control and fallback roots.

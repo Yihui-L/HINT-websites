@@ -8,11 +8,11 @@
     "versions": {
       "debug": {
         "default": "hint_debug.nc",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L105"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L105"
       },
       "wall": {
         "default": "hint_wall.nc",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L105"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L105"
       }
     }
   },
@@ -25,11 +25,11 @@
     "versions": {
       "debug": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L106"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L106"
       },
       "wall": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L106"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L106"
       }
     }
   },
@@ -42,11 +42,11 @@
     "versions": {
       "debug": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L107"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L107"
       },
       "wall": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L107"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L107"
       }
     }
   },
@@ -59,11 +59,11 @@
     "versions": {
       "debug": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L108"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L108"
       },
       "wall": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L108"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L108"
       }
     }
   },
@@ -76,11 +76,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L113"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L113"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L113"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L113"
       }
     }
   },
@@ -93,11 +93,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L114"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L114"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L114"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L114"
       }
     }
   },
@@ -110,11 +110,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L115"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L115"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L115"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L115"
       }
     }
   },
@@ -127,11 +127,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L116"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L116"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L116"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L116"
       }
     }
   },
@@ -144,11 +144,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L117"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L117"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L117"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L117"
       }
     }
   },
@@ -161,11 +161,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L118"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L118"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L118"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L118"
       }
     }
   },
@@ -178,11 +178,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L119"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L119"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L119"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L119"
       }
     }
   },
@@ -195,11 +195,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L120"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L120"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L120"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L120"
       }
     }
   },
@@ -212,11 +212,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L137"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L137"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L137"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L137"
       }
     }
   },
@@ -229,11 +229,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L138"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L138"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L138"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L138"
       }
     }
   },
@@ -246,11 +246,11 @@
     "versions": {
       "debug": {
         "default": 500,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L139"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L139"
       },
       "wall": {
         "default": 500,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L139"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L139"
       }
     }
   },
@@ -263,11 +263,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L144"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L144"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L144"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L144"
       }
     }
   },
@@ -280,11 +280,11 @@
     "versions": {
       "debug": {
         "default": 1e-05,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L145"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L145"
       },
       "wall": {
         "default": 1e-05,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L145"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L145"
       }
     }
   },
@@ -297,11 +297,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L150"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L150"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L150"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L150"
       }
     }
   },
@@ -314,11 +314,11 @@
     "versions": {
       "debug": {
         "default": 3,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L151"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L151"
       },
       "wall": {
         "default": 3,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L151"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L151"
       }
     }
   },
@@ -331,11 +331,11 @@
     "versions": {
       "debug": {
         "default": "vmec",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L164"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L164"
       },
       "wall": {
         "default": "vmec",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L164"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L164"
       }
     }
   },
@@ -348,11 +348,11 @@
     "versions": {
       "debug": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L165"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L165"
       },
       "wall": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L165"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L165"
       }
     }
   },
@@ -365,11 +365,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L166"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L166"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L166"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L166"
       }
     }
   },
@@ -382,11 +382,11 @@
     "versions": {
       "debug": {
         "default": "power_series",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L156"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L156"
       },
       "wall": {
         "default": "power_series",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L156"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L156"
       }
     }
   },
@@ -399,11 +399,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L157"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L157"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L157"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L157"
       }
     }
   },
@@ -416,11 +416,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L158"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L158"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L158"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L158"
       }
     }
   },
@@ -433,11 +433,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L159"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L159"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L159"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L159"
       }
     }
   },
@@ -450,11 +450,11 @@
     "versions": {
       "debug": {
         "default": "power_series",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L156"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L156"
       },
       "wall": {
         "default": "power_series",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L156"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L156"
       }
     }
   },
@@ -467,11 +467,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L157"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L157"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L157"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L157"
       }
     }
   },
@@ -484,11 +484,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L158"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L158"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L158"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L158"
       }
     }
   },
@@ -501,11 +501,11 @@
     "versions": {
       "debug": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L159"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L159"
       },
       "wall": {
         "default": [],
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L159"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L159"
       }
     }
   },
@@ -518,11 +518,11 @@
     "versions": {
       "debug": {
         "default": "initial",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L199"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L199"
       },
       "wall": {
         "default": "initial",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L198"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L198"
       }
     }
   },
@@ -535,11 +535,11 @@
     "versions": {
       "debug": {
         "default": "zero",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L200"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L200"
       },
       "wall": {
         "default": "zero",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L199"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L199"
       }
     }
   },
@@ -552,11 +552,11 @@
     "versions": {
       "debug": {
         "default": "cpu",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L201"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L201"
       },
       "wall": {
         "default": "cpu",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L200"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L200"
       }
     }
   },
@@ -569,11 +569,11 @@
     "versions": {
       "debug": {
         "default": "jax",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L202"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L202"
       },
       "wall": {
         "default": "jax",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L201"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L201"
       }
     }
   },
@@ -586,11 +586,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L203"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L203"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L202"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L202"
       }
     }
   },
@@ -603,11 +603,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L204"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L204"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L203"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L203"
       }
     }
   },
@@ -620,11 +620,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L205"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L205"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L204"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L204"
       }
     }
   },
@@ -637,11 +637,11 @@
     "versions": {
       "debug": {
         "default": true,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L206"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L206"
       },
       "wall": {
         "default": true,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L205"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L205"
       }
     }
   },
@@ -654,11 +654,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L207"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L207"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L206"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L206"
       }
     }
   },
@@ -671,11 +671,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L208"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L208"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L207"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L207"
       }
     }
   },
@@ -688,11 +688,11 @@
     "versions": {
       "debug": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L209"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L209"
       },
       "wall": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L208"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L208"
       }
     }
   },
@@ -705,11 +705,11 @@
     "versions": {
       "debug": {
         "default": 0.002,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L173"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L173"
       },
       "wall": {
         "default": 0.002,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L173"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L173"
       }
     }
   },
@@ -722,11 +722,11 @@
     "versions": {
       "debug": {
         "default": 10.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L174"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L174"
       },
       "wall": {
         "default": 10.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L174"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L174"
       }
     }
   },
@@ -739,11 +739,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L175"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L175"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L175"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L175"
       }
     }
   },
@@ -756,11 +756,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L176"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L176"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L176"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L176"
       }
     }
   },
@@ -773,11 +773,11 @@
     "versions": {
       "debug": {
         "default": 1000,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L181"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L181"
       },
       "wall": {
         "default": 1000,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L181"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L181"
       }
     }
   },
@@ -790,11 +790,11 @@
     "versions": {
       "debug": {
         "default": 0.001,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L182"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L182"
       },
       "wall": {
         "default": 0.001,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L182"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L182"
       }
     }
   },
@@ -807,11 +807,11 @@
     "versions": {
       "debug": {
         "default": 0.001,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L183"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L183"
       },
       "wall": {
         "default": 0.001,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L183"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L183"
       }
     }
   },
@@ -824,7 +824,7 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L184"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L184"
       }
     }
   },
@@ -837,11 +837,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L185"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L185"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L184"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L184"
       }
     }
   },
@@ -854,11 +854,11 @@
     "versions": {
       "debug": {
         "default": 512,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L186"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L186"
       },
       "wall": {
         "default": 512,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L185"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L185"
       }
     }
   },
@@ -871,11 +871,11 @@
     "versions": {
       "debug": {
         "default": 1e-11,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L187"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L187"
       },
       "wall": {
         "default": 1e-11,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L186"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L186"
       }
     }
   },
@@ -888,11 +888,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L188"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L188"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L187"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L187"
       }
     }
   },
@@ -905,11 +905,11 @@
     "versions": {
       "debug": {
         "default": 1000,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L189"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L189"
       },
       "wall": {
         "default": 1000,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L188"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L188"
       }
     }
   },
@@ -922,11 +922,11 @@
     "versions": {
       "debug": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L190"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L190"
       },
       "wall": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L189"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L189"
       }
     }
   },
@@ -939,11 +939,11 @@
     "versions": {
       "debug": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L191"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L191"
       },
       "wall": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L190"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L190"
       }
     }
   },
@@ -956,11 +956,11 @@
     "versions": {
       "debug": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L192"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L192"
       },
       "wall": {
         "default": 1.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L191"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L191"
       }
     }
   },
@@ -973,11 +973,11 @@
     "versions": {
       "debug": {
         "default": 4.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L193"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L193"
       },
       "wall": {
         "default": 4.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L192"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L192"
       }
     }
   },
@@ -990,11 +990,11 @@
     "versions": {
       "debug": {
         "default": 8.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L194"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L194"
       },
       "wall": {
         "default": 8.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L193"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L193"
       }
     }
   },
@@ -1007,11 +1007,11 @@
     "versions": {
       "debug": {
         "default": 4,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L216"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L216"
       },
       "wall": {
         "default": 4,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L215"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L215"
       }
     }
   },
@@ -1024,11 +1024,11 @@
     "versions": {
       "debug": {
         "default": true,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L217"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L217"
       },
       "wall": {
         "default": true,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L216"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L216"
       }
     }
   },
@@ -1041,11 +1041,11 @@
     "versions": {
       "debug": {
         "default": "cpu",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L550"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L550"
       },
       "wall": {
         "default": "cpu",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L549"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L549"
       }
     }
   },
@@ -1058,11 +1058,11 @@
     "versions": {
       "debug": {
         "default": "jax",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L551"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L551"
       },
       "wall": {
         "default": "jax",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L550"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L550"
       }
     }
   },
@@ -1075,11 +1075,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -1092,11 +1092,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L507"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L507"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L506"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L506"
       }
     }
   },
@@ -1109,11 +1109,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L508"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L508"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L507"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L507"
       }
     }
   },
@@ -1126,11 +1126,11 @@
     "versions": {
       "debug": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L509"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L509"
       },
       "wall": {
         "default": 0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L508"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L508"
       }
     }
   },
@@ -1143,11 +1143,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L510"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L510"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L509"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L509"
       }
     }
   },
@@ -1160,11 +1160,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L511"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L511"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L510"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L510"
       }
     }
   },
@@ -1177,11 +1177,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L512"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L512"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L511"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L511"
       }
     }
   },
@@ -1194,11 +1194,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L513"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L513"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L512"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L512"
       }
     }
   },
@@ -1211,11 +1211,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -1228,11 +1228,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -1245,11 +1245,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L556"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L556"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L555"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L555"
       }
     }
   },
@@ -1262,11 +1262,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L557"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L557"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L556"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L556"
       }
     }
   },
@@ -1279,11 +1279,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L558"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L558"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L557"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L557"
       }
     }
   },
@@ -1296,11 +1296,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -1313,11 +1313,11 @@
     "versions": {
       "debug": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L523"
       },
       "wall": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L522"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L522"
       }
     }
   },
@@ -1330,11 +1330,11 @@
     "versions": {
       "debug": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L524"
       },
       "wall": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L523"
       }
     }
   },
@@ -1347,11 +1347,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L525"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L524"
       }
     }
   },
@@ -1364,11 +1364,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L526"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L525"
       }
     }
   },
@@ -1381,11 +1381,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L527"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L526"
       }
     }
   },
@@ -1398,11 +1398,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L528"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L527"
       }
     }
   },
@@ -1415,11 +1415,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L529"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L528"
       }
     }
   },
@@ -1432,11 +1432,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L530"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L529"
       }
     }
   },
@@ -1449,11 +1449,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L531"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L530"
       }
     }
   },
@@ -1466,11 +1466,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L532"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L531"
       }
     }
   },
@@ -1483,11 +1483,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L533"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L532"
       }
     }
   },
@@ -1500,11 +1500,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L534"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L533"
       }
     }
   },
@@ -1517,11 +1517,11 @@
     "versions": {
       "debug": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L535"
       },
       "wall": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L534"
       }
     }
   },
@@ -1534,11 +1534,11 @@
     "versions": {
       "debug": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L536"
       },
       "wall": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L535"
       }
     }
   },
@@ -1551,11 +1551,11 @@
     "versions": {
       "debug": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L537"
       },
       "wall": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L536"
       }
     }
   },
@@ -1568,11 +1568,11 @@
     "versions": {
       "debug": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L538"
       },
       "wall": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L537"
       }
     }
   },
@@ -1585,11 +1585,11 @@
     "versions": {
       "debug": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L539"
       },
       "wall": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L538"
       }
     }
   },
@@ -1602,11 +1602,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L540"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L539"
       }
     }
   },
@@ -1619,11 +1619,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L541"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L540"
       }
     }
   },
@@ -1636,11 +1636,11 @@
     "versions": {
       "debug": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L542"
       },
       "wall": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L541"
       }
     }
   },
@@ -1653,11 +1653,11 @@
     "versions": {
       "debug": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L543"
       },
       "wall": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L542"
       }
     }
   },
@@ -1670,11 +1670,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L544"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L543"
       }
     }
   },
@@ -1687,11 +1687,11 @@
     "versions": {
       "debug": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L545"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L545"
       },
       "wall": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L544"
       }
     }
   },
@@ -1704,11 +1704,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -1721,11 +1721,11 @@
     "versions": {
       "debug": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L523"
       },
       "wall": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L522"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L522"
       }
     }
   },
@@ -1738,11 +1738,11 @@
     "versions": {
       "debug": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L524"
       },
       "wall": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L523"
       }
     }
   },
@@ -1755,11 +1755,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L525"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L524"
       }
     }
   },
@@ -1772,11 +1772,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L526"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L525"
       }
     }
   },
@@ -1789,11 +1789,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L527"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L526"
       }
     }
   },
@@ -1806,11 +1806,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L528"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L527"
       }
     }
   },
@@ -1823,11 +1823,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L529"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L528"
       }
     }
   },
@@ -1840,11 +1840,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L530"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L529"
       }
     }
   },
@@ -1857,11 +1857,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L531"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L530"
       }
     }
   },
@@ -1874,11 +1874,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L532"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L531"
       }
     }
   },
@@ -1891,11 +1891,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L533"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L532"
       }
     }
   },
@@ -1908,11 +1908,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L534"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L533"
       }
     }
   },
@@ -1925,11 +1925,11 @@
     "versions": {
       "debug": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L535"
       },
       "wall": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L534"
       }
     }
   },
@@ -1942,11 +1942,11 @@
     "versions": {
       "debug": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L536"
       },
       "wall": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L535"
       }
     }
   },
@@ -1959,11 +1959,11 @@
     "versions": {
       "debug": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L537"
       },
       "wall": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L536"
       }
     }
   },
@@ -1976,11 +1976,11 @@
     "versions": {
       "debug": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L538"
       },
       "wall": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L537"
       }
     }
   },
@@ -1993,11 +1993,11 @@
     "versions": {
       "debug": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L539"
       },
       "wall": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L538"
       }
     }
   },
@@ -2010,11 +2010,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L540"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L539"
       }
     }
   },
@@ -2027,11 +2027,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L541"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L540"
       }
     }
   },
@@ -2044,11 +2044,11 @@
     "versions": {
       "debug": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L542"
       },
       "wall": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L541"
       }
     }
   },
@@ -2061,11 +2061,11 @@
     "versions": {
       "debug": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L543"
       },
       "wall": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L542"
       }
     }
   },
@@ -2078,11 +2078,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L544"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L543"
       }
     }
   },
@@ -2095,11 +2095,11 @@
     "versions": {
       "debug": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L545"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L545"
       },
       "wall": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L544"
       }
     }
   },
@@ -2112,11 +2112,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -2129,11 +2129,11 @@
     "versions": {
       "debug": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L523"
       },
       "wall": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L522"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L522"
       }
     }
   },
@@ -2146,11 +2146,11 @@
     "versions": {
       "debug": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L524"
       },
       "wall": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L523"
       }
     }
   },
@@ -2163,11 +2163,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L525"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L524"
       }
     }
   },
@@ -2180,11 +2180,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L526"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L525"
       }
     }
   },
@@ -2197,11 +2197,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L527"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L526"
       }
     }
   },
@@ -2214,11 +2214,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L528"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L527"
       }
     }
   },
@@ -2231,11 +2231,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L529"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L528"
       }
     }
   },
@@ -2248,11 +2248,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L530"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L529"
       }
     }
   },
@@ -2265,11 +2265,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L531"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L530"
       }
     }
   },
@@ -2282,11 +2282,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L532"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L531"
       }
     }
   },
@@ -2299,11 +2299,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L533"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L532"
       }
     }
   },
@@ -2316,11 +2316,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L534"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L533"
       }
     }
   },
@@ -2333,11 +2333,11 @@
     "versions": {
       "debug": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L535"
       },
       "wall": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L534"
       }
     }
   },
@@ -2350,11 +2350,11 @@
     "versions": {
       "debug": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L536"
       },
       "wall": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L535"
       }
     }
   },
@@ -2367,11 +2367,11 @@
     "versions": {
       "debug": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L537"
       },
       "wall": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L536"
       }
     }
   },
@@ -2384,11 +2384,11 @@
     "versions": {
       "debug": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L538"
       },
       "wall": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L537"
       }
     }
   },
@@ -2401,11 +2401,11 @@
     "versions": {
       "debug": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L539"
       },
       "wall": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L538"
       }
     }
   },
@@ -2418,11 +2418,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L540"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L539"
       }
     }
   },
@@ -2435,11 +2435,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L541"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L540"
       }
     }
   },
@@ -2452,11 +2452,11 @@
     "versions": {
       "debug": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L542"
       },
       "wall": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L541"
       }
     }
   },
@@ -2469,11 +2469,11 @@
     "versions": {
       "debug": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L543"
       },
       "wall": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L542"
       }
     }
   },
@@ -2486,11 +2486,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L544"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L543"
       }
     }
   },
@@ -2503,11 +2503,11 @@
     "versions": {
       "debug": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L545"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L545"
       },
       "wall": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L544"
       }
     }
   },
@@ -2520,11 +2520,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -2537,11 +2537,11 @@
     "versions": {
       "debug": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L523"
       },
       "wall": {
         "default": "hint",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L522"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L522"
       }
     }
   },
@@ -2554,11 +2554,11 @@
     "versions": {
       "debug": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L524"
       },
       "wall": {
         "default": "3d",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L523"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L523"
       }
     }
   },
@@ -2571,11 +2571,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L525"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L524"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L524"
       }
     }
   },
@@ -2588,11 +2588,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L526"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L525"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L525"
       }
     }
   },
@@ -2605,11 +2605,11 @@
     "versions": {
       "debug": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L527"
       },
       "wall": {
         "default": 1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L526"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L526"
       }
     }
   },
@@ -2622,11 +2622,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L528"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L527"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L527"
       }
     }
   },
@@ -2639,11 +2639,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L529"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L528"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L528"
       }
     }
   },
@@ -2656,11 +2656,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L530"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L529"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L529"
       }
     }
   },
@@ -2673,11 +2673,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L531"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L530"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L530"
       }
     }
   },
@@ -2690,11 +2690,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L532"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L531"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L531"
       }
     }
   },
@@ -2707,11 +2707,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L533"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L532"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L532"
       }
     }
   },
@@ -2724,11 +2724,11 @@
     "versions": {
       "debug": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L534"
       },
       "wall": {
         "default": 0.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L533"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L533"
       }
     }
   },
@@ -2741,11 +2741,11 @@
     "versions": {
       "debug": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L535"
       },
       "wall": {
         "default": 0.01,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L534"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L534"
       }
     }
   },
@@ -2758,11 +2758,11 @@
     "versions": {
       "debug": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L536"
       },
       "wall": {
         "default": 1000.0,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L535"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L535"
       }
     }
   },
@@ -2775,11 +2775,11 @@
     "versions": {
       "debug": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L537"
       },
       "wall": {
         "default": 128,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L536"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L536"
       }
     }
   },
@@ -2792,11 +2792,11 @@
     "versions": {
       "debug": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L538"
       },
       "wall": {
         "default": 150,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L537"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L537"
       }
     }
   },
@@ -2809,11 +2809,11 @@
     "versions": {
       "debug": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L539"
       },
       "wall": {
         "default": 100,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L538"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L538"
       }
     }
   },
@@ -2826,11 +2826,11 @@
     "versions": {
       "debug": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L540"
       },
       "wall": {
         "default": 1e-08,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L539"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L539"
       }
     }
   },
@@ -2843,11 +2843,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L541"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L540"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L540"
       }
     }
   },
@@ -2860,11 +2860,11 @@
     "versions": {
       "debug": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L542"
       },
       "wall": {
         "default": 0.02,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L541"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L541"
       }
     }
   },
@@ -2877,11 +2877,11 @@
     "versions": {
       "debug": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L543"
       },
       "wall": {
         "default": 1e-06,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L542"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L542"
       }
     }
   },
@@ -2894,11 +2894,11 @@
     "versions": {
       "debug": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L544"
       },
       "wall": {
         "default": 1e-10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L543"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L543"
       }
     }
   },
@@ -2911,11 +2911,11 @@
     "versions": {
       "debug": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L545"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L545"
       },
       "wall": {
         "default": 10,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L544"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L544"
       }
     }
   },
@@ -2928,11 +2928,11 @@
     "versions": {
       "debug": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L502"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L502"
       },
       "wall": {
         "default": false,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L501"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L501"
       }
     }
   },
@@ -2945,11 +2945,11 @@
     "versions": {
       "debug": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L1"
       },
       "wall": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L1"
       }
     }
   },
@@ -2962,11 +2962,11 @@
     "versions": {
       "debug": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L1"
       },
       "wall": {
         "default": "",
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L1"
       }
     }
   },
@@ -2979,11 +2979,11 @@
     "versions": {
       "debug": {
         "default": -1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L1"
       },
       "wall": {
         "default": -1,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L1"
       }
     }
   },
@@ -2996,11 +2996,11 @@
     "versions": {
       "debug": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-debug/src/hint_debug/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-debug/src/hint_debug/config.py#L1"
       },
       "wall": {
         "default": null,
-        "source": "https://github.com/Yihui-L/HINT-docs/blob/f7262ea11b8ddd957ce924c43fbf96c4593e40f7/HINT-wall/src/hint_wall/config.py#L1"
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/674f7941a347423bb0c5ca23ff5ac22b5fae27a1/HINT-wall/src/hint_wall/config.py#L1"
       }
     }
   }
