@@ -147,6 +147,8 @@ start_point = "zero"
 # Source panels are cached across targets. Compatible stellarator-symmetric grids
 # evaluate half-period targets, then reflect; sources still cover the full torus.
 # MPI distributes R-Z target blocks; one rank per allocated GPU is recommended.
+# Target ownership balances R-Z blocks across planes; refined source panels stay
+# in a bounded rank-local JAX CPU/GPU cache. This changes scheduling, not tolerances.
 # Other preprocessing/NetCDF and native Step-A remain CPU work.
 # Postprocessing independently selects execution.backend in post.toml.
 backend = "cpu"
