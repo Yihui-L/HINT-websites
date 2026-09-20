@@ -39,7 +39,7 @@ EX-NCSX-debug-vmec-unscale-component/
 
 `docs-data/result-notes.md` 是方法说明源稿；`docs-data/results.json` 保留历史配置、图片分类、尺寸、SHA-256 和输入文件校验值。`files["README.md"]` 校验当前含归档说明的 README，`archive_readme_sha256` 保留原历史 README 的哈希；历史来源提交、物理参数、图片元数据与输入哈希不变。构建器逐项验证当前文件，不跳过 README 校验。
 
-原仓库的 `Documents/root-redirect.html`、`Documents/tools/build_site.py` 和 `export_site.py` 已完整迁入并适配。原建站说明另存于 [历史维护记录](docs-data/legacy-site-maintenance.md)，科学说明保留于原算例 README 与方法源稿。
+`Documents/root-redirect.html` 是本实例网站入口的构建模板，`Documents/tools/build_site.py` 和 `export_site.py` 分别用于构建和导出。科学说明保留于算例 README 与方法源稿；不保留过时的建站操作记录。
 
 从本案例根目录执行（Python 3.11+，构建依赖 `Markdown==3.10.3`）：
 
@@ -53,4 +53,4 @@ python -B Documents/tools/export_site.py /tmp/ncsx-case-export
 
 导出器拒绝非空目标、案例内部目标及符号链接，只将获准文件复制到目标根目录，保留入口、资源与这两个维护工具。导出目录本身即可作为独立案例站点；Source-Code 只是可选的同级导航目标，不影响独立浏览。检查记录见 [WEBSITE_CHECKS.md](docs-data/WEBSITE_CHECKS.md)。
 
-未来当前 component 结果的发布需另行核验来源、版本、步号与统计口径，不能仅替换图片或把本档案改标为新结果。发布时保持本目录内部相对路径；不覆盖 HINT-websites 根入口或 Source-Code，不发布求解器、私有 Git 历史及未审阅的大型原始数据。
+未来当前 component 结果的发布需另行核验来源、版本、步号与统计口径，不能仅替换图片或把本档案改标为新结果。发布时保持本目录内部相对路径；不在 HINT-websites 根目录生成入口文件，不覆盖 Source-Code，不发布求解器、私有 Git 历史及未审阅的大型原始数据。
