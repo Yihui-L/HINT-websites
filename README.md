@@ -1,36 +1,23 @@
-# HINT Public Websites
+# HINT Websites
 
-This repository contains only the public static websites approved for publication.
-The original HINT source and NCSX archive repositories remain private.
+HINT 的两个独立公开网站。源码和网站分开维护；HINT-docs 源码仓库仍为私有。
 
-- [HINT program and user manual](https://yihui-l.github.io/HINT-websites/manual/)
-- [NCSX initialization and step 100 results](https://yihui-l.github.io/HINT-websites/highbeta_vmec_unscale/Documents/)
+| 一级目录 | 内容 | 网站 |
+|---|---|---|
+| `Source-Code/` | HINT-debug / HINT-wall 程序与使用手册，无具体算例记录 | [阅读手册](https://yihui-l.github.io/HINT-websites/Source-Code/) |
+| `EX-NCSX-debug-vmec-unscale-component/` | NCSX 实例资料与图片，目前暂存历史结果 | [查看实例档案](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
 
-## Published Content
+除 Git 管理目录外，仓库只保留以上两个一级文件夹。各有独立入口、样式、脚本和数据，不依赖对方的资源文件。根目录的 `index.html`、`404.html`、`.nojekyll` 和本 README 用于入口、旧网址迁移和发布说明。
 
-- `manual/`: model, numerical methods, inputs, outputs, acceleration, workflow,
-  static assets and documented examples for HINT-debug 1.3.2 / HINT-wall 1.3.2.
-- `highbeta_vmec_unscale/`: selected result website, 85 PNGs (84 archived results plus the initialization total-field Poincare), three TOML
-  files, wall text and archive explanations for the NCSX initialization and step 100 results.
-  The new outer-0 figure uses the stored total field before any MHD iteration;
-  tracing, VMEC overlays and limitations are documented on the result website.
-- `index.html`: redirects to the manual, which links to the result website.
+## 内容边界
 
-Solver source, source repository history, credentials, wout, mgrid, computation
-NetCDF files and the historical `startup_zero` case are not published here.
-Links to the private repositories require separate GitHub access.
+- `Source-Code/` 是原 HINT-docs/Documents 的新维护位置，包含正文、参数表、通用模板、资源、构建与校验工具。文件夹名称不表示其中包含求解器源码。
+- 实例目录完整迁自原 `test_HINT-debug_ncsx/highbeta_vmec_unscale/`；旧实例仓库暂时保留，后续网站维护在此进行。现有图片和输入保留其原始版本、时间与步数，不重新标记为当前运行结果。当前任务结束后的新图尚未发布。
+- 不上传 wout、mgrid、计算 NetCDF、凭据、运行缓存或私有仓库 Git 历史。
+- 初始化磁面图和达到预定外迭代步数都不等价于已经验证力平衡收敛。
 
-The numerical result is an archive stopped at a requested iteration count, not
-a claim that equilibrium convergence has been demonstrated.
+## 维护与发布
 
-## Updating
+通用手册的构建命令见 [Source-Code/README.md](Source-Code/README.md)。实例的输入、图片、方法说明和结果清单只在实例目录维护。
 
-Edit and validate the canonical `Documents/` files in the original private
-repositories. Use their `Documents/tools/export_site.py` scripts to export only
-approved static files into empty staging directories. Synchronize the manual
-into `manual/` and the selected result into `highbeta_vmec_unscale/`; preserve
-this root README, redirect and `.nojekyll`. Review the diff before pushing.
-Do not merge or push either private repository's history into this repository.
-
-GitHub Pages serves `main` at `/` with HTTPS enforced. Updates to this repository
-automatically trigger deployment; private source changes alone do not publish.
+GitHub Pages 沿用 `main` 分支根目录并强制 HTTPS。提交推送后需要等待 Pages 构建完成。旧 `/manual/` 和 `/highbeta_vmec_unscale/` 页面通过根目录 404 路由迁移到新路径；请更新收藏链接。

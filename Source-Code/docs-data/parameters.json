@@ -1,0 +1,3058 @@
+[
+  {
+    "program": "main",
+    "name": "paths.output_file",
+    "type": "str",
+    "unit_condition": ".nc 路径",
+    "description": "主程序统一结果文件。initial 会创建/重建该文件；follow 从该文件读取最后完整状态并向同一文件追加。不得与其他运行共用写入路径。",
+    "versions": {
+      "debug": {
+        "default": "hint_debug.nc",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L105"
+      },
+      "wall": {
+        "default": "hint_wall.nc",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L105"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "paths.vmec_wout",
+    "type": "str",
+    "unit_condition": ".nc 路径",
+    "description": "initial 必需：VMEC wout 几何、平衡场与剖面。空字符串不是可运行输入。follow 不需要外部 wout。",
+    "versions": {
+      "debug": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L106"
+      },
+      "wall": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L106"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "paths.coils",
+    "type": "str",
+    "unit_condition": ".txt / .dat 路径",
+    "description": "initial 必需：HINT_COILS 1 闭合 XYZ 线圈文本，含总电流、nfp、仿星器对称性和每线圈复制规则。follow 不重读该文件。",
+    "versions": {
+      "debug": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L107"
+      },
+      "wall": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L107"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "paths.vessel",
+    "type": "str",
+    "unit_condition": ".txt / .dat 路径",
+    "description": "initial 必需：HINT_WALL 1 壁文本。不是 MKLIM 的旧 .nc 文件。follow 使用结果内嵌的壁几何。",
+    "versions": {
+      "debug": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L108"
+      },
+      "wall": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L108"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.nr",
+    "type": "int",
+    "unit_condition": "整数，至少 6",
+    "description": "R 方向等间距节点数，包含矩形域两端。默认 0 是待填写占位值，不表示自动选择。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L113"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L113"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.nz",
+    "type": "int",
+    "unit_condition": "整数，至少 6",
+    "description": "Z 方向等间距节点数，包含两端。四阶中心差分需要五点，程序还要求额外一个点。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L114"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L114"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.ntor",
+    "type": "int",
+    "unit_condition": "整数，至少 6",
+    "description": "一个完整场周期的等间距环向节点数，不重复终点；还必须严格大于 VMEC 最高环向谐波序数的两倍。不是场周期数。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L115"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L115"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.nfp",
+    "type": "int",
+    "unit_condition": "整数，至少 0",
+    "description": "场周期数。0 从 wout 自动取得；显式非零值必须与 wout 和壁一致。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L116"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L116"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.r_min",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "矩形计算域 R 下界，必须大于 0；与其他边界共同严格包围第一壁。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L117"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L117"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.r_max",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "矩形计算域 R 上界，必须大于 r_min，且包围第一壁。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L118"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L118"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.z_min",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "矩形计算域 Z 下界，必须小于 z_max。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L119"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L119"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "grid.z_max",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "矩形计算域 Z 上界；壁外还需满足 minimum_exterior_layers 的离散余量。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L120"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L120"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "flux.ntheta",
+    "type": "int",
+    "unit_condition": "整数，0 自动",
+    "description": "VMEC 极向几何采样点数。0 使用 2*mpol+6；显式设置须满足几何采样要求，包含周期端点。不是演化网格数量。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L137"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L137"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "flux.inverse_tolerance_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L138"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L138"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "flux.max_inverse_iterations",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "单点 VMEC 坐标非线性反解的最大迭代次数。",
+    "versions": {
+      "debug": {
+        "default": 500,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L139"
+      },
+      "wall": {
+        "default": 500,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L139"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "vacuum.current_density_a_mm2",
+    "type": "float",
+    "unit_condition": "A/mm²，正数",
+    "description": "initial 必填的平滑核心参考中心电流密度；默认0无效。a[m]=sqrt(abs(I)/(pi*J_ref*1e6)) 是核心尺度，不是均匀截面半径。局部直导线 J(rho)=I*a²/[pi*(rho²+a²)²]。不是材料临界电流密度，不含额外匝数倍率。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L144"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L144"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "vacuum.quadrature_tolerance",
+    "type": "float",
+    "unit_condition": "无量纲，1e-10至1e-3",
+    "description": "默认1e-5，中心线加密容差。线段积分解析计算；独立探针处加密 B 的最大变化除以平均模须不超过5倍容差。不等同于最终场误差或散度阈值。",
+    "versions": {
+      "debug": {
+        "default": 1e-05,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L145"
+      },
+      "wall": {
+        "default": 1e-05,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L145"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "wall.periodic_closure_rtol",
+    "type": "float",
+    "unit_condition": "无量纲，正数",
+    "description": "壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L150"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L150"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "wall.minimum_exterior_layers",
+    "type": "int",
+    "unit_condition": "整数，至少 3",
+    "description": "第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。",
+    "versions": {
+      "debug": {
+        "default": 3,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L151"
+      },
+      "wall": {
+        "default": 3,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L151"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.source",
+    "type": "str",
+    "unit_condition": "vmec / input",
+    "description": "vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用 profiles.pressure、profiles.current 及 total_toroidal_current_a 替代。profiles.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。",
+    "versions": {
+      "debug": {
+        "default": "vmec",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L164"
+      },
+      "wall": {
+        "default": "vmec",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L164"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.pressure_scale",
+    "type": "float",
+    "unit_condition": "无量纲，非负",
+    "description": "准备阶段对目标压强的整体倍率。start_point=vmec 时必须为 1。与 solver.scale_after、文件内 pressure_scale 攀升进度不同。",
+    "versions": {
+      "debug": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L165"
+      },
+      "wall": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L165"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.total_toroidal_current_a",
+    "type": "float",
+    "unit_condition": "A",
+    "description": "仅 source=input 时作为有符号总环向源电流目标；source=vmec 时使用 wout 总电流，不通过此值覆盖。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L166"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L166"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.pressure.kind",
+    "type": "str",
+    "unit_condition": "power_series / line_segment",
+    "description": "仅 source=input 生效。power_series 使用升幂多项式；line_segment 使用分段线性表格。拼写是单数 line_segment。",
+    "versions": {
+      "debug": {
+        "default": "power_series",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L156"
+      },
+      "wall": {
+        "default": "power_series",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L156"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.pressure.coefficients",
+    "type": "list[float]",
+    "unit_condition": "数值数组",
+    "description": "power_series 必填非空数组 [c0,c1,...]，f(s)=sum(c_n*s^n)。pressure 为 Pa；current 为 lambda(s) 的相对形状，最终按总电流归一化，不是 I(s) 的多项式。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L157"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L157"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.pressure.s",
+    "type": "list[float]",
+    "unit_condition": "无量纲数组",
+    "description": "line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L158"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L158"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.pressure.values",
+    "type": "list[float]",
+    "unit_condition": "数值数组",
+    "description": "line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L159"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L159"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.current.kind",
+    "type": "str",
+    "unit_condition": "power_series / line_segment",
+    "description": "仅 source=input 生效。power_series 使用升幂多项式；line_segment 使用分段线性表格。拼写是单数 line_segment。",
+    "versions": {
+      "debug": {
+        "default": "power_series",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L156"
+      },
+      "wall": {
+        "default": "power_series",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L156"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.current.coefficients",
+    "type": "list[float]",
+    "unit_condition": "数值数组",
+    "description": "power_series 必填非空数组 [c0,c1,...]，f(s)=sum(c_n*s^n)。pressure 为 Pa；current 为 lambda(s) 的相对形状，最终按总电流归一化，不是 I(s) 的多项式。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L157"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L157"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.current.s",
+    "type": "list[float]",
+    "unit_condition": "无量纲数组",
+    "description": "line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L158"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L158"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "profiles.current.values",
+    "type": "list[float]",
+    "unit_condition": "数值数组",
+    "description": "line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。",
+    "versions": {
+      "debug": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L159"
+      },
+      "wall": {
+        "default": [],
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L159"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.mode",
+    "type": "str",
+    "unit_condition": "initial / follow",
+    "description": "initial 准备数据并建立新结果；follow 恢复已有完整状态。follow 的 outer_steps 是追加步数，不是最终外迭代编号。",
+    "versions": {
+      "debug": {
+        "default": "initial",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L201"
+      },
+      "wall": {
+        "default": "initial",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L200"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.start_point",
+    "type": "str",
+    "unit_condition": "zero / vmec",
+    "description": "zero从零响应场和小压力开始；vmec在LCFS内使用wout总B，外部使用线圈B+virtual-casing B，再定义B1=B-B0。不做初始化平滑/投影，完整压强、不攀升，立即保存第0步。follow不能改变起点语义。",
+    "versions": {
+      "debug": {
+        "default": "zero",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L202"
+      },
+      "wall": {
+        "default": "zero",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L201"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.backend",
+    "type": "str",
+    "unit_condition": "cpu / gpu",
+    "description": "计算硬件选择。GPU 需要相应 CUDA/JAX 或 CuPy 环境；不会因为存在 GPU 而自动忽略 cpu 设置。",
+    "versions": {
+      "debug": {
+        "default": "cpu",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L203"
+      },
+      "wall": {
+        "default": "cpu",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L202"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.engine",
+    "type": "str",
+    "unit_condition": "jax / native",
+    "description": "jax 使用双精度 JIT/批处理/分布式路径；native 为 NumPy/SciPy 或 CuPy 路径。主程序多 MPI rank 要求 jax。",
+    "versions": {
+      "debug": {
+        "default": "jax",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L204"
+      },
+      "wall": {
+        "default": "jax",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L203"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.magnetic_interpolation",
+    "type": "str",
+    "unit_condition": "component / rbf",
+    "description": "默认component：原版四点三次Lagrange分量插值。rbf：耦合无散向量RBF，成本较高。主程序、磁轴、追踪、后处理共用；follow未指定时继承检查点，后处理读取所选记录。不会修改Step-B方程或节点数据。",
+    "versions": {
+      "debug": {
+        "default": "component",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L205"
+      },
+      "wall": {
+        "default": "component",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L204"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.outer_steps",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "本次调用执行的外迭代次数；每次含 Step-A 和一个 Step-B 内循环。follow 为新增次数。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L206"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L205"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.save_every",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "外迭代完整三维场的保存间隔；本次调用最后一步也保存。与内部诊断记录间隔独立。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L207"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L206"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.pressure_ramp_iterations",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "zero 起点将轴上压力目标由初始小值按几何比例提高到完整目标的外迭代步数。vmec 起点不使用攀升，但输入类型/正数检查仍执行。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L208"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L207"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.scale_after",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "true：攀升结束后每个外迭代仍用单一倍率维持目标轴上压力；false：结束后取消此反馈。vmec 从开始就视为攀升完成。不会冻结 s 或关闭轴搜索。",
+    "versions": {
+      "debug": {
+        "default": true,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L209"
+      },
+      "wall": {
+        "default": true,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L208"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "initial 磁轴定位的初始 R 猜测，须大于 0；follow 默认继承保存的热启动位置。不是固定磁轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L210"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L209"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "磁轴初始 Z 猜测。随迭代由当前磁场重新定位。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L211"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L210"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.axis_residual_tolerance_scale",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁轴周期闭合检查的容差倍率；增大可容忍更大闭合误差，不等于提高定位精度。follow 未给出时继承。",
+    "versions": {
+      "debug": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L212"
+      },
+      "wall": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L211"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_a.max_step",
+    "type": "float",
+    "unit_condition": "归一化长度，正数",
+    "description": "磁力线自适应积分的最大弧长步长，长度以 L_ref 归一化。减小提高采样能力但增加成本。",
+    "versions": {
+      "debug": {
+        "default": 0.002,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L173"
+      },
+      "wall": {
+        "default": 0.002,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L173"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_a.trace_length",
+    "type": "float",
+    "unit_condition": "归一化长度，正数",
+    "description": "每个方向的最大追踪长度。正向和反向分别计算压力平均，失败方向贡献零。",
+    "versions": {
+      "debug": {
+        "default": 10.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L174"
+      },
+      "wall": {
+        "default": 10.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L174"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_a.relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁力线常微分方程积分的相对误差控制。不是最终平衡残差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L175"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L175"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_a.absolute_tolerance",
+    "type": "float",
+    "unit_condition": "归一化状态容差，正数",
+    "description": "Step-A 自适应积分绝对误差控制；不同引擎使用不同积分阶数，容差不代表逐位一致。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L176"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L176"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.inner_steps",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "每次外迭代内磁场/流速 RKG 更新次数；p 和 s 在该内循环冻结。",
+    "versions": {
+      "debug": {
+        "default": 1000,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L181"
+      },
+      "wall": {
+        "default": 1000,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L181"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.time_step",
+    "type": "float",
+    "unit_condition": "归一化 Alfvén 时间，正数",
+    "description": "固定内部时间步。需满足网格、磁场及显式扩散稳定性，程序不保证任意设置均满足 CFL。",
+    "versions": {
+      "debug": {
+        "default": 0.001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L182"
+      },
+      "wall": {
+        "default": 0.001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L182"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.resistivity",
+    "type": "float",
+    "unit_condition": "归一化电阻率，非负",
+    "description": "内部eta0，B1感应方程含 curl[-eta*(J1-Jnet)]。SI标度 mu0 L_ref v_ref。",
+    "versions": {
+      "debug": {
+        "default": 0.001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L183"
+      },
+      "wall": {
+        "default": 0.001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L183"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.eta1",
+    "type": "float",
+    "unit_condition": "归一化电阻率，非负；仅 debug",
+    "description": "第一壁外至矩形边界的数值真空区电阻率。0 是继承 eta0 的哨兵值，不是无电阻真空；与 eta0 不同时平滑界面。wall 不接受此参数。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L184"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.viscosity",
+    "type": "float",
+    "unit_condition": "归一化运动黏性，非负",
+    "description": "速度方程中柱坐标矢量拉普拉斯系数。SI 标度 L_ref*v_ref。默认 0，仍可能存在速度滤波的数值耗散。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L185"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L184"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.kdivb",
+    "type": "float",
+    "unit_condition": "非负，归一化扩散系数",
+    "description": "kdivb，默认1e-4。B1方程加 +kdivb grad(div B1)，扩散响应场的散度，不改变固定B0；不保证总场散度达到机器零。",
+    "versions": {
+      "debug": {
+        "default": 0.0001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L186"
+      },
+      "wall": {
+        "default": 0.0001,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L185"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.divergence_projection_iterations",
+    "type": "int",
+    "unit_condition": "整数，非负",
+    "description": "默认0禁用。Step-B可选离散散度投影的迭代上限；只在演化中使用，不修正初始化或LCFS数据。 wall还保留每个RKG阶段必需的旋度增量相容约束，其预算至少max(400,4*最大网格维数)，不受0禁用完整状态投影的影响。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L187"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L186"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.divergence_projection_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "可选投影的相对残差目标，默认1e-8。不是源积分或插值误差容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L188"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L187"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.divergence_projection_every",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "可选投影间隔，默认100个内部步，仅在iterations>0时生效。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L189"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L188"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.smoothing_every",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "对速度相对参考场的增量执行五点滤波的内部步间隔。不是压力 reset，也不是把速度设为零。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L190"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L189"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.reference_every",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "更新速度滤波参考场的内部步间隔。保留当前速度，仅改变后续滤波的参考。",
+    "versions": {
+      "debug": {
+        "default": 1000,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L191"
+      },
+      "wall": {
+        "default": 1000,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L190"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.diagnostics_every",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "内部能量/力/散度/边界误差诊断的间隔，末步也记录；是否写入由 output.store_stepb_diagnostics 控制。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L192"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L191"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.preconditioner_smoothing_passes",
+    "type": "int",
+    "unit_condition": "整数，非负",
+    "description": "对由真空场及其旋度建立的局部松弛系数执行邻域平滑的次数；0 不平滑。",
+    "versions": {
+      "debug": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L193"
+      },
+      "wall": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L192"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.preconditioner_b_critical",
+    "type": "float",
+    "unit_condition": "归一化 B，正数",
+    "description": "大背景磁场区的动量松弛系数阈值，场强因子 min(1,(Bcrit/|B0|)^2)。不改变或限幅背景磁场。",
+    "versions": {
+      "debug": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L194"
+      },
+      "wall": {
+        "default": 1.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L193"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.preconditioner_j_low",
+    "type": "float",
+    "unit_condition": "归一化电流，非负",
+    "description": "以 curl(B0) 模作为预条件指标的下阈值；低于此值电流因子为 1。不是 Jnet 阈值。",
+    "versions": {
+      "debug": {
+        "default": 4.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L195"
+      },
+      "wall": {
+        "default": 4.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L194"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "solver.step_b.preconditioner_j_high",
+    "type": "float",
+    "unit_condition": "归一化电流，大于 j_low",
+    "description": "预条件电流指标上阈值；两阈值之间线性降低，高于上阈值因子 0.1。",
+    "versions": {
+      "debug": {
+        "default": 8.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L196"
+      },
+      "wall": {
+        "default": 8.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L195"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "output.compression_level",
+    "type": "int",
+    "unit_condition": "整数，0–9",
+    "description": "NetCDF 数组压缩级别；0 不压缩。高压缩可能增加写入耗时，不改变物理数据精度。",
+    "versions": {
+      "debug": {
+        "default": 4,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L219"
+      },
+      "wall": {
+        "default": 4,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L218"
+      }
+    }
+  },
+  {
+    "program": "main",
+    "name": "output.store_stepb_diagnostics",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "保存 Step-B 标量诊断历史。false 时后处理不能凭最终场恢复未存下来的内部步历史。",
+    "versions": {
+      "debug": {
+        "default": true,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L220"
+      },
+      "wall": {
+        "default": true,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L219"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "execution.backend",
+    "type": "str",
+    "unit_condition": "cpu / gpu",
+    "description": "后处理计算硬件，与主程序运行时硬件可以不同。绘图渲染仍在 CPU。",
+    "versions": {
+      "debug": {
+        "default": "cpu",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L561"
+      },
+      "wall": {
+        "default": "cpu",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L560"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "execution.engine",
+    "type": "str",
+    "unit_condition": "jax / native",
+    "description": "后处理数值引擎；JAX 批量追踪可 GPU/MPI，几何拟合及部分积分仍为 CPU。",
+    "versions": {
+      "debug": {
+        "default": "jax",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L562"
+      },
+      "wall": {
+        "default": "jax",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L561"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.nr",
+    "type": "int",
+    "unit_condition": "0 或至少 6",
+    "description": "输出采样网格 R 节点数。0 使用输入结果网格数量。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L518"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L517"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.nz",
+    "type": "int",
+    "unit_condition": "0 或至少 6",
+    "description": "输出采样网格 Z 节点数。0 使用输入结果网格数量。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L519"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L518"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.ntor",
+    "type": "int",
+    "unit_condition": "0 或至少 6",
+    "description": "一个场周期的采样环向节点数。0 使用输入结果数量。",
+    "versions": {
+      "debug": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L520"
+      },
+      "wall": {
+        "default": 0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L519"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.r_min_m",
+    "type": "float | None",
+    "unit_condition": "m；省略自动",
+    "description": "采样域 R 下界；默认 None，TOML 中应省略而不是写 null。不得请求输入网格外插。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L521"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L520"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.r_max_m",
+    "type": "float | None",
+    "unit_condition": "m；省略自动",
+    "description": "采样域 R 上界，默认源结果上界。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L522"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L521"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.z_min_m",
+    "type": "float | None",
+    "unit_condition": "m；省略自动",
+    "description": "采样域 Z 下界，默认源结果下界。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L523"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L522"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "fields.z_max_m",
+    "type": "float | None",
+    "unit_condition": "m；省略自动",
+    "description": "采样域 Z 上界，默认源结果上界。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L524"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L523"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "force_balance.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "magnetic_axis.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "magnetic_axis.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m，非负",
+    "description": "后处理磁轴搜索猜测。0 优先使用保存的轴信息；不指定新固定磁轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L567"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L566"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "magnetic_axis.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "与显式 R 猜测配套的 Z 坐标。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L568"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L567"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "magnetic_axis.residual_tolerance_scale",
+    "type": "float | None",
+    "unit_condition": "正数；省略继承",
+    "description": "磁轴闭合容差倍率，默认从结果内保存的求解器配置继承。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L569"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L568"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.field_source",
+    "type": "str",
+    "unit_condition": "hint / vacuum",
+    "description": "hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。",
+    "versions": {
+      "debug": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L534"
+      },
+      "wall": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L533"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.mode",
+    "type": "str",
+    "unit_condition": "3d / vmec",
+    "description": "field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。",
+    "versions": {
+      "debug": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L535"
+      },
+      "wall": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L534"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.trace_both_directions",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L536"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L535"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.calculate_flux_quantities",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L537"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L536"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_count",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L538"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L537"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_r_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L539"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L538"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "第一条磁力线的 Z 起点。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L540"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L539"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_phi_fraction",
+    "type": "float",
+    "unit_condition": "[0,1)",
+    "description": "起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L541"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L540"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_delta_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 R 增量，R_i=R_0+i*delta_R。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L542"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L541"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.seed_delta_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L543"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L542"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L544"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L543"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "与轴 R 猜测配套的 Z。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L545"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L544"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.step_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。",
+    "versions": {
+      "debug": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L546"
+      },
+      "wall": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L545"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.trace_length_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。",
+    "versions": {
+      "debug": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L547"
+      },
+      "wall": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L546"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.toroidal_planes",
+    "type": "int",
+    "unit_condition": "正整数；周期面功能至少 4",
+    "description": "磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。",
+    "versions": {
+      "debug": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L548"
+      },
+      "wall": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L547"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.boundary_points",
+    "type": "int",
+    "unit_condition": "正整数；相关功能至少 4",
+    "description": "边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。",
+    "versions": {
+      "debug": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L549"
+      },
+      "wall": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L548"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.surface_circuits",
+    "type": "int",
+    "unit_condition": "正整数，完整环向圈数",
+    "description": "CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L550"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L549"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理磁力线积分相对误差容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L551"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L550"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理积分绝对误差容差；物理坐标使用 m。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L552"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L551"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.surface_scatter_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。",
+    "versions": {
+      "debug": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L553"
+      },
+      "wall": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L552"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.quadrature_relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量自适应积分的相对误差目标，普通轨迹不使用。",
+    "versions": {
+      "debug": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L554"
+      },
+      "wall": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L553"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.quadrature_absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量积分绝对误差目标；适用量的尺度须结合输出理解。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L555"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L554"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "field_lines.quadrature_max_depth",
+    "type": "int",
+    "unit_condition": "整数，至少 1",
+    "description": "磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。",
+    "versions": {
+      "debug": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L556"
+      },
+      "wall": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L555"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.field_source",
+    "type": "str",
+    "unit_condition": "hint / vacuum",
+    "description": "hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。",
+    "versions": {
+      "debug": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L534"
+      },
+      "wall": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L533"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.mode",
+    "type": "str",
+    "unit_condition": "3d / vmec",
+    "description": "field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。",
+    "versions": {
+      "debug": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L535"
+      },
+      "wall": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L534"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.trace_both_directions",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L536"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L535"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.calculate_flux_quantities",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L537"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L536"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_count",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L538"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L537"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_r_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L539"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L538"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "第一条磁力线的 Z 起点。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L540"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L539"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_phi_fraction",
+    "type": "float",
+    "unit_condition": "[0,1)",
+    "description": "起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L541"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L540"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_delta_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 R 增量，R_i=R_0+i*delta_R。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L542"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L541"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.seed_delta_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L543"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L542"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L544"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L543"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "与轴 R 猜测配套的 Z。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L545"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L544"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.step_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。",
+    "versions": {
+      "debug": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L546"
+      },
+      "wall": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L545"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.trace_length_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。",
+    "versions": {
+      "debug": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L547"
+      },
+      "wall": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L546"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.toroidal_planes",
+    "type": "int",
+    "unit_condition": "正整数；周期面功能至少 4",
+    "description": "磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。",
+    "versions": {
+      "debug": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L548"
+      },
+      "wall": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L547"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.boundary_points",
+    "type": "int",
+    "unit_condition": "正整数；相关功能至少 4",
+    "description": "边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。",
+    "versions": {
+      "debug": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L549"
+      },
+      "wall": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L548"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.surface_circuits",
+    "type": "int",
+    "unit_condition": "正整数，完整环向圈数",
+    "description": "CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L550"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L549"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理磁力线积分相对误差容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L551"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L550"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理积分绝对误差容差；物理坐标使用 m。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L552"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L551"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.surface_scatter_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。",
+    "versions": {
+      "debug": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L553"
+      },
+      "wall": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L552"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.quadrature_relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量自适应积分的相对误差目标，普通轨迹不使用。",
+    "versions": {
+      "debug": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L554"
+      },
+      "wall": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L553"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.quadrature_absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量积分绝对误差目标；适用量的尺度须结合输出理解。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L555"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L554"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "poincare.quadrature_max_depth",
+    "type": "int",
+    "unit_condition": "整数，至少 1",
+    "description": "磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。",
+    "versions": {
+      "debug": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L556"
+      },
+      "wall": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L555"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.field_source",
+    "type": "str",
+    "unit_condition": "hint / vacuum",
+    "description": "hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。",
+    "versions": {
+      "debug": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L534"
+      },
+      "wall": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L533"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.mode",
+    "type": "str",
+    "unit_condition": "3d / vmec",
+    "description": "field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。",
+    "versions": {
+      "debug": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L535"
+      },
+      "wall": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L534"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.trace_both_directions",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L536"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L535"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.calculate_flux_quantities",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L537"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L536"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_count",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L538"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L537"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_r_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L539"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L538"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "第一条磁力线的 Z 起点。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L540"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L539"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_phi_fraction",
+    "type": "float",
+    "unit_condition": "[0,1)",
+    "description": "起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L541"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L540"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_delta_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 R 增量，R_i=R_0+i*delta_R。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L542"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L541"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.seed_delta_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L543"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L542"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L544"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L543"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "与轴 R 猜测配套的 Z。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L545"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L544"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.step_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。",
+    "versions": {
+      "debug": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L546"
+      },
+      "wall": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L545"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.trace_length_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。",
+    "versions": {
+      "debug": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L547"
+      },
+      "wall": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L546"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.toroidal_planes",
+    "type": "int",
+    "unit_condition": "正整数；周期面功能至少 4",
+    "description": "磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。",
+    "versions": {
+      "debug": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L548"
+      },
+      "wall": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L547"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.boundary_points",
+    "type": "int",
+    "unit_condition": "正整数；相关功能至少 4",
+    "description": "边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。",
+    "versions": {
+      "debug": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L549"
+      },
+      "wall": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L548"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.surface_circuits",
+    "type": "int",
+    "unit_condition": "正整数，完整环向圈数",
+    "description": "CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L550"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L549"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理磁力线积分相对误差容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L551"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L550"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理积分绝对误差容差；物理坐标使用 m。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L552"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L551"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.surface_scatter_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。",
+    "versions": {
+      "debug": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L553"
+      },
+      "wall": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L552"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.quadrature_relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量自适应积分的相对误差目标，普通轨迹不使用。",
+    "versions": {
+      "debug": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L554"
+      },
+      "wall": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L553"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.quadrature_absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量积分绝对误差目标；适用量的尺度须结合输出理解。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L555"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L554"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "flux_surfaces.quadrature_max_depth",
+    "type": "int",
+    "unit_condition": "整数，至少 1",
+    "description": "磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。",
+    "versions": {
+      "debug": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L556"
+      },
+      "wall": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L555"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.field_source",
+    "type": "str",
+    "unit_condition": "hint / vacuum",
+    "description": "hint 追踪保存时刻总场 B0+B1；vacuum 追踪该结果内的 B0。不是直接输入另一个 MKVAC 文件。",
+    "versions": {
+      "debug": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L534"
+      },
+      "wall": {
+        "default": "hint",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L533"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.mode",
+    "type": "str",
+    "unit_condition": "3d / vmec",
+    "description": "field_lines 的 3d 为普通追踪，vmec 为边界曲线追踪，并非求解 VMEC。内容命名分支中，poincare/flux_surfaces 强制 3d，boundary_trace 强制 vmec，显式值会被覆盖。",
+    "versions": {
+      "debug": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L535"
+      },
+      "wall": {
+        "default": "3d",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L534"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.trace_both_directions",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "普通轨迹是否保存双向追踪。闭合面/庞加莱内容有独立周期追踪路径，不应以此假定每项结果都增加一份反向数据。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L536"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L535"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.calculate_flux_quantities",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "field_lines 的 3d 分支可附带磁面量计算。内容命名分支中 flux_surfaces 强制 true，poincare/boundary_trace 强制 false。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L537"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L536"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_count",
+    "type": "int",
+    "unit_condition": "正整数",
+    "description": "线性排列的 R–Z 起点数；多个起点时至少一个增量非零。flux_surfaces 要求至少 4。边界跟踪由其起始边界点及专用离散参数控制。",
+    "versions": {
+      "debug": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L538"
+      },
+      "wall": {
+        "default": 1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L537"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_r_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "第一条磁力线的 R 起点，必须在可追踪的壁内/网格内。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L539"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L538"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "第一条磁力线的 Z 起点。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L540"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L539"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_phi_fraction",
+    "type": "float",
+    "unit_condition": "[0,1)",
+    "description": "起始环向角占一个场周期的比例：phi=2*pi*值/nfp。不是角度，也不是全环比例。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L541"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L540"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_delta_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 R 增量，R_i=R_0+i*delta_R。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L542"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L541"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.seed_delta_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "相邻起点的 Z 增量。起点是 R–Z 线性序列，不是随机磁面采样。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L543"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L542"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.axis_seed_r_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "涉及磁轴的磁面/边界诊断的轴猜测；优先采用适用的保存信息。普通轨迹并不必须使用轴。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L544"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L543"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.axis_seed_z_m",
+    "type": "float",
+    "unit_condition": "m",
+    "description": "与轴 R 猜测配套的 Z。",
+    "versions": {
+      "debug": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L545"
+      },
+      "wall": {
+        "default": 0.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L544"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.step_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通磁力线弧长积分的采样/步长控制。周期面追踪使用专用 toroidal_planes 等控制，仍执行共有输入合法性检查。",
+    "versions": {
+      "debug": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L546"
+      },
+      "wall": {
+        "default": 0.01,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L545"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.trace_length_m",
+    "type": "float",
+    "unit_condition": "m，正数",
+    "description": "普通轨迹的最大长度；磁面和庞加莱的圈数由 surface_circuits 等控制，不可把此值直接换成其圈数。",
+    "versions": {
+      "debug": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L547"
+      },
+      "wall": {
+        "default": 1000.0,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L546"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.toroidal_planes",
+    "type": "int",
+    "unit_condition": "正整数；周期面功能至少 4",
+    "description": "磁面/庞加莱每场周期的环向离散数，不是主程序 ntor。",
+    "versions": {
+      "debug": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L548"
+      },
+      "wall": {
+        "default": 128,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L547"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.boundary_points",
+    "type": "int",
+    "unit_condition": "正整数；相关功能至少 4",
+    "description": "边界/周期截面构造的采样数量。poincare 分支以此作为截面回归次数；具体用途随所启用内容区分。",
+    "versions": {
+      "debug": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L549"
+      },
+      "wall": {
+        "default": 150,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L548"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.surface_circuits",
+    "type": "int",
+    "unit_condition": "正整数，完整环向圈数",
+    "description": "CLI 磁面量计算使用的完整 2*pi 环向圈数：步数为 2*toroidal_planes*nfp*surface_circuits，每步跨半个离散环向间距。不同于 Notebook crossings 的场周期数；poincare CLI 回归次数由 boundary_points 控制。",
+    "versions": {
+      "debug": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L550"
+      },
+      "wall": {
+        "default": 100,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L549"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理磁力线积分相对误差容差。",
+    "versions": {
+      "debug": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L551"
+      },
+      "wall": {
+        "default": 1e-08,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L550"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "后处理积分绝对误差容差；物理坐标使用 m。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L552"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L551"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.surface_scatter_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "截面散布/磁面可解析性判据的相对阈值。通过不等于数学证明存在磁面。",
+    "versions": {
+      "debug": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L553"
+      },
+      "wall": {
+        "default": 0.02,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L552"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.quadrature_relative_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量自适应积分的相对误差目标，普通轨迹不使用。",
+    "versions": {
+      "debug": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L554"
+      },
+      "wall": {
+        "default": 1e-06,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L553"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.quadrature_absolute_tolerance",
+    "type": "float",
+    "unit_condition": "正数",
+    "description": "磁面量积分绝对误差目标；适用量的尺度须结合输出理解。",
+    "versions": {
+      "debug": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L555"
+      },
+      "wall": {
+        "default": 1e-10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L554"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "boundary_trace.quadrature_max_depth",
+    "type": "int",
+    "unit_condition": "整数，至少 1",
+    "description": "磁面量自适应积分最大细分深度。达到上限需检查精度诊断，不能视为无条件收敛。",
+    "versions": {
+      "debug": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L556"
+      },
+      "wall": {
+        "default": 10,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L555"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "convergence.enabled",
+    "type": "bool",
+    "unit_condition": "布尔值",
+    "description": "是否启动此后处理内容；至少启用一个。",
+    "versions": {
+      "debug": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L513"
+      },
+      "wall": {
+        "default": false,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L512"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "input_file",
+    "type": "str",
+    "unit_condition": ".nc 路径，必需",
+    "description": "主程序统一结果文件。后处理不写入此文件。",
+    "versions": {
+      "debug": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L1"
+      },
+      "wall": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L1"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "output_file",
+    "type": "str",
+    "unit_condition": ".nc 路径",
+    "description": "独立后处理结果文件；空字符串自动取 input 文件名加 _analysis.nc。必须不同于 input_file。",
+    "versions": {
+      "debug": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L1"
+      },
+      "wall": {
+        "default": "",
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L1"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "selection.record",
+    "type": "int",
+    "unit_condition": "整数",
+    "description": "完整保存状态的记录选择，-1 为最后完整记录；不是外迭代编号，尤其 save_every>1 时不能混淆。",
+    "versions": {
+      "debug": {
+        "default": -1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L1"
+      },
+      "wall": {
+        "default": -1,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L1"
+      }
+    }
+  },
+  {
+    "program": "post",
+    "name": "selection.requested_time",
+    "type": "float | None",
+    "unit_condition": "归一化 Alfvén 时间；可省略",
+    "description": "提供时优先于 record，选择最接近该时间的完整保存态，不在两个状态间插值。TOML 不支持 null，默认应省略。",
+    "versions": {
+      "debug": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-debug/src/hint_debug/config.py#L1"
+      },
+      "wall": {
+        "default": null,
+        "source": "https://github.com/Yihui-L/HINT-docs/blob/109c039709e761f03fb30cf0ea98d5929958b17a/HINT-wall/src/hint_wall/config.py#L1"
+      }
+    }
+  }
+]

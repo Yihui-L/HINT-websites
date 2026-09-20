@@ -1,0 +1,262 @@
+# HINT-wall preprocessing and equilibrium configuration.
+#
+# Types shown below are TOML types. Relative paths are resolved from this file.
+# This example describes an initial run. For follow mode, output_file identifies
+# the existing unified NetCDF restart file; VMEC, coils, vessel, grid, wall,
+# vacuum, flux, and profile values are then restored from that NetCDF file.
+# Step-A/axis use the selected B interpolator; pressure uses scalar cubic interpolation.
+
+[paths]
+# string; default "hint_wall.nc"; unified preprocessing/evolution/restart output.
+output_file = "hint_wall.nc"
+# string; required in initial mode; VMEC wout NetCDF input.
+vmec_wout = "../case/wout_case.nc"
+# string; required initial; HINT_COILS 1 closed XYZ coil text (.txt/.dat).
+# Per-coil symmetry: stellarator (half-period representative), periodic (full-period
+# representative), updown (Z-reflected pair only, e.g. complete PF rings), or none
+# (already complete). The expanded ensemble must match VMEC/wall symmetry.
+coils = "../case/coils_case.txt"
+# string; required in initial mode; self-describing HINT_WALL text (.txt/.dat), shared with HINT-debug.
+vessel = "../case/wall_case.txt"
+
+[grid]
+# integers; default 0 (unset); required in initial mode. R, Z and toroidal
+# points per field period.
+# Each count must be >=6. ntor must also be strictly greater than 2*VMEC_ntor.
+nr = 129
+nz = 129
+ntor = 64
+# integer; default 0 adopts VMEC nfp. A positive value must match every input.
+nfp = 0
+# floats [m]; defaults 0 (unset); required initial cylindrical box bounds.
+# Require 0<r_min<r_max and z_min<z_max. The full first wall must lie strictly
+# inside the box with wall.minimum_exterior_layers points beyond it on each edge.
+r_min = 2.5
+r_max = 5.0
+z_min = -1.5
+z_max = 1.5
+
+[flux]
+# integer; default 0 selects 2*VMEC_mpol+6. An explicit value must provide more
+# than 2*mpol independent poloidal samples.
+ntheta = 0
+# float [m]; default 1e-8; maximum accepted R-Z VMEC inverse-map residual.
+inverse_tolerance_m = 1e-8
+# For start_point="vmec", magnetic reconstruction internally uses min(this,1e-10) m.
+# integer; default 500; maximum least-squares evaluations per grid point.
+max_inverse_iterations = 500
+
+[vacuum]
+# float [A/mm^2]; REQUIRED initial (default 0 is invalid). Reference CENTERLINE
+# density for a smooth-core regularized loop, not a uniform tube or material Jc.
+# Each signed total current I [A] comes from coils_case.txt; no extcur, turns,
+# mgrid R/S conversion, global scale, or field-strength clipping is applied.
+# a [m] = sqrt(abs(I)/(pi * current_density_a_mm2 * 1e6)).
+# Locally straight: J(rho)=I*a^2/[pi*(rho^2+a^2)^2]; a is a core scale,
+# not a hard-edge radius. B uses the analytic regularized Biot-Savart kernel.
+# 30 below is an illustrative model assumption, NOT a validated coil design.
+current_density_a_mm2 = 30.0
+# float; default 1e-5, range [1e-10,1e-3]; centerline refinement tolerance.
+# B segment integrals are analytic; refined B must differ by <=5*tolerance.
+# It is not the HINT spatial interpolation error or the allowed div(B).
+quadrature_tolerance = 1e-5
+# All physical coils are generated before summing their smooth-core B.
+# B_total=B0+B_response; B_response is evolved directly.
+# Magnetic sampling follows solver.magnetic_interpolation; saved B nodes are unchanged.
+# Jtarget is the normalized parallel-current maintenance source; it is a
+# resistive source and is NOT added to curl(B_response)/mu0 as another current.
+# The stored B0 is reused by follow/post; neither sources nor radii are rebuilt.
+# See ../docs/COIL_FILE_FORMAT.md for per-coil symmetry and signed-current rules.
+
+[wall]
+# HINT_WALL 1 text header: nfp, stellarator_symmetric, toroidal_planes,
+# poloidal_points; after DATA, rows are phi [rad], R [m], Z [m], grouped by plane.
+# Its nfp and symmetry must match VMEC exactly. For lasym=false it
+# supplies 0<=phi<=pi/nfp (half period, endpoints included); for lasym=true it
+# supplies 0<=phi<=2*pi/nfp with the final R-Z plane duplicating the first.
+# A single phi=0 plane denotes a 2-D wall. See ../docs/WALL_FILE_FORMAT.md.
+# float; default 1e-10; tolerance for symmetry planes and toroidal closure.
+periodic_closure_rtol = 1e-10
+# integer; default/minimum 3; required R-Z grid layers outside the first wall.
+# The VMEC s=1 boundary must also remain strictly inside the wall.
+minimum_exterior_layers = 3
+
+[profiles]
+# string; default "vmec"; reads presf, jdotb, bdotb, and ctor, with
+# lambda(s)=jdotb(s)/bdotb(s). "input" uses the definitions below.
+source = "vmec"
+# float; default 1; target-pressure multiplier. VMEC presf already contains the
+# VMEC PRES_SCALE contribution. The resulting profile must peak at s=0; that value
+# is the ramp target, maintained afterwards only when solver.scale_after=true.
+pressure_scale = 1.0
+# float [A]; default 0; input-branch total toroidal current. The VMEC branch uses ctor.
+total_toroidal_current_a = 0.0
+
+[profiles.pressure]
+# Used only when profiles.source="input". kind is a string; default "power_series";
+# alternatively "line_segment".
+# power_series: p(s)=sum(coefficients[n]*s^n), coefficients in Pa.
+# line_segment: provide equal-length s and values arrays of at least 3 points;
+# s must increase strictly from exactly 0 to exactly 1 and values are in Pa.
+kind = "power_series"
+# float array [Pa]; default []; coefficients in increasing powers of s.
+coefficients = [100000.0, -100000.0]
+# float array; default []; dimensionless s nodes, used only for line_segment.
+s = []
+# float array [Pa]; default []; pressure at those nodes, used only for line_segment.
+values = []
+
+[profiles.current]
+# Used only when profiles.source="input". This defines the lambda(s) shape used in
+# J_target=lambda(s)B, matching VMEC's <J.B>/<B.B> profile definition.
+# Its amplitude is discarded and normalized to total_toroidal_current_a.
+# line_segment obeys the same exact s=[0,1] domain contract as pressure.
+# string; default "power_series"; alternatively "line_segment".
+kind = "power_series"
+# float array; default []; coefficients of the lambda shape in increasing powers.
+# Overall units/amplitude cancel during total-current normalization.
+coefficients = [1.0, -1.0]
+# float array; default []; dimensionless s nodes for line_segment.
+s = []
+# float array; default []; lambda shape at those nodes for line_segment.
+values = []
+
+[solver]
+# string; default "initial"; rebuilds preprocessing and replaces output_file.
+# "follow" resumes the last complete record and stored preprocessing in that file.
+mode = "initial"
+# String, default "zero". "zero": vacuum response + small-pressure ramp.
+# "vmec": full wout pressure and plasma-current magnetic field at initialization;
+# no ramp; subsequent target-axis-pressure maintenance is controlled by scale_after.
+# Requires profiles.source="vmec", pressure_scale=1; no extra library is needed.
+# Built-in regularized LCFS quadrature; local refinement keeps the original target.
+# Initial B1.n is frozen on the boundary, not forced to zero. Velocity starts at zero.
+start_point = "zero"
+# string; hardware for JAX Step-A and Step-B: "cpu" (default) or "gpu".
+# FIELDLINES initialization uses wout total B inside/on LCFS, and coil B plus
+# exterior B virtual casing outside. B1 = total B - B0; no A integration/inversion.
+# Adaptive surface panels refine unresolved exterior targets without changing
+# target coordinates or the HINT grid. Batches bound device memory.
+# Requires wout field/geometry coefficients (including asymmetric modes if lasym).
+# JAX Fourier/near-field quadrature batches
+# on the selected device; CPU keeps vectorized adaptive control and fallback roots.
+# Source panels are cached across targets. Compatible stellarator-symmetric grids
+# evaluate half-period targets, then reflect; sources still cover the full torus.
+# MPI distributes R-Z target blocks; one rank per allocated GPU is recommended.
+# Target ownership balances R-Z blocks across planes; refined source panels stay
+# in a bounded rank-local JAX CPU/GPU cache. This changes scheduling, not tolerances.
+# Other preprocessing/NetCDF and native Step-A remain CPU work.
+# Postprocessing independently selects execution.backend in post.toml.
+backend = "cpu"
+# Coil B0 uses analytic smooth-core segments in shared batches across coils.
+# GPU JAX keeps sources resident; CPU uses bounded target workers; MPI splits targets.
+# CPU threads follow allocated affinity/quota; OpenMP/BLAS teams and MPI ranks
+# are distinct. Launch MPI explicitly, normally one rank per allocated GPU.
+# string; "jax" (default) enables float64 JAX/XLA for batched Step-A traces and
+# compiles complete Step-B RKG intervals. "native" uses NumPy on CPU or
+# CuPy on GPU as a single-process reference path. JAX GPU requires Linux plus
+# the matching jax-cuda extra.
+# Equations, stencils, wall closure, pressure ramp, resets, and saved SI data are
+# shared between engines. Step-A uses DOPRI5 in JAX versus DOP853 in native mode,
+# so adaptive integration error can differ as well as roundoff and reduction order.
+engine = "jax"
+# Magnetic interpolation at every off-grid consumer (Step-A, axis and post).
+# "component" (default): original four-point cubic Lagrange per BR/Bphi/BZ.
+# "rbf": coupled solenoidal vector RBF; higher fit/evaluation cost.
+# Neither choice modifies stored B or the Step-B finite-difference operators.
+magnetic_interpolation = "component"
+# integer; default 1; Step-A/Step-B outer cycles in this invocation.
+outer_steps = 100
+# integer; default 1; save interval in outer cycles; the final cycle is always saved.
+save_every = 1
+# integer; default 1; initial-run cycles over which magnetic-axis pressure rises
+# geometrically from its small initial value to the s=0 profile target. The initial
+# value is selected so vacuum-axis beta is at most 1e-3. The cycle that reaches
+# the target still rescales pressure, even when scale_after=false. Later cycles
+# obey scale_after. Ignored for vmec starts; follow retains its saved ramp progress.
+# Scaling preserves the relaxed shape and evolving s. Current is not ramped.
+# Run enough cycles after ramp completion to assess convergence independently.
+pressure_ramp_iterations = 20
+# boolean; default true. After reaching the target, true continues uniform
+# pressure rescaling to the original target at the current magnetic axis after
+# each outer cycle. false disables this amplitude feedback; Step-A/B continue
+# evolving p, s, B and v, and axis pressure may drift or decay without being restored.
+# For start_point="vmec", the ramp is already complete at initialization:
+# false applies from the first outer cycle; initial wout p is unchanged either way.
+# Follow omission inherits the selected checkpoint's value (initial default true).
+scale_after = true
+# floats [m]; defaults 0/0; initial axis guess, also used when an initial checkpoint has no located axis yet
+# without a saved axis seed. New checkpoints restore their own normalized seed.
+# R must be positive in initial mode.
+axis_seed_r_m = 3.75
+axis_seed_z_m = 0.0
+# float; default 1.0; positive multiplier for magnetic-axis fixed-point acceptance.
+# This does not change DOP853 integration tolerances. Omit in follow mode to inherit.
+axis_residual_tolerance_scale = 1.0
+
+[solver.step_a]
+# floats; field-line pressure averaging uses batched DOPRI5 with JAX and DOP853
+# in the native reference path.
+# In both engines, an out-of-wall trial stage is retried at smaller step size.
+# Truly failed directions still contribute zero to the forward/backward average.
+max_step = 0.002              # normalized length; default 0.002
+trace_length = 10.0           # normalized length in each direction; default 10
+relative_tolerance = 1e-8     # default 1e-8
+absolute_tolerance = 1e-10    # default 1e-10
+
+[solver.step_b]
+# Dimensionless HINT variables use B_reference, length_reference,
+# rho_reference=1 kg/m^3, p_ref=B_reference^2/mu0, and
+# v_ref=B_reference/sqrt(mu0*rho_reference).
+# integer; default 1000; four-stage low-storage RKG time steps in every Step-B.
+inner_steps = 1000
+# float [Alfven time]; default 1e-3; RKG step. Stability must be checked by
+# timestep refinement; every hardware/engine combination uses the same value and equations.
+time_step = 0.001
+# nonnegative float; default 1e-3; uniform normalized electrical resistivity in
+# dB1/dt = curl(v x B - eta*(J_response-J_target)) + kdivb*grad(div B1).
+# No wall-exterior eta is evolved.
+resistivity = 0.001
+# nonnegative float; default 0; normalized coefficient of vector Laplacian(v) in
+# the artificial momentum relaxation. Zero reproduces the retained inviscid form.
+viscosity = 0.0
+# dB1/dt = curl[v x (B0+B1)-eta*(J1-Jtarget)] + kdivb*grad(div B1).
+# J1=curl(B1) in normalized units. The original four-stage RKG method is used.
+# kdivb: normalized positive grad(div B1) diffusion, original HINT default.
+# It damps response divergence during evolution; it never modifies initialization.
+kdivb = 1e-4
+# Optional B projection during Step-B, disabled by default.
+# In HINT-wall, the mandatory per-stage curl-increment constraint is separate;
+# its budget is at least max(400, 4*max(grid.shape)), also when this value is 0.
+divergence_projection_iterations = 0
+divergence_projection_tolerance = 1e-8
+divergence_projection_every = 100
+# positive integer; default 1; apply the original fourth-order mixed velocity
+# filter after this many RKG steps. The magnetic field and pressure are not filtered.
+smoothing_every = 1
+# positive integer; default 1000; replace only the velocity filter baseline by
+# the current velocity after this many RKG steps (original nrefb semantics).
+# This is not nvreset: it never zeroes velocity and never resets p, s, or B.
+reference_every = 1000
+# positive integer; default 100; sample energies, force residual, div(B_response),
+# wall-normal response field, and wall velocity at this inner-step cadence.
+diagnostics_every = 100
+# integer >=0; default 10; min-neighbor smoothing passes applied to the local
+# momentum preconditioner. Zero disables only this smoothing, not the preconditioner.
+preconditioner_smoothing_passes = 10
+# positive float; default 1; normalized |B_vac| threshold. Above it, the momentum
+# update is multiplied by (b_critical/|B_vac|)^2 for relaxation stability.
+preconditioner_b_critical = 1.0
+# floats; defaults 4 and 8; normalized |curl B_vac| thresholds. The momentum
+# factor transitions from 1 to 0.1 between them and is 0.1 above j_high.
+preconditioner_j_low = 4.0
+preconditioner_j_high = 8.0
+
+[output]
+# integer; default 4; NetCDF deflate level in [0,9]. Zero disables compression.
+# This affects file size and I/O cost only, never the evolved arrays or equations.
+compression_level = 4
+# boolean; default true; append scalar Step-B diagnostic samples to
+# /equilibrium/stepb_diagnostics. False suppresses those history records only;
+# equilibrium checkpoints controlled by solver.save_every are still written.
+store_stepb_diagnostics = true
