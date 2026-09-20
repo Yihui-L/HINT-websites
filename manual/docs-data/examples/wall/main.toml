@@ -52,19 +52,19 @@ max_inverse_iterations = 500
 # mgrid R/S conversion, global scale, or field-strength clipping is applied.
 # a [m] = sqrt(abs(I)/(pi * current_density_a_mm2 * 1e6)).
 # Locally straight: J(rho)=I*a^2/[pi*(rho^2+a^2)^2]; a is a core scale,
-# not a hard-edge radius. A uses 1/sqrt(distance^2+a^2) on every segment.
+# not a hard-edge radius. B uses the analytic regularized Biot-Savart kernel.
 # 30 below is an illustrative model assumption, NOT a validated coil design.
 current_density_a_mm2 = 30.0
 # float; default 1e-5, range [1e-10,1e-3]; centerline refinement tolerance.
-# Segment integrals are analytic; refined A and B must differ by <=5*tolerance.
+# B segment integrals are analytic; refined B must differ by <=5*tolerance.
 # It is not the HINT spatial interpolation error or the allowed div(B).
 quadrature_tolerance = 1e-5
-# All physical coils are generated before summing A. Grid B0=curl_h(A0);
-# off-grid B0=curl(spline(A0)), never independent component interpolation.
-# B_total=B0+B_response; A_response is evolved, B_response=curl_h(A_response).
-# J_target is the plasma
+# All physical coils are generated before summing their smooth-core B.
+# B_total=B0+B_response; B_response is evolved directly.
+# Magnetic sampling preserves face-flux divergence without changing saved B.
+# Jtarget is the normalized parallel-current maintenance source; it is a
 # resistive source and is NOT added to curl(B_response)/mu0 as another current.
-# The stored A0 is reused by follow/post; neither sources nor radii are rebuilt.
+# The stored B0 is reused by follow/post; neither sources nor radii are rebuilt.
 # See ../docs/COIL_FILE_FORMAT.md for per-coil symmetry and signed-current rules.
 
 [wall]
@@ -132,11 +132,11 @@ mode = "initial"
 # Initial B1.n is frozen on the boundary, not forced to zero. Velocity starts at zero.
 start_point = "zero"
 # string; hardware for JAX Step-A and Step-B: "cpu" (default) or "gpu".
-# VMEC response initialization directly integrates A, not B followed by inversion.
-# Source paths automatically refine 64..65536 quadrature nodes without changing
-# the HINT grid or tolerance; only unresolved targets incur the extra work.
-# High-order target batches shrink to bound memory; no input knob is needed.
-# It needs wout phipf/chipf/signgs/lmns (lmnc for lasym), plus bsup for validation.
+# FIELDLINES initialization uses wout total B inside/on LCFS, and coil B plus
+# exterior B virtual casing outside. B1 = total B - B0; no A integration/inversion.
+# Adaptive surface panels refine unresolved exterior targets without changing
+# target coordinates or the HINT grid. Batches bound device memory.
+# Requires wout field/geometry coefficients (including asymmetric modes if lasym).
 # JAX Fourier/near-field quadrature batches
 # on the selected device; CPU keeps vectorized adaptive control and fallback roots.
 # Source panels are cached across targets. Compatible stellarator-symmetric grids
@@ -147,7 +147,7 @@ start_point = "zero"
 # Other preprocessing/NetCDF and native Step-A remain CPU work.
 # Postprocessing independently selects execution.backend in post.toml.
 backend = "cpu"
-# Coil A0 uses analytic smooth-core segments in shared batches across coils.
+# Coil B0 uses analytic smooth-core segments in shared batches across coils.
 # GPU JAX keeps sources resident; CPU uses bounded target workers; MPI splits targets.
 # CPU threads follow allocated affinity/quota; OpenMP/BLAS teams and MPI ranks
 # are distinct. Launch MPI explicitly, normally one rank per allocated GPU.
@@ -208,22 +208,23 @@ inner_steps = 1000
 # timestep refinement; every hardware/engine combination uses the same value and equations.
 time_step = 0.001
 # nonnegative float; default 1e-3; uniform normalized electrical resistivity in
-# dA1/dt = v x B - eta*(J_response-J_target). No wall-exterior eta is evolved.
+# dB1/dt = curl(v x B - eta*(J_response-J_target)) + kdivb*grad(div B1).
+# No wall-exterior eta is evolved.
 resistivity = 0.001
 # nonnegative float; default 0; normalized coefficient of vector Laplacian(v) in
 # the artificial momentum relaxation. Zero reproduces the retained inviscid form.
 viscosity = 0.0
-# A1 is evolved in temporal gauge: dA1/dt = v x (B0+curl A1) - eta*(J1-Jtarget).
-# B1=curl_h(A1), J1=curl_h(B1); no grad(div B) cleaning or magnetic projection.
-# Positive integer/float; defaults 512 and 1e-11. HINT-wall projects each A1
-# increment onto its frozen-normal-flux constraints. This relative tolerance
-# applies to row-normalized boundary curl constraints (absolute floor uses 1).
-# A recomputed final residual above 4 times this target rejects the interval.
-# HINT-debug uses an exact rectangular tangential-increment closure instead;
-# these two parameters are retained for matching input layouts and are unused there.
-# Failure to meet the wall constraint rejects the step rather than changing B.
-potential_boundary_iterations = 512
-potential_boundary_tolerance = 1e-11
+# dB1/dt = curl[v x (B0+B1)-eta*(J1-Jtarget)] + kdivb*grad(div B1).
+# J1=curl(B1) in normalized units. The original four-stage RKG method is used.
+# kdivb: normalized positive grad(div B1) diffusion, original HINT default.
+# It damps response divergence during evolution; it never modifies initialization.
+divb_diffusion = 1e-4
+# Optional B projection during Step-B, disabled by default.
+# In HINT-wall, the mandatory per-stage curl-increment constraint is separate;
+# its budget is at least max(400, 4*max(grid.shape)), also when this value is 0.
+divergence_projection_iterations = 0
+divergence_projection_tolerance = 1e-8
+divergence_projection_every = 100
 # positive integer; default 1; apply the original fourth-order mixed velocity
 # filter after this many RKG steps. The magnetic field and pressure are not filtered.
 smoothing_every = 1

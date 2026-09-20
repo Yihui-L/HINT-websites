@@ -11,7 +11,7 @@
 
 3 个旧预处理程序已整合进 initial。用户不再手工衔接 flx/vac/lim 三个输出，也不再以旧 NAMELIST 作为新版输入。后处理 TOML 配置的是数值分析内容；它不是所有 Notebook 绘图参数的序列化文件。
 
-## 统一文件 schema 9
+## 统一文件 schema 20
 
 两版各有自己的 schema 属性，不能交叉续算。新状态仅保存必要基础量：
 
@@ -19,10 +19,10 @@
 / R, Z, phi, nfp, B_reference, length_reference, density_reference, alfven_time_reference
 /preprocess/flux             initial norm_s 与来源
 /preprocess/profiles         目标压力、lambda、电流幅度
-/preprocess/vacuum/A         固定 A0，T m；线圈文本、电流密度、半径、诊断
+/preprocess/vacuum/B         固定 B0，T；线圈文本、电流密度、半径、诊断
 /preprocess/wall             mask、distance、normal、对称性与来源
-/preprocess/initial_response_A  vmec 初始冻结法向参考 A1，T m
-/equilibrium/response_A      每完整记录的实际 A1，T m
+/preprocess/initial_response_B  vmec 初始冻结法向参考 B1，T
+/equilibrium/B               每完整记录的总 B，T
 /equilibrium/velocity        m/s
 /equilibrium/pressure        Pa
 /equilibrium/norm_s          当前演化标签
@@ -30,17 +30,17 @@
 /equilibrium/stepb_diagnostics  可选内步标量历史
 ```
 
-读取时用相同 curl_h 导出 B₀、B₁、总 B 和 J₁，不再逆拟合或用旧磁场 ghost 覆盖结果。A 的归一化标度为 B_ref L_ref。time 是归一化阿尔芬时间；axis_seed_R/Z 是归一化热启动元数据；三维场使用 SI 并不意味着内步标量也自动变成 SI。
+读取B0与总B，以B1=B-B0、J1=curl(B1)/mu0得到响应及电流，不求A。time 是归一化阿尔芬时间；axis_seed_R/Z 是归一化热启动元数据；三维场使用 SI 并不意味着内步标量也自动变成 SI。
 
-写入前校验 A 与内存中的 B 一致，再同步数组并发布完整标志。不完整记录被跳过。A₀与初始 A₁参考只存一次；后者不能用当前 A₁覆盖，否则会改变冻结边界。Hermite 导数表、J、grad(p)、力残差和图像切片可重建，不逐步重复存储。
+同步基础数组后发布完整标志。不完整记录跳过。B0与初始B1参考只存一次；后者不能被当前B1覆盖。初始化未迭代状态立即写入outer_step=0。插值系数、J、grad(p)及力残差可重建，不重复保存。
 
-新主程序 follow 只接受 schema 9 的 A 状态。旧 schema 和 B-only 结果均明确拒绝，不提供格式升级或兼容读取。后处理需稳定结果或安全副本，不承诺正在写入的 HDF5 可任意并发读。
+新主程序 follow 只接受 schema 20 的 B 状态。旧 schema（含1.x的A状态）均明确拒绝，不提供格式升级或兼容读取。后处理需稳定结果或安全副本，不承诺正在写入的 HDF5 可任意并发读。
 
 ## analysis.nc
 
 数值后处理按内容写入独立文件，包含采样几何、壁信息和 `/postprocess/<内容>/run_*` 结果。重复分析不直接覆盖输入平衡；每次 run 的完整标志和 latest_run 记录用于识别有效结果。追加时检查来源文件与几何一致性，不能把不同算例悄悄混入一个 analysis.nc。
 
-分析文件当前使用 `hint_analysis_schema=1`，根组含 R、Z、phi、nfp 和 `source_equilibrium`；壁距离场在 `/geometry/wall/signed_distance`。它不是主程序 schema 9 checkpoint，不能将 analysis.nc 当作 follow 输入。
+分析文件当前使用 `hint_analysis_schema=1`，根组含 R、Z、phi、nfp 和 `source_equilibrium`；壁距离场在 `/geometry/wall/signed_distance`。它不是主程序 schema 20 checkpoint，不能将 analysis.nc 当作 follow 输入。
 
 fields 的壁外采样约定为 −1；导数量还提供有效节点掩膜。其他结果可使用 NaN/状态码标识失败。统计时必须尊重 mask/status，不能把 −1 当成真实负场强或把失败轨迹当成零旋转变换。
 

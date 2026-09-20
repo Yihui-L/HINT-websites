@@ -7,7 +7,7 @@
 # 'min', 'max', or 'rms' overrides this. point=(R_m,Z_m,phi_rad) samples a point.
 # Stored Step-B metrics retain solver normalization. Spatial derivatives are SI.
 # divergence_b* are fourth-order GRID derivatives, not continuous-interpolant
-# divergence. All off-grid magnetic sampling uses curl(A). In a notebook call
+# divergence. All off-grid magnetic sampling uses compatible direct-B flux interpolation. In a notebook call
 # plots.magnetic_interpolation_diagnostics(vacuum=False) for total-field probes,
 # or vacuum=True for background probes; these are separate diagnostics.
 # The primary divergence_relative_mean is

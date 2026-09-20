@@ -15,7 +15,7 @@ main,flux.ntheta,int,0,0,整数，0 自动,VMEC 极向几何采样点数。0 使
 main,flux.inverse_tolerance_m,float,1e-08,1e-08,m，正数,柱坐标到 VMEC 坐标反解的几何残差容差。VMEC 响应场初始化会在内部收紧到不大于 1e-10 m；不是磁轴搜索容差。
 main,flux.max_inverse_iterations,int,500,500,正整数,单点 VMEC 坐标非线性反解的最大迭代次数。
 main,vacuum.current_density_a_mm2,float,0.0,0.0,A/mm²，正数,initial 必填的平滑核心参考中心电流密度；默认0无效。a[m]=sqrt(abs(I)/(pi*J_ref*1e6)) 是核心尺度，不是均匀截面半径。局部直导线 J(rho)=I*a²/[pi*(rho²+a²)²]。不是材料临界电流密度，不含额外匝数倍率。
-main,vacuum.quadrature_tolerance,float,1e-05,1e-05,无量纲，1e-10至1e-3,默认1e-5，中心线加密容差。线段积分解析计算；独立探针处加密 A/B 的最大变化除以平均模须不超过5倍容差。不等同于最终场误差或散度阈值。
+main,vacuum.quadrature_tolerance,float,1e-05,1e-05,无量纲，1e-10至1e-3,默认1e-5，中心线加密容差。线段积分解析计算；独立探针处加密 B 的最大变化除以平均模须不超过5倍容差。不等同于最终场误差或散度阈值。
 main,wall.periodic_closure_rtol,float,1e-10,1e-10,无量纲，正数,壁数据周期/对称端面一致性的相对容差。用于输入几何合法性，不是磁场求解容差。
 main,wall.minimum_exterior_layers,int,3,3,整数，至少 3,第一壁与矩形计算域之间的最小网格层余量。不能代替真实几何的 LCFS 包含检查。
 main,profiles.source,str,"""vmec""","""vmec""",vmec / input,vmec 从 wout 读 presf、jdotb/bdotb 和总环向电流；input 用下面的两个剖面定义及 total_toroidal_current_a 替代。input.current 定义的是 lambda 形状，不是 VMEC ac 或 jcurv。
@@ -30,7 +30,7 @@ main,profiles.current.coefficients,list[float],[],[],数值数组,"power_series 
 main,profiles.current.s,list[float],[],[],无量纲数组,line_segment 的标签节点，至少 3 个，严格递增，首末必须为 0 和 1。初始化为 VMEC 归一化环向磁通；演化使用重建标签。
 main,profiles.current.values,list[float],[],[],数值数组,line_segment 对应值，长度与 s 相同。pressure 为 Pa；current 为 lambda 形状。压力须非负且轴上为最大值。
 main,solver.mode,str,"""initial""","""initial""",initial / follow,initial 准备数据并建立新结果；follow 恢复已有完整状态。follow 的 outer_steps 是追加步数，不是最终外迭代编号。
-main,solver.start_point,str,"""zero""","""zero""",zero / vmec,zero 从零响应场和小压力开始；vmec 以完整 VMEC 压力及等离子体响应场开始且不攀升。follow 从 checkpoint 恢复，不能改起点语义。
+main,solver.start_point,str,"""zero""","""zero""",zero / vmec,zero从零响应场和小压力开始；vmec在LCFS内使用wout总B，外部使用线圈B+virtual-casing B，再定义B1=B-B0。不做初始化平滑/投影，完整压强、不攀升，立即保存第0步。follow不能改变起点语义。
 main,solver.backend,str,"""cpu""","""cpu""",cpu / gpu,计算硬件选择。GPU 需要相应 CUDA/JAX 或 CuPy 环境；不会因为存在 GPU 而自动忽略 cpu 设置。
 main,solver.engine,str,"""jax""","""jax""",jax / native,jax 使用双精度 JIT/批处理/分布式路径；native 为 NumPy/SciPy 或 CuPy 路径。主程序多 MPI rank 要求 jax。
 main,solver.outer_steps,int,1,1,正整数,本次调用执行的外迭代次数；每次含 Step-A 和一个 Step-B 内循环。follow 为新增次数。
@@ -46,11 +46,13 @@ main,solver.step_a.relative_tolerance,float,1e-08,1e-08,正数,磁力线常微�
 main,solver.step_a.absolute_tolerance,float,1e-10,1e-10,归一化状态容差，正数,Step-A 自适应积分绝对误差控制；不同引擎使用不同积分阶数，容差不代表逐位一致。
 main,solver.step_b.inner_steps,int,1000,1000,正整数,每次外迭代内磁场/流速 RKG 更新次数；p 和 s 在该内循环冻结。
 main,solver.step_b.time_step,float,0.001,0.001,归一化 Alfvén 时间，正数,固定内部时间步。需满足网格、磁场及显式扩散稳定性，程序不保证任意设置均满足 CFL。
-main,solver.step_b.resistivity,float,0.001,0.001,归一化电阻率，非负,内部 eta0；A1 方程电阻项为 -eta*(J1-Jnet)，取旋度即原 B1 感应方程的电阻项。SI 标度为 mu0*L_ref*v_ref。
+main,solver.step_b.resistivity,float,0.001,0.001,归一化电阻率，非负,内部eta0，B1感应方程含 curl[-eta*(J1-Jnet)]。SI标度 mu0 L_ref v_ref。
 main,solver.step_b.eta1,float,0.0,NOT_ACCEPTED,归一化电阻率，非负；仅 debug,第一壁外至矩形边界的数值真空区电阻率。0 是继承 eta0 的哨兵值，不是无电阻真空；与 eta0 不同时平滑界面。wall 不接受此参数。
 main,solver.step_b.viscosity,float,0.0,0.0,归一化运动黏性，非负,速度方程中柱坐标矢量拉普拉斯系数。SI 标度 L_ref*v_ref。默认 0，仍可能存在速度滤波的数值耗散。
-main,solver.step_b.potential_boundary_iterations,int,512,512,正整数，默认 512,wall 每个 RKG 阶段的矢势增量壁面约束 CG 上限；debug 矩形闭合不使用该参数。
-main,solver.step_b.potential_boundary_tolerance,float,1e-11,1e-11,正数，默认 1e-11,"wall 行归一化法向旋度约束 CG 目标，乘 max(1,max(abs(F)))；最终重新计算的残差须不超过该目标的4倍。不是磁场散度或几何容差；debug 不使用。"
+main,solver.step_b.divb_diffusion,float,0.0001,0.0001,非负，归一化扩散系数,kdivb，默认1e-4。B1方程加 +kdivb grad(div B1)，扩散响应场的散度，不改变固定B0；不保证总场散度达到机器零。
+main,solver.step_b.divergence_projection_iterations,int,0,0,整数，非负,"默认0禁用。Step-B可选离散散度投影的迭代上限；只在演化中使用，不修正初始化或LCFS数据。 wall还保留每个RKG阶段必需的旋度增量相容约束，其预算至少max(400,4*最大网格维数)，不受0禁用完整状态投影的影响。"
+main,solver.step_b.divergence_projection_tolerance,float,1e-08,1e-08,正数,可选投影的相对残差目标，默认1e-8。不是源积分或插值误差容差。
+main,solver.step_b.divergence_projection_every,int,100,100,正整数,可选投影间隔，默认100个内部步，仅在iterations>0时生效。
 main,solver.step_b.smoothing_every,int,1,1,正整数,对速度相对参考场的增量执行五点滤波的内部步间隔。不是压力 reset，也不是把速度设为零。
 main,solver.step_b.reference_every,int,1000,1000,正整数,更新速度滤波参考场的内部步间隔。保留当前速度，仅改变后续滤波的参考。
 main,solver.step_b.diagnostics_every,int,100,100,正整数,内部能量/力/散度/边界误差诊断的间隔，末步也记录；是否写入由 output.store_stepb_diagnostics 控制。

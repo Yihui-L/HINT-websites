@@ -101,3 +101,15 @@ plots.rotational_transform(data=data, coordinate="s")
 各绘图方法返回 `PlotResult(figure, axes, data)`，`.save()` 支持 PNG/PDF/SVG；不用图时也可读取 field/section/line/point/temporal。Notebook **不自动创建 analysis.nc**。绘图可用变量名、单位和适用功能由源码自动提取在下方变量索引中。
 
 源码：[绘图 API](source:debug:postprocess/hint_debug_plotting/plots.py)、[变量](source:debug:postprocess/hint_debug_plotting/variables.py)、[iota](source:debug:postprocess/hint_debug_plotting/rotational_transform.py)、[VMEC 对比](source:debug:postprocess/hint_debug_plotting/vmec_reference.py)。
+
+## 初始化庞加莱
+
+```python
+plots.initialization_poincare(
+    seed_count=128, exterior_count=10, seed_phi=0.0, seed_z=0.0,
+    turns=500, max_step_phi=plots.grid.period/128,
+    interpolation="compatible", marker_size=0.04, dpi=240,
+).save("initialization_poincare.png")
+```
+
+总是选择保存的outer_step=0。默认在phi=0、Z=0的外侧射线上取128个均匀VMEC s（含0和1），外侧再取10个点；同一批轨迹记录三个截面，不在各截面重新发射。turns为完整2pi圈数，angles、步长、rtol/atol、显式R-Z起点均可指定。绘图不替代精度判定；详见[绘图接口](source:debug:docs/NOTEBOOK_PLOTTING.md)。
