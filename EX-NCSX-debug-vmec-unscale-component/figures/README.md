@@ -1,160 +1,94 @@
-# Initialization and outer-100 PNG index
+# 当前 NCSX 图集
 
-85 PNG figures: 84 archived figures at 300 dpi, plus one initialization Poincare figure at 320 dpi.
-HINT-debug 0.8.8; VMEC start; scale_after=false.
+全部为本次 2.2.0 任务，初始化第0步、末态第50步。详细方法见网站。
 
-Spatial data: completed outer iteration 100, EXCEPT the explicitly named initialization figure below.
-Histories: available iterations 0-100.
-See [case README](../README.md) for units, averaging, masks, input hashes, and limitations.
-
-## Initialization total-field Poincare (outer 0)
-
-- [poincare_total_initial_three_sections](poincare_total_initial_three_sections.png), 1760x4990 pixels, 320 dpi.
-- [Calculation method and limitations](../Documents/index.html#initial-poincare).
-- Complete record 0, time=0, outer_step=0; saved `/equilibrium/B` is already B0+B1 in tesla. No duplicate B0 addition or new MHD evolution.
-- Sections 0/30/60 deg; actual wout geometry at s=0.25/0.5/0.75/1 and axis, wall and computational box overlaid.
-- Periodic cubic field interpolation, adaptive RK4 step doubling, float64 GPU/JAX, rtol=1e-8 and atol=1e-10.
-- Up to 600 FIELD periods (200 full turns at nfp=3); 128 nominal subintervals per period, internally adaptive.
-- Multi-s, four-theta VMEC seeds plus an exterior grid; distinct trajectories, no same-s averaging.
-- Only actual return crossings; wall hits terminate tracing, not the MHD evolution domain.
-
-| phi [deg] | accepted seeds | valid returns | survive 600 returns | wall hits | singular / unresolved |
-|---|---:|---:|---:|---:|---:|
-| 0 | 547 | 131010 | 213 | 334 | 0 / 0 |
-| 30 | 329 | 129218 | 212 | 117 | 0 / 0 |
-| 60 | 279 | 130414 | 213 | 66 | 0 / 0 |
-
-Seed sets differ from the outer-100 plots; counts are not a controlled confinement comparison.
-VMEC overlays are Fourier geometry, not a second field-line integration. Geometric agreement alone does not establish B magnitude, iota or force balance accuracy.
-
-## Outer-100 field-line trace diagnostics
-
-Each iota value uses one theta=0 seed per initial VMEC s per section, not a multi-seed average.
-Different sections are kept separate. All trace lengths below are FIELD periods, not full toroidal turns.
-
-| phi [deg] | iota seeds | finite estimates | convergence + section-resolution pass | axis closure [m] |
-|---|---:|---:|---:|---:|
-| 0.0 | 191 | 90 | 24 | 8.69738e-08 |
-| 30.0 | 191 | 58 | 34 | 5.43246e-08 |
-| 60.0 | 191 | 71 | 53 | 7.77276e-08 |
-
-Iota: 512 field periods, 128 toroidal substeps per period; initial VMEC s=0.0001-0.9999.
-Finite but unqualified estimates use separate markers; failed traces are not filled by interpolation.
-
-Axis searches met the grid-aware tolerance, not the stricter nonlinear tolerance; warnings were retained.
-Dense launch coverage does not imply that reliable magnetic-surface iota exists throughout that range.
-
-| phi [deg] | accepted Poincare seeds | valid return points | seeds surviving to last return |
-|---|---:|---:|---:|
-| 0.0 | 2308 | 116281 | 155 |
-| 30.0 | 1143 | 121785 | 162 |
-| 60.0 | 844 | 152332 | 202 |
-
-Poincare: up to 600 field periods per line; domain/wall exits are retained as trace termination.
-
-## Reading the plots
-
-- Sections: phi=0, 30, 60 deg; wall, box, and VMEC axis/flux surfaces overlaid.
-- Local force ratio: |J1 x B - grad(p)| / max(|J1 x B|, |grad(p)|), masked near zero denominator.
-- Checkpoint mean/RMS histories: R-weighted cylindrical volume reductions, wall and evolving s<1 masks.
-- Step-B histories: stored normalized diagnostics at the last inner step of each outer iteration.
-- SI response-divergence history: arithmetic statistics over the physical box, not volume statistics.
-- Profile s/rho bins: section-area averages of evolving HINT labels, not exact flux-surface averages.
-- Iota initial_vmec_s plot: INITIAL launch label; other iota s/rho plots use evolving HINT labels.
-- No pressure-ramp end marker: vmec start has no pressure ramp.
-
-## Two-dimensional sections
-
-- [section_current_density](section_current_density.png)
-- [section_divergence_b](section_divergence_b.png)
-- [section_divergence_b_abs](section_divergence_b_abs.png)
-- [section_divergence_b_response](section_divergence_b_response.png)
-- [section_divergence_b_response_abs](section_divergence_b_response_abs.png)
-- [section_divergence_b_vacuum](section_divergence_b_vacuum.png)
-- [section_divergence_b_vacuum_abs](section_divergence_b_vacuum_abs.png)
-- [section_field_phi](section_field_phi.png)
-- [section_field_r](section_field_r.png)
-- [section_field_strength](section_field_strength.png)
-- [section_field_z](section_field_z.png)
-- [section_force_residual](section_force_residual.png)
-- [section_force_residual_relative](section_force_residual_relative.png)
-- [section_lorentz_force](section_lorentz_force.png)
-- [section_parallel_current_density](section_parallel_current_density.png)
-- [section_parallel_pressure_gradient](section_parallel_pressure_gradient.png)
-- [section_pressure](section_pressure.png)
-- [section_pressure_gradient](section_pressure_gradient.png)
-- [section_response_field_phi](section_response_field_phi.png)
-- [section_response_field_r](section_response_field_r.png)
-- [section_response_field_strength](section_response_field_strength.png)
-- [section_response_field_z](section_response_field_z.png)
-- [section_rho](section_rho.png)
-- [section_s](section_s.png)
-- [section_speed](section_speed.png)
-- [section_speed_change_rate](section_speed_change_rate.png)
-- [section_toroidal_current_density](section_toroidal_current_density.png)
-- [section_vacuum_field_strength](section_vacuum_field_strength.png)
-- [section_velocity_change_rate](section_velocity_change_rate.png)
-- [section_velocity_phi](section_velocity_phi.png)
-- [section_velocity_r](section_velocity_r.png)
-- [section_velocity_z](section_velocity_z.png)
-
-## Profiles and rotational transform
-
-- [profile_enclosed_toroidal_current_rho](profile_enclosed_toroidal_current_rho.png)
-- [profile_enclosed_toroidal_current_s](profile_enclosed_toroidal_current_s.png)
-- [profile_field_strength_R](profile_field_strength_R.png)
-- [profile_field_strength_Z](profile_field_strength_Z.png)
-- [profile_field_strength_phi](profile_field_strength_phi.png)
-- [profile_field_strength_rho](profile_field_strength_rho.png)
-- [profile_field_strength_s](profile_field_strength_s.png)
-- [profile_force_residual_R](profile_force_residual_R.png)
-- [profile_force_residual_Z](profile_force_residual_Z.png)
-- [profile_force_residual_phi](profile_force_residual_phi.png)
-- [profile_force_residual_relative_R](profile_force_residual_relative_R.png)
-- [profile_force_residual_relative_Z](profile_force_residual_relative_Z.png)
-- [profile_force_residual_relative_phi](profile_force_residual_relative_phi.png)
-- [profile_force_residual_relative_rho](profile_force_residual_relative_rho.png)
-- [profile_force_residual_relative_s](profile_force_residual_relative_s.png)
-- [profile_force_residual_rho](profile_force_residual_rho.png)
-- [profile_force_residual_s](profile_force_residual_s.png)
-- [profile_pressure_R](profile_pressure_R.png)
-- [profile_pressure_Z](profile_pressure_Z.png)
-- [profile_pressure_phi](profile_pressure_phi.png)
-- [profile_pressure_rho](profile_pressure_rho.png)
-- [profile_pressure_s](profile_pressure_s.png)
-- [profile_rotational_transform_R](profile_rotational_transform_R.png)
-- [profile_rotational_transform_Z](profile_rotational_transform_Z.png)
-- [profile_rotational_transform_initial_vmec_s](profile_rotational_transform_initial_vmec_s.png)
-- [profile_rotational_transform_rho](profile_rotational_transform_rho.png)
-- [profile_rotational_transform_s](profile_rotational_transform_s.png)
-- [profile_speed_R](profile_speed_R.png)
-- [profile_speed_Z](profile_speed_Z.png)
-- [profile_speed_phi](profile_speed_phi.png)
-- [profile_speed_rho](profile_speed_rho.png)
-- [profile_speed_s](profile_speed_s.png)
-- [profile_toroidal_current_density_R](profile_toroidal_current_density_R.png)
-- [profile_toroidal_current_density_Z](profile_toroidal_current_density_Z.png)
-- [profile_toroidal_current_density_phi](profile_toroidal_current_density_phi.png)
-- [profile_toroidal_current_density_rho](profile_toroidal_current_density_rho.png)
-- [profile_toroidal_current_density_s](profile_toroidal_current_density_s.png)
-
-## Convergence and timings
-
-- [convergence_checkpoint_field_means](convergence_checkpoint_field_means.png)
-- [convergence_checkpoint_means](convergence_checkpoint_means.png)
-- [convergence_checkpoint_peaks](convergence_checkpoint_peaks.png)
-- [convergence_checkpoint_rms](convergence_checkpoint_rms.png)
-- [convergence_checkpoint_velocity_change_rate](convergence_checkpoint_velocity_change_rate.png)
-- [convergence_response_divergence_si](convergence_response_divergence_si.png)
-- [convergence_stepb_01](convergence_stepb_01.png)
-- [convergence_stepb_02](convergence_stepb_02.png)
-- [convergence_stepb_03](convergence_stepb_03.png)
-- [convergence_wall_clock_timings](convergence_wall_clock_timings.png)
-
-## Poincare sections
-
-- [poincare_000.0deg](poincare_000.0deg.png)
-- [poincare_030.0deg](poincare_030.0deg.png)
-- [poincare_060.0deg](poincare_060.0deg.png)
-- [poincare_outboard_detail](poincare_outboard_detail.png)
-- [poincare_three_sections](poincare_three_sections.png)
+- [庞加莱 · 第 50 步 · 三截面](poincare_final_three_sections.png)
+- [压强](section_pressure.png)
+- [流速与力残差体平均](convergence_checkpoint_means.png)
+- [压强 · s](profile_pressure_s.png)
+- [局域归一化力残差](section_force_residual_relative.png)
+- [旋转变换 ι · 初始 VMEC s](profile_rotational_transform_initial_vmec_s.png)
+- [庞加莱 · 第 0 步 · 三截面](poincare_initial_three_sections.png)
+- [响应场插值器 JAX AD 散度](convergence_ad_response.png)
+- [总场插值器 JAX AD 散度](convergence_ad_total.png)
+- [真空场插值器 JAX AD 散度](convergence_ad_vacuum.png)
+- [压强及磁场体平均](convergence_checkpoint_field_means.png)
+- [压强、场强及流速峰值](convergence_checkpoint_peaks.png)
+- [流速与力残差体 RMS](convergence_checkpoint_rms.png)
+- [流速变化率体 RMS](convergence_checkpoint_velocity_change_rate.png)
+- [末态高精度散度核验 · 节点与离网格点](convergence_final_divergence_precision.png)
+- [Step-B 存储诊断 · 01](convergence_stepb_01.png)
+- [Step-B 存储诊断 · 02](convergence_stepb_02.png)
+- [Step-B 存储诊断 · 03](convergence_stepb_03.png)
+- [每次外迭代实际耗时](convergence_wall_clock_timings.png)
+- [庞加莱 · 第 50 步 · 0°](poincare_final_phi_000.png)
+- [庞加莱 · 第 50 步 · 30°](poincare_final_phi_030.png)
+- [庞加莱 · 第 50 步 · 60°](poincare_final_phi_060.png)
+- [庞加莱 · 第 0 步 · 0°](poincare_initial_phi_000.png)
+- [庞加莱 · 第 0 步 · 30°](poincare_initial_phi_030.png)
+- [庞加莱 · 第 0 步 · 60°](poincare_initial_phi_060.png)
+- [累计环向电流 · rho](profile_enclosed_toroidal_current_rho.png)
+- [累计环向电流 · s](profile_enclosed_toroidal_current_s.png)
+- [总场强 · R](profile_field_strength_R.png)
+- [总场强 · Z](profile_field_strength_Z.png)
+- [总场强 · phi](profile_field_strength_phi.png)
+- [总场强 · rho](profile_field_strength_rho.png)
+- [总场强 · s](profile_field_strength_s.png)
+- [力残差大小 · R](profile_force_residual_R.png)
+- [力残差大小 · Z](profile_force_residual_Z.png)
+- [力残差大小 · phi](profile_force_residual_phi.png)
+- [局域归一化力残差 · R](profile_force_residual_relative_R.png)
+- [局域归一化力残差 · Z](profile_force_residual_relative_Z.png)
+- [局域归一化力残差 · phi](profile_force_residual_relative_phi.png)
+- [局域归一化力残差 · rho](profile_force_residual_relative_rho.png)
+- [局域归一化力残差 · s](profile_force_residual_relative_s.png)
+- [力残差大小 · rho](profile_force_residual_rho.png)
+- [力残差大小 · s](profile_force_residual_s.png)
+- [压强 · R](profile_pressure_R.png)
+- [压强 · Z](profile_pressure_Z.png)
+- [压强 · phi](profile_pressure_phi.png)
+- [压强 · rho](profile_pressure_rho.png)
+- [旋转变换 ι · R](profile_rotational_transform_R.png)
+- [旋转变换 ι · Z](profile_rotational_transform_Z.png)
+- [旋转变换 ι · rho](profile_rotational_transform_rho.png)
+- [旋转变换 ι · s](profile_rotational_transform_s.png)
+- [流速大小 · R](profile_speed_R.png)
+- [流速大小 · Z](profile_speed_Z.png)
+- [流速大小 · phi](profile_speed_phi.png)
+- [流速大小 · rho](profile_speed_rho.png)
+- [流速大小 · s](profile_speed_s.png)
+- [环向电流密度 Jφ · R](profile_toroidal_current_density_R.png)
+- [环向电流密度 Jφ · Z](profile_toroidal_current_density_Z.png)
+- [环向电流密度 Jφ · phi](profile_toroidal_current_density_phi.png)
+- [环向电流密度 Jφ · rho](profile_toroidal_current_density_rho.png)
+- [环向电流密度 Jφ · s](profile_toroidal_current_density_s.png)
+- [响应电流密度大小](section_current_density.png)
+- [总场网格散度](section_divergence_b.png)
+- [总场网格散度绝对值](section_divergence_b_abs.png)
+- [响应场网格散度](section_divergence_b_response.png)
+- [响应场网格散度绝对值](section_divergence_b_response_abs.png)
+- [真空场网格散度](section_divergence_b_vacuum.png)
+- [真空场网格散度绝对值](section_divergence_b_vacuum_abs.png)
+- [总磁场 phi 分量](section_field_phi.png)
+- [总磁场 r 分量](section_field_r.png)
+- [总场强](section_field_strength.png)
+- [总磁场 z 分量](section_field_z.png)
+- [力残差大小](section_force_residual.png)
+- [洛伦兹力](section_lorentz_force.png)
+- [平行电流密度](section_parallel_current_density.png)
+- [平行压强梯度](section_parallel_pressure_gradient.png)
+- [压强梯度](section_pressure_gradient.png)
+- [响应磁场 phi 分量](section_response_field_phi.png)
+- [响应磁场 r 分量](section_response_field_r.png)
+- [响应场强](section_response_field_strength.png)
+- [响应磁场 z 分量](section_response_field_z.png)
+- [ρ 标签](section_rho.png)
+- [演化 s 标签](section_s.png)
+- [流速大小](section_speed.png)
+- [流速大小变化率](section_speed_change_rate.png)
+- [环向电流密度 Jφ](section_toroidal_current_density.png)
+- [真空场强](section_vacuum_field_strength.png)
+- [流速矢量变化率](section_velocity_change_rate.png)
+- [流速 phi 分量](section_velocity_phi.png)
+- [流速 r 分量](section_velocity_r.png)
+- [流速 z 分量](section_velocity_z.png)

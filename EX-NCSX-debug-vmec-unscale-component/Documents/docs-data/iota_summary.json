@@ -1,0 +1,29 @@
+[
+  {
+    "event": "iota_done",
+    "elapsed_s": 137.82815327122808,
+    "phi_degrees": 0.0,
+    "finite": 159,
+    "resolved": 27,
+    "requested": 191,
+    "axis_closure_m": 2.7425917337826842e-08
+  },
+  {
+    "event": "iota_done",
+    "elapsed_s": 257.3643942400813,
+    "phi_degrees": 29.999999999999996,
+    "finite": 93,
+    "resolved": 32,
+    "requested": 191,
+    "axis_closure_m": 3.661749331794581e-08
+  },
+  {
+    "event": "iota_done",
+    "elapsed_s": 377.22965575382113,
+    "phi_degrees": 59.99999999999999,
+    "finite": 104,
+    "resolved": 53,
+    "requested": 191,
+    "axis_closure_m": 4.217899358384346e-08
+  }
+]

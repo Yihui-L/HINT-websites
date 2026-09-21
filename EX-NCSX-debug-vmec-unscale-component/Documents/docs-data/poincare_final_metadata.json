@@ -1,0 +1,89 @@
+{
+  "source": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/hint_debug_ncsx_vmec.nc",
+  "outer_step": 50,
+  "turns": 500,
+  "nfp": 3,
+  "launch_phi_rad": 0,
+  "seeds": 1422,
+  "radial_seeds": 138,
+  "wall_mesh_seeds": 1284,
+  "rejected_seeds": 0,
+  "interpolation": "component",
+  "backend": "gpu",
+  "engine": "jax",
+  "max_step_phi": 0.016362461737446838,
+  "rtol": 1e-08,
+  "atol": 1e-10,
+  "elapsed_tracing_s": 365.3748043552041,
+  "sections": [
+    {
+      "phi_degrees": 0.0,
+      "points": 362884
+    },
+    {
+      "phi_degrees": 29.999999999999996,
+      "points": 363379
+    },
+    {
+      "phi_degrees": 59.99999999999999,
+      "points": 363090
+    }
+  ],
+  "final_status_counts": {
+    "0": 223,
+    "1": 1199,
+    "2": 0,
+    "3": 0
+  },
+  "outputs": [
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_wall_coverage.png",
+      "size_bytes": 1718099
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_wall_coverage.svg",
+      "size_bytes": 153905068
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_wall_coverage.pdf",
+      "size_bytes": 18318433
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_000.png",
+      "size_bytes": 865285
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_000.svg",
+      "size_bytes": 51176429
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_000.pdf",
+      "size_bytes": 6224248
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_030.png",
+      "size_bytes": 840839
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_030.svg",
+      "size_bytes": 51239213
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_030.pdf",
+      "size_bytes": 6101216
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_060.png",
+      "size_bytes": 807179
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_060.svg",
+      "size_bytes": 51196318
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/final-poincare-step050-wall-coverage/final_poincare_phi_060.pdf",
+      "size_bytes": 6163650
+    }
+  ],
+  "elapsed_total_s": 548.1646390985698
+}

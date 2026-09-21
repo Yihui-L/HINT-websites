@@ -1,0 +1,43 @@
+{
+  "options": {
+    "seed_count": 128,
+    "exterior_count": 10,
+    "seed_phi": 0.0,
+    "seed_z": 0.0,
+    "turns": 500,
+    "angles": [
+      0.0,
+      0.5235987755982988,
+      1.0471975511965976
+    ],
+    "max_step_phi": 0.016362461737446838,
+    "interpolation": null,
+    "rtol": 1e-08,
+    "atol": 1e-10
+  },
+  "interpolation": "component",
+  "source": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/hint_debug_ncsx_vmec.nc",
+  "snapshot": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/initial-poincare-component/snapshot.nc",
+  "outer_step": 0,
+  "marker_area_pt2": 0.025,
+  "dpi": 320,
+  "sections": [
+    {
+      "phi_degrees": 0.0,
+      "valid_crossings": 190054,
+      "surviving_seeds": 126
+    },
+    {
+      "phi_degrees": 29.999999999999996,
+      "valid_crossings": 190059,
+      "surviving_seeds": 126
+    },
+    {
+      "phi_degrees": 59.99999999999999,
+      "valid_crossings": 190056,
+      "surviving_seeds": 126
+    }
+  ],
+  "elapsed_s": 392.8154559843242,
+  "note": "Saved pre-iteration total B; one seed set traced through all sections. VMEC curves are geometric references, not traced return points."
+}

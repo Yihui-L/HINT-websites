@@ -1,19 +1,14 @@
-# Continuation example only. Do not launch while the initial writer is running.
-# Continues the last complete checkpoint and APPENDS to the same output file.
-# wout, mgrid, wall, evolved s/p/B/v and fixed initial B1.n come from that file.
+# Example only; do not run concurrently with the initial writer.
+# Current schema 21 restores B0/B/p/v/s and source/wall data from the same file.
 [paths]
 output_file = "run/hint_debug_ncsx_vmec.nc"
-
 [solver]
 mode = "follow"
 backend = "gpu"
 engine = "jax"
-# Number of ADDITIONAL outer iterations, not the desired absolute final index.
-outer_steps = 200
+outer_steps = 50
 save_every = 1
-# Omit start_point, scale_after, and Step-A/B settings to inherit the checkpoint.
-# For this run the inherited start_point is vmec and scale_after is false.
-
+# Omitted solver controls inherit the checkpoint, including interpolation and scale_after=false.
 [output]
 compression_level = 4
 store_stepb_diagnostics = true

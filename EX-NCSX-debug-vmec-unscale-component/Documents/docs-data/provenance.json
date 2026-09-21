@@ -1,0 +1,29 @@
+{
+  "source_commit": "84c2cf2e2ce7fb956c7b101a57722a681156e9ac",
+  "version": "2.2.0",
+  "outer_step": 50,
+  "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component",
+  "plotting_library": "installed hint_debug_plotting 2.2.0",
+  "input_checksums": {
+    "ncsx_main.toml": "994d330b634bad0e5f9ad756fa21a0b8d52fd6289898a5b8ae921c8b1a1b73e9",
+    "ncsx_follow.toml": "07004d5d38e35764a959c991bb4d5278783f6cc8d6b744fcb6ed920103cad525",
+    "ncsx_post.toml": "efe233b5a0a37e7185b9fc93e91fcbd09ed69b87cc0c19fc458fd66e6128d0cb",
+    "inputs/ncsx_coils.txt": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
+    "inputs/NCSX_physical_vessel_half_period.txt": "b21c015e188459f7b5d0bcfec1f3570a621c915baeeb1a6a65c4d2c4e2033814"
+  },
+  "not_published_source_checksums": {
+    "wout_ncsx_c09r00_free_nonnegative.nc": {
+      "sha256": "f479637de1aa77cba5a58c679fa62deced67864ab6ed493bacf4916492ebec25",
+      "bytes": 4222792
+    },
+    "hint_debug_ncsx_vmec.nc": {
+      "sha256": "7d98ecab5dedf9ecbe43131852a5b1a9648f29ebfcf9326a9821e09ced23610b",
+      "bytes": 6440095397
+    }
+  },
+  "postprocess_axis_warnings": [
+    "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=1.640e-08, strict=1.611e-08",
+    "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=4.727e-08, strict=1.495e-08",
+    "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=5.093e-08, strict=1.404e-08"
+  ]
+}
