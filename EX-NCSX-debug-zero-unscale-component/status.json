@@ -1,0 +1,29 @@
+{
+  "version": "2.3.0",
+  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z",
+  "input_checksums": {
+    "wout_ncsx_c09r00_free_nonnegative.nc": {
+      "sha256": "f479637de1aa77cba5a58c679fa62deced67864ab6ed493bacf4916492ebec25",
+      "bytes": 4222792
+    },
+    "ncsx_coils.txt": {
+      "sha256": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
+      "bytes": 351283
+    },
+    "NCSX_physical_vessel_half_period.txt": {
+      "sha256": "b21c015e188459f7b5d0bcfec1f3570a621c915baeeb1a6a65c4d2c4e2033814",
+      "bytes": 961443
+    }
+  },
+  "status": "submitted",
+  "snapshot_utc": "2026-09-21T09:49:58.574196+00:00",
+  "submitted_utc": "2026-09-21T09:49:26.075428+00:00",
+  "start_point": "zero",
+  "scale_after": false,
+  "pressure_ramp_iterations": 20,
+  "outer_steps": 200,
+  "inner_steps": 1000,
+  "magnetic_interpolation": "component",
+  "status_note": "Static submission snapshot, not a live monitor; no result figures published yet."
+}

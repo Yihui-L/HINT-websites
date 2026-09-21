@@ -1,0 +1,14 @@
+# Example only; do not run concurrently with the initial writer.
+# Current schema 22 restores B0/B/p/v/s and source/wall data from the same file.
+[paths]
+output_file = "run/hint_debug_ncsx_zero.nc"
+[solver]
+mode = "follow"
+backend = "gpu"
+engine = "jax"
+outer_steps = 200
+save_every = 1
+# Omitted solver controls inherit the checkpoint, including interpolation and scale_after=false.
+[output]
+compression_level = 4
+store_stepb_diagnostics = true

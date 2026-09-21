@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCSX Zero | HINT-debug 2.3.0</title><style>
+*{box-sizing:border-box}body{margin:0;color:#202d31;background:#fff;font:16px/1.7 system-ui,sans-serif;letter-spacing:0}
+main{max-width:980px;margin:auto;padding:40px 24px}nav{border-bottom:1px solid #dae1e1;padding-bottom:16px}
+a{color:#286d66}h1{font-size:32px;margin-bottom:8px}h2{font-size:21px}code{overflow-wrap:anywhere}
+.status{border-left:4px solid #a67725;padding:8px 20px;background:#faf8f2}table{border-collapse:collapse;width:100%;margin:24px 0}
+th,td{text-align:left;border-bottom:1px solid #e2e7e7;padding:10px 12px}th{width:42%}footer{border-top:1px solid #dae1e1;margin-top:32px;padding-top:16px;color:#58666a}
+</style></head><body><main>
+<nav><a href="../Source-Code/">程序手册</a></nav>
+<h1>NCSX</h1><p>HINT-debug 2.3.0 · Zero · Unscale · Component</p>
+<section class="status"><h2>新算例已提交</h2><p>本页为提交状态快照，后续结果尚未发布。这里不展示旧例子的图片，也不预判收敛情况。</p>
+<p>提交时间：2026-09-21T09:49:26.075428+00:00</p></section>
+<table><tr><th>启动方式</th><td>initial / zero</td></tr><tr><th>外迭代 / Step-B内步</th><td>200 / 1000</td></tr>
+<tr><th>压强攀升</th><td>20步；此后 scale_after=false</td></tr><tr><th>网格 / 周期数</th><td>144 × 144 × 144 / 3</td></tr>
+<tr><th>磁场插值 / 计算后端</th><td>component / GPU + JAX</td></tr><tr><th>kdivb</th><td>10⁻⁴</td></tr></table>
+<h2>边界与输入</h2><p>响应场从零开始，矩形R-Z边界的响应法向场保持零。真空背景场不受该边界约束；真实第一壁用于截断磁力线。VMEC提供目标压强、电流剖面及初始标签，但不计算VMEC初始响应场。</p>
+<ul><li><a href="ncsx_main.toml">ncsx_main.toml</a></li><li><a href="ncsx_follow.toml">ncsx_follow.toml</a></li><li><a href="ncsx_post.toml">ncsx_post.toml</a></li><li><a href="inputs/ncsx_coils.txt">inputs/ncsx_coils.txt</a></li><li><a href="inputs/NCSX_physical_vessel_half_period.txt">inputs/NCSX_physical_vessel_half_period.txt</a></li><li><a href="status.json">status.json</a></li></ul><p>follow文件仅为续算示例，尚未执行。wout和输出NetCDF不在本站，mgrid不参与此次计算。</p>
+<footer>源码提交 <code>0495705cb52feb85e8db2f31f0cc91034197a01b</code><br>这是独立的新算例目录；结果发布前不代表计算已经完成。</footer>
+</main></body></html>

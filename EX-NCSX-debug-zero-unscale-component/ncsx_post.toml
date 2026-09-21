@@ -1,0 +1,48 @@
+# Example only; run on a stopped output or a consistent snapshot, not live HDF5.
+input_file = "run/hint_debug_ncsx_zero.nc"
+output_file = "run/hint_debug_ncsx_analysis.nc"
+
+[execution]
+backend = "gpu"
+engine = "jax"
+
+[selection]
+record = -1
+
+[fields]
+enabled = true
+nr = 0
+nz = 0
+ntor = 0
+
+[force_balance]
+enabled = true
+
+[magnetic_axis]
+enabled = false
+axis_seed_r_m = 0.0
+axis_seed_z_m = 0.0
+
+[poincare]
+enabled = true
+field_source = "hint"
+seed_count = 30
+seed_r_m = 1.6
+seed_z_m = 0.0
+seed_phi_fraction = 0.0
+seed_delta_r_m = -0.01
+seed_delta_z_m = 0.0
+trace_both_directions = false
+toroidal_planes = 128
+boundary_points = 150
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[field_lines]
+enabled = false
+[flux_surfaces]
+enabled = false
+[boundary_trace]
+enabled = false
+[convergence]
+enabled = true
