@@ -1,4 +1,20 @@
-# Per-outer saved AD divergence metrics (no field reconstruction):
+# Also available: grid FD4 metrics, distinct from source/interpolant derivatives.
+# divb_fd4_vacuum_mean_abs [T/m]
+# divb_fd4_vacuum_mean_normalized [1]
+# divb_fd4_vacuum_rms [T/m]
+# divb_fd4_vacuum_max [T/m]
+# divb_fd4_vacuum_sample_count [1]
+# divb_fd4_response_mean_abs [T/m]
+# divb_fd4_response_mean_normalized [1]
+# divb_fd4_response_rms [T/m]
+# divb_fd4_response_max [T/m]
+# divb_fd4_response_sample_count [1]
+# divb_fd4_total_mean_abs [T/m]
+# divb_fd4_total_mean_normalized [1]
+# divb_fd4_total_rms [T/m]
+# divb_fd4_total_max [T/m]
+# divb_fd4_total_sample_count [1]
+# Per-outer saved interpolant AD metrics (no field reconstruction):
 # divb_ad_vacuum_mean_abs [T/m]
 # divb_ad_vacuum_mean_normalized [1]
 # divb_ad_vacuum_rms [T/m]

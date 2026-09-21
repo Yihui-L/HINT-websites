@@ -11,7 +11,7 @@
 
 3 个旧预处理程序已整合进 initial。用户不再手工衔接 flx/vac/lim 三个输出，也不再以旧 NAMELIST 作为新版输入。后处理 TOML 配置的是数值分析内容；它不是所有 Notebook 绘图参数的序列化文件。
 
-## 统一文件 schema 21
+## 统一文件 schema 22
 
 两版各有自己的 schema 属性，不能交叉续算。新状态仅保存必要基础量：
 
@@ -38,13 +38,19 @@ Step-B 的 divb 字段为所选插值器的 JAX AD 采样诊断，不是网格�
 
 `convergence.enabled=true` 时后处理输出 `magnetic_convergence`，直接复制上述记录，不重算磁场。绘图脚本可用 `time_series` 读取任意 `divb_ad_*` 变量，也可用 `HintPlots.magnetic_history()` 读取全部统计。
 
-新主程序 follow 只接受 schema 21 的 B 状态。旧 schema（含1.x的A状态）均明确拒绝，不提供格式升级或兼容读取。后处理需稳定结果或安全副本，不承诺正在写入的 HDF5 可任意并发读。
+2.3.0 新增同样命名结构的 `divb_fd4_*`，为全部壁内有效中心模板节点的四阶网格差分统计。`ad` 是所选插值器导数，不是解析源场导数；`fd4` 是离散残差，不是精确连续散度。两者共享绝对值单位 T/m 和归一化均值定义，但计数/区域不同。
+
+`/preprocess/initial_source_diagnostics` 分别保存 `vacuum_domain/wall/lcfs_inside/lcfs_outside` 和 `response_lcfs_inside/lcfs_outside` 可用组。源函数在笛卡尔坐标下用 JAX float64 求实际 Jacobian，内区采用 `(dB/dq)(dx/dq)^{-1}`。最多256个域内/壁内线圈探针、64个内/外区探针；内区排除精确磁轴和边界，外区要求完整5×5×5外侧模板。外区固定高阶积分场值需通过自适应积分对照才报告。解析 AD 不使用 HINT 磁场插值器，也不人为返回0。跨 LCFS 只保存不可定义的状态说明，不存数值散度；错误写日志并标记 unavailable，不终止健康演化。
+
+后处理 `convergence` 同时复制源统计至 `initial_source_divergence`，绘图可用 `plots.initial_source_diagnostics()` 直接读取。follow 不需要 wout/线圈文件，不重算或覆盖这些初始记录。源表达式无散仅验证其结构约束，不代表场值或 LCFS 连续性已通过物理验证。
+
+新主程序 follow 只接受 schema 22 的 B 状态。旧 schema（含1.x的A状态）均明确拒绝，不提供格式升级或兼容读取。后处理需稳定结果或安全副本，不承诺正在写入的 HDF5 可任意并发读。
 
 ## analysis.nc
 
 数值后处理按内容写入独立文件，包含采样几何、壁信息和 `/postprocess/<内容>/run_*` 结果。重复分析不直接覆盖输入平衡；每次 run 的完整标志和 latest_run 记录用于识别有效结果。追加时检查来源文件与几何一致性，不能把不同算例悄悄混入一个 analysis.nc。
 
-分析文件当前使用 `hint_analysis_schema=1`，根组含 R、Z、phi、nfp 和 `source_equilibrium`；壁距离场在 `/geometry/wall/signed_distance`。它不是主程序 schema 21 checkpoint，不能将 analysis.nc 当作 follow 输入。
+分析文件当前使用 `hint_analysis_schema=1`，根组含 R、Z、phi、nfp 和 `source_equilibrium`；壁距离场在 `/geometry/wall/signed_distance`。它不是主程序 schema 22 checkpoint，不能将 analysis.nc 当作 follow 输入。
 
 fields 的壁外采样约定为 −1；导数量还提供有效节点掩膜。其他结果可使用 NaN/状态码标识失败。统计时必须尊重 mask/status，不能把 −1 当成真实负场强或把失败轨迹当成零旋转变换。
 

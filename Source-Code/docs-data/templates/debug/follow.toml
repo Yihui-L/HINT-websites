@@ -1,4 +1,4 @@
-# Requires a current schema-21 B-state checkpoint; old files are not accepted.
+# Requires a current schema-22 B-state checkpoint; old files are not accepted.
 # Continue the last complete record in an existing HINT-debug main output.
 # Relative paths resolve from this TOML file. Do not run two writers on one file.
 # Static inputs, B/v/p/s, ramp progress and axis warm start come from that NetCDF.

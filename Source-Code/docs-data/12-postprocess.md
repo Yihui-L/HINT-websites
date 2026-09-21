@@ -13,7 +13,7 @@
 | poincare | 周期截面交点 | 一个场周期，不是每步都输出完整环向圈 |
 | flux_surfaces | 可解析磁面的积分量 | 散布/积分精度不合格需保留失败状态 |
 | boundary_trace | 边界曲线追踪 | 内部固定 mode=vmec；名字不表示调用 VMEC 求解器 |
-| convergence | 保存的 Step-B 历史 | 无法恢复没有存储的内部诊断 |
+| convergence | Step-B 历史、每外迭代 AD/FD4、初始源场 AD | 直接读取已有统计；不重算源场 |
 
 输入只接受 `fields/force_balance/field_lines` 等当前表名，旧 `magval/gprts/hmag` 别名已删除。共有 HMAGConfig 中某些参数被内容分支覆盖或不使用，完整参数表逐项说明，不建议把所有公共字段都复制到每个表。
 
@@ -30,6 +30,8 @@ plots = HintPlots(
     backend="cpu", engine="jax",
 )
 print(variable_catalog())
+print(plots.initial_source_diagnostics())
+plots.time_series(["divb_ad_response_mean_abs", "divb_fd4_response_mean_abs"])
 ```
 
 wall 使用 `hint_wall_plotting`。`outer_step` 与 `record` 不可同时给出；record 是保存记录序号，不是步号。构造对象不会启动主程序，不修改结果。传入的 wout 需同一算例、周期与对称性一致；仅凭 nfp 匹配仍不能替代用户确认正确文件。

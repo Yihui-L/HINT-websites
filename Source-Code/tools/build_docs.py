@@ -81,10 +81,10 @@ def plotting_catalog(variant: str) -> dict:
     for node in ast.parse(diagnostics.read_text()).body:
         if isinstance(node, ast.Assign):
             for target in node.targets:
-                if isinstance(target, ast.Name) and target.id in {"AD_FIELDS", "AD_STATISTICS"}:
+                if isinstance(target, ast.Name) and target.id in {"AD_FIELDS", "AD_STATISTICS", "DIVERGENCE_METHODS"}:
                     namespace[target.id] = ast.literal_eval(node.value)
-    if not {"AD_FIELDS", "AD_STATISTICS"} <= namespace.keys():
-        raise ValueError(f"Missing AD metadata in {diagnostics}")
+    if not {"AD_FIELDS", "AD_STATISTICS", "DIVERGENCE_METHODS"} <= namespace.keys():
+        raise ValueError(f"Missing divergence metadata in {diagnostics}")
     path = root / f"postprocess/hint_{variant}_plotting/variables.py"
     tree = ast.parse(path.read_text(), filename=str(path))
     tree.body = [node for node in tree.body if not (
@@ -534,7 +534,7 @@ def build():
 <output id="search-status" aria-live="polite"></output><nav aria-label="章节">{nav}</nav>
 <div class="sidebar-bottom"><a href="https://github.com/Yihui-L/HINT-websites/tree/main/Source-Code">GitHub · 手册文档</a>
 <a href="https://github.com/Yihui-L/HINT-docs">GitHub · 程序源码（需权限）</a></div></aside>
-<main id="content"><div class="document-meta"><span>HINT / SOURCE-CODE / 使用说明</span><span>源码 {SOURCE_REF[:7]}{' + 未提交工作区' if SOURCE_DIRTY else ''} · schema 21</span></div>
+<main id="content"><div class="document-meta"><span>HINT / SOURCE-CODE / 使用说明</span><span>源码 {SOURCE_REF[:7]}{' + 未提交工作区' if SOURCE_DIRTY else ''} · schema 22</span></div>
 <div class="manual-intro"><p class="eyebrow">MODEL · NUMERICS · WORKFLOW</p><p>从物理方程到输入输出</p><div class="quick-links"><a href="#model">物理模型</a><a href="#installation">安装运行</a><a href="#main-parameters">参数索引</a><a href="#postprocess">后处理</a></div></div>
 {'<p><strong>未发布的工作区快照。</strong>源码链接指向最近提交，未包含当前候选修改；请结合逐文件哈希及核验章节阅读，不能将本页视为已验收版本。</p>' if SOURCE_DIRTY else ''}
 {articles}<p id="no-results" hidden>未找到匹配章节。</p><footer>源代码定义行为，离散诊断支持判断；本文不代替算例验证。<br>HINT-debug {versions["debug"]} / HINT-wall {versions["wall"]}</footer></main>
@@ -542,7 +542,7 @@ def build():
     (DOCS / "index.html").write_text(page)
     (DOCS / "SOURCE_VERSION.md").write_text(
         f"# Source Version\n\n- HINT-debug {versions['debug']} / HINT-wall {versions['wall']}\n"
-        f"- Source commit: `{SOURCE_REF}`\n- NetCDF schema: 21 (variant-specific identifiers)\n"
+        f"- Source commit: `{SOURCE_REF}`\n- NetCDF schema: 22 (variant-specific identifiers)\n"
         f"- Uncommitted source-tree changes: {SOURCE_DIRTY}. "
         "When true, the commit is a base reference, not this complete snapshot.\n"
         "- 参数默认值与字段类型由配置 AST 生成，解释为本快照人工核对。\n"

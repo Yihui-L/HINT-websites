@@ -10,7 +10,9 @@ VMEC 逆变基矢场转换到物理柱坐标分量：
 
 $$B_R=B^\theta\partial_\theta R+B^\phi\partial_\phi R,\quad B_Z=B^\theta\partial_\theta Z+B^\phi\partial_\phi Z,\quad B_\phi=R B^\phi.$$
 
-这就是不能只用某个面的 `dI/ds` 推出该面所有点电流矢量的原因：还需要三维几何、完整平衡场及其导数。
+2.3.0 的初始化内区不再独立插值 `B^theta/B^phi` 系数：使用 `phi`、`iotas`、`lmns`（非对称时还需 `lmnc`）和同一套几何 Jacobian 重构上述逆变分量，详见[初始化](#initial-restart)。`iotas/lmns/lmnc` 跳过半网格第 0 行占位值；几何仍用完整网格。外区 virtual-casing 的边界磁场取值方式保持不变。
+
+不能只用某个面的 `dI/ds` 推出该面所有点电流矢量：还需要三维几何、完整平衡场及其导数。
 
 压力源采用 wout `presf` 表；lambda 源采用 `jdotb/bdotb`，不把 ac 多项式直接当作局部电流密度。VMEC 中用于直磁力线坐标的 λ 与本程序平行电流形状 λ 同名但**物理含义不同**。
 

@@ -526,7 +526,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_mean_normalized": {
       "label": "divb_ad_vacuum_mean_normalized",
@@ -534,7 +534,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_rms": {
       "label": "divb_ad_vacuum_rms",
@@ -542,7 +542,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_max": {
       "label": "divb_ad_vacuum_max",
@@ -550,7 +550,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_sample_count": {
       "label": "divb_ad_vacuum_sample_count",
@@ -558,7 +558,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_mean_abs": {
       "label": "divb_ad_response_mean_abs",
@@ -566,7 +566,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_mean_normalized": {
       "label": "divb_ad_response_mean_normalized",
@@ -574,7 +574,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_rms": {
       "label": "divb_ad_response_rms",
@@ -582,7 +582,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_max": {
       "label": "divb_ad_response_max",
@@ -590,7 +590,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_sample_count": {
       "label": "divb_ad_response_sample_count",
@@ -598,7 +598,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_mean_abs": {
       "label": "divb_ad_total_mean_abs",
@@ -606,7 +606,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_mean_normalized": {
       "label": "divb_ad_total_mean_normalized",
@@ -614,7 +614,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_rms": {
       "label": "divb_ad_total_rms",
@@ -622,7 +622,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_max": {
       "label": "divb_ad_total_max",
@@ -630,7 +630,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_sample_count": {
       "label": "divb_ad_total_sample_count",
@@ -638,7 +638,127 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_mean_abs": {
+      "label": "divb_fd4_vacuum_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_mean_normalized": {
+      "label": "divb_fd4_vacuum_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_rms": {
+      "label": "divb_fd4_vacuum_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_max": {
+      "label": "divb_fd4_vacuum_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_sample_count": {
+      "label": "divb_fd4_vacuum_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_mean_abs": {
+      "label": "divb_fd4_response_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_mean_normalized": {
+      "label": "divb_fd4_response_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_rms": {
+      "label": "divb_fd4_response_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_max": {
+      "label": "divb_fd4_response_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_sample_count": {
+      "label": "divb_fd4_response_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_mean_abs": {
+      "label": "divb_fd4_total_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_mean_normalized": {
+      "label": "divb_fd4_total_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_rms": {
+      "label": "divb_fd4_total_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_max": {
+      "label": "divb_fd4_total_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_sample_count": {
+      "label": "divb_fd4_total_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "pressure_max": {
       "label": "Pressure maximum",
@@ -1192,7 +1312,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_mean_normalized": {
       "label": "divb_ad_vacuum_mean_normalized",
@@ -1200,7 +1320,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_rms": {
       "label": "divb_ad_vacuum_rms",
@@ -1208,7 +1328,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_max": {
       "label": "divb_ad_vacuum_max",
@@ -1216,7 +1336,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_vacuum_sample_count": {
       "label": "divb_ad_vacuum_sample_count",
@@ -1224,7 +1344,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_vacuum_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_vacuum_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_mean_abs": {
       "label": "divb_ad_response_mean_abs",
@@ -1232,7 +1352,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_mean_normalized": {
       "label": "divb_ad_response_mean_normalized",
@@ -1240,7 +1360,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_rms": {
       "label": "divb_ad_response_rms",
@@ -1248,7 +1368,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_max": {
       "label": "divb_ad_response_max",
@@ -1256,7 +1376,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_response_sample_count": {
       "label": "divb_ad_response_sample_count",
@@ -1264,7 +1384,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_response_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_response_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_mean_abs": {
       "label": "divb_ad_total_mean_abs",
@@ -1272,7 +1392,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_mean_abs; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_mean_normalized": {
       "label": "divb_ad_total_mean_normalized",
@@ -1280,7 +1400,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_mean_normalized; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_rms": {
       "label": "divb_ad_total_rms",
@@ -1288,7 +1408,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_rms; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_max": {
       "label": "divb_ad_total_max",
@@ -1296,7 +1416,7 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_max; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "divb_ad_total_sample_count": {
       "label": "divb_ad_total_sample_count",
@@ -1304,7 +1424,127 @@
       "supports": [
         "time_series"
       ],
-      "description": "divb_ad_total_sample_count; stored per-outer JAX AD diagnostic"
+      "description": "divb_ad_total_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_mean_abs": {
+      "label": "divb_fd4_vacuum_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_mean_normalized": {
+      "label": "divb_fd4_vacuum_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_rms": {
+      "label": "divb_fd4_vacuum_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_max": {
+      "label": "divb_fd4_vacuum_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_vacuum_sample_count": {
+      "label": "divb_fd4_vacuum_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_vacuum_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_mean_abs": {
+      "label": "divb_fd4_response_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_mean_normalized": {
+      "label": "divb_fd4_response_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_rms": {
+      "label": "divb_fd4_response_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_max": {
+      "label": "divb_fd4_response_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_response_sample_count": {
+      "label": "divb_fd4_response_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_response_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_mean_abs": {
+      "label": "divb_fd4_total_mean_abs",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_mean_abs; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_mean_normalized": {
+      "label": "divb_fd4_total_mean_normalized",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_mean_normalized; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_rms": {
+      "label": "divb_fd4_total_rms",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_rms; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_max": {
+      "label": "divb_fd4_total_max",
+      "units": "T/m",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_max; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
+    },
+    "divb_fd4_total_sample_count": {
+      "label": "divb_fd4_total_sample_count",
+      "units": "1",
+      "supports": [
+        "time_series"
+      ],
+      "description": "divb_fd4_total_sample_count; stored per-outer interpolant AD or grid FD4 diagnostic (see identifier)"
     },
     "pressure_max": {
       "label": "Pressure maximum",

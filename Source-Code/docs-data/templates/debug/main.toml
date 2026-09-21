@@ -140,6 +140,9 @@ start_point = "zero"
 # string; hardware for JAX Step-A and Step-B: "cpu" (default) or "gpu".
 # FIELDLINES initialization uses wout total B inside/on LCFS, and coil B plus
 # exterior B virtual casing outside. B1 = total B - B0; no A integration/inversion.
+# Interior B uses flux/iota/lambda and one geometric Jacobian; casing retains wout boundary B.
+# Source AD is saved once; interpolant AD and grid FD4 statistics are saved each outer step.
+# No classical analytic divergence is assigned to the LCFS jump.
 # Adaptive surface panels refine unresolved exterior targets without changing
 # target coordinates or the HINT grid. Batches bound device memory.
 # Requires wout field/geometry coefficients (including asymmetric modes if lasym).
