@@ -105,6 +105,7 @@ def build():
     checkpoints=json.loads((DATA/'checkpoint_reductions.json').read_text())
     provenance=json.loads((DATA/'provenance.json').read_text())
     precision=json.loads((DATA/'final_ad_precision.json').read_text())
+    sources=json.loads((DATA/'initial_source_ad.json').read_text())
     iota=json.loads((DATA/'iota_summary.json').read_text())
     iotatable=table([(f"{r['phi_degrees']:.0f}°",f"{r['resolved']} / {r['finite']} / {r['requested']}",
                      f"通过检查 / 有限 / 总起点；轴闭合误差 {r['axis_closure_m']:.3g} m") for r in iota])
@@ -126,9 +127,9 @@ def build():
     cards=[]
     for f in figures:
         cards.append(f'''<article id="figure-{f['id']}" class="figure-card" data-category="{f['category']}" data-id="{f['id']}">
+<div class="figure-text"><span class="category">{GROUPS[f['category']]}</span><h2>{html.escape(f['title'])}</h2><p>{html.escape(f['caption'])}</p></div>
 <a class="image-link" href="{f['file']}" aria-label="查看原图：{html.escape(f['title'])}"><img src="{f['file']}" alt="{html.escape(f['title'])}" width="{f['width']}" height="{f['height']}" loading="lazy" decoding="async"></a>
-<div class="figure-text"><span class="category">{GROUPS[f['category']]}</span><h2>{html.escape(f['title'])}</h2><p>{html.escape(f['caption'])}</p>
-<div class="figure-foot"><small>{f['width']} × {f['height']} px</small><a href="{f['file']}" download>下载 PNG</a></div><code>{f['id']}</code></div></article>''')
+<div class="figure-text"><div class="figure-foot"><small>{f['width']} × {f['height']} px</small><a href="{f['file']}" download>下载 PNG</a></div><code>{f['id']}</code></div></article>''')
     tabs=f'<button class="category-tab active" data-category="all" aria-pressed="true">全部 <small>{len(figures)}</small></button>'
     tabs+=''.join(f'<button class="category-tab" data-category="{k}" aria-pressed="false">{v} <small>{counts[k]}</small></button>' for k,v in GROUPS.items())
     last=summary['last']; diag=last['diagnostic']; ad=last['magnetic_statistics']; fields=checkpoints[-1]
@@ -152,6 +153,16 @@ def build():
             precisionrows.append((label+' / '+where+' / 绝对均值与最大值',f"{values['divergence_mean_abs']:.10g} / {values['divergence_max']:.10g} T/m",'实际分量插值场的散度'))
         check=precision['fields'][key]['independent_polynomial_check']
         precisionrows.append((label+' / AD与独立导数最大差',f"{check['max_abs_difference_t_per_m']:.10g} T/m",f"{check['samples']}离网格点；此值是求导误差而非磁场散度"))
+    sourcerows=[]
+    for key,label in [('vacuum_wall','初始真空场 / 直接线圈模型'),
+                      ('total_wout_interior','LCFS内初始总场 / wout重构'),
+                      ('response_wout_minus_coils_interior','LCFS内响应场 / wout−线圈'),
+                      ('response_virtual_casing_exterior','LCFS外响应场 / virtual-casing'),
+                      ('total_coils_plus_casing_exterior','LCFS外初始总场 / 线圈+casing')]:
+        v=sources['fields'][key]
+        sourcerows.append((label, f"{v['mean_abs_t_m']:.8g} / {v['max_abs_t_m']:.8g} T/m",
+                          f"绝对均值 / 最大值；{v['samples']}个样本；平均归一化={v['mean_normalized']:.8g}"))
+    source_section='<h3>初始场解析表达式的直接散度核验</h3>'+table(sourcerows)+f'''<p>这是同一组输入、同一源场模型的补充 float64 JAX 直接求导，不使用 HINT 网格磁场插值，也不使用有限差分步长。真空场采用本次实际的第3级线圈中心线加密，其512个壁内节点与已保存真空场的最大矢量差为 {sources['vacuum_saved_grid_max_vector_difference_t']:.3g} T。LCFS内256点在 s∈[0.02,0.98] 的磁坐标中取样，通过坐标Jacobian换算为空间散度；保留程序实际的wout径向系数插值，因此该重构误差不应冒充理想VMEC解析误差。</p><p>LCFS外64点距离离散表面采样至少 {sources['exterior_min_sampled_surface_distance_m']:.3g} m，采用与初始化相同的30×8面板、24点Gauss规则，对固定源节点表达式求导；与自适应积分的场值最大差为 {sources['vc_adaptive_field_max_difference_t']:.3g} T。这是远离界面的源表达式检验，不是整个初始化场的保真度证明。</p><p class="notice">理论上平滑核心线圈核和离开积分面的casing核散度恒为0；表中非零小值是其浮点求值结果。理想VMEC场也满足∇·B=0，但有限精度wout系数的重构需要单独检验。两侧散度很小并不保证LCFS拼接无散：若法向分量有跳跃，会有分布意义的表面散度，不能为界面赋予一个普通的解析散度值。完整口径见<a href="docs-data/initial_source_ad.json">初始源场核验数据</a>和<a href="../tools/check_initial_source_divergence.py">核验脚本</a>。</p>'''
     inputnames=['ncsx_main.toml','ncsx_follow.toml','ncsx_post.toml','inputs/ncsx_coils.txt','inputs/NCSX_physical_vessel_half_period.txt']
     links=''.join(f'<li><a href="../{name}" download>{name}</a></li>' for name in inputnames)
     safe_json=json.dumps(figures,ensure_ascii=False).replace('<','\\u003c')
@@ -176,6 +187,9 @@ def build():
 <section id="inputs"><h2>输入与溯源</h2><ul>{links}</ul><p>main 为本次实际运行配置；follow 为未执行的续算示例；post 为数值后处理 CLI 示例。网站 PNG 使用公开绘图 API，具体绘图参数见 <a href="../tools/postprocess_ncsx_220_complete.py">图集脚本</a> 与 <a href="../tools/plot_final_poincare.py">末态追踪脚本</a>，不是仅执行 post.toml 所得。</p><p>运行源码提交 <code>{html.escape(provenance['source_commit'])}</code>；<a href="docs-data/provenance.json">输入与源文件 SHA-256</a>；<a href="docs-data/run_summary.json">日志指标</a>；<a href="docs-data/checkpoint_reductions.json">保存态统计</a>；<a href="docs-data/results.json">完整图片清单与校验和</a>。</p><p>不上传 wout、mgrid、主程序/后处理 NetCDF 和缓存。线圈与壁文本已包含；wout 需另行提供，不能仅凭本站文件声称完整可复现。</p></section>
 <footer>当前 NCSX 第 50 步结果 · 所有图像为本次任务数据 · <a href="../../Source-Code/">HINT 程序文档</a></footer></main>
 <dialog id="viewer" aria-labelledby="viewer-title"><div class="viewer-toolbar"><button id="prev" title="上一张" aria-label="上一张">←</button><button id="next" title="下一张" aria-label="下一张">→</button><div class="viewer-heading"><p class="viewer-archive">HINT-debug 2.2.0 · 当前 NCSX 任务</p><h2 id="viewer-title"></h2></div><a id="original-link" target="_blank" rel="noopener">原始 PNG</a><button id="close-viewer" title="关闭" aria-label="关闭">×</button></div><div class="viewer-scroll"><img id="viewer-image" alt=""><p id="viewer-caption"></p></div></dialog><script id="figure-data" type="application/json">{safe_json}</script></body></html>'''
+    page=page.replace('<h3>已存插值器 AD 散度</h3>',source_section+'<h3>已存插值器 AD 散度</h3>')
+    page=page.replace('<img id="viewer-image" alt=""><p id="viewer-caption"></p>',
+                      '<p id="viewer-caption"></p><img id="viewer-image" alt="">')
     (DOCS/'index.html').write_text(page)
     (CASE/'index.html').write_text('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=Documents/index.html"><title>NCSX 第50步结果</title><a href="Documents/index.html">查看当前 NCSX 结果</a></html>\n')
     (CASE/'figures/README.md').write_text('# 当前 NCSX 图集\n\n全部为本次 2.2.0 任务，初始化第0步、末态第50步。详细方法见网站。\n\n'+

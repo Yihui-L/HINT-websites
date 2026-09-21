@@ -1,0 +1,67 @@
+{
+  "version": "2.2.0",
+  "outer_step": 0,
+  "dtype": "float64",
+  "method": "JAX analytic derivatives of continuous source expressions, not HINT-grid interpolation",
+  "source_refinement": 3,
+  "fields": {
+    "vacuum_wall": {
+      "samples": 512,
+      "mean_abs_t_m": 7.849276445286678e-16,
+      "max_abs_t_m": 7.105427357601002e-15,
+      "rms_t_m": 1.171390257035836e-15,
+      "mean_normalized": 7.940220864612324e-18,
+      "p95_t_m": 2.4424906541753444e-15
+    },
+    "total_wout_interior": {
+      "samples": 256,
+      "mean_abs_t_m": 0.006126275966207342,
+      "max_abs_t_m": 0.05654791439543305,
+      "rms_t_m": 0.011020336508031334,
+      "mean_normalized": 5.8723282481920295e-05,
+      "p95_t_m": 0.025549208778503477
+    },
+    "response_wout_minus_coils_interior": {
+      "samples": 256,
+      "mean_abs_t_m": 0.006126275966207322,
+      "max_abs_t_m": 0.056547914395429055,
+      "rms_t_m": 0.011020336508031275,
+      "mean_normalized": 0.0011567492041877113,
+      "p95_t_m": 0.02554920877850425
+    },
+    "response_virtual_casing_exterior": {
+      "samples": 64,
+      "mean_abs_t_m": 1.3852038006217926e-16,
+      "max_abs_t_m": 7.494005416219807e-16,
+      "rms_t_m": 2.143192376618781e-16,
+      "mean_normalized": 3.899225356360722e-17,
+      "p95_t_m": 5.113964807179627e-16
+    },
+    "total_coils_plus_casing_exterior": {
+      "samples": 64,
+      "mean_abs_t_m": 8.916478666520788e-16,
+      "max_abs_t_m": 3.6637359812630166e-15,
+      "rms_t_m": 1.2905998743092865e-15,
+      "mean_normalized": 9.637150289406902e-18,
+      "p95_t_m": 3.3903435614490656e-15
+    }
+  },
+  "limitations": [
+    "Finite samples are not a global bound.",
+    "VC derivatives use fixed 24-point Gauss source panels away from LCFS; field values are checked against adaptive quadrature.",
+    "Wout reconstruction includes the production radial coefficient interpolation.",
+    "No classical analytic divergence is assigned at a discontinuous LCFS interface."
+  ],
+  "vacuum_saved_grid_max_vector_difference_t": 3.778430030019572e-15,
+  "vc_adaptive_field_max_difference_t": 1.6643117863361939e-09,
+  "vc_panels": [
+    30,
+    8
+  ],
+  "exterior_min_sampled_surface_distance_m": 0.0816775217111387,
+  "seconds": 15.643796227872372,
+  "input_sha256": {
+    "ncsx_coils.txt": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
+    "wout_ncsx_c09r00_free_nonnegative.nc": "f479637de1aa77cba5a58c679fa62deced67864ab6ed493bacf4916492ebec25"
+  }
+}

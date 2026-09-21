@@ -20,3 +20,7 @@
 网格四阶差分散度用于了解离散方程中的约束误差，但粗网格截断误差可能显著，不能当作连续源场误差。component 插值器 JAX AD 用于判断磁力线实际取样场的散度；AD 无差分步长，但不消除插值误差。末态另取32768个壁内节点和32768个离网格点，使用float64 AD，并以2048个离网格点的扩展精度多项式解析导数交叉核验。交叉检验的数值求导误差和场本身散度是两个不同指标，不能把前者小值冒充后者。
 
 不上传wout、mgrid、主程序或后处理NetCDF、运行缓存或凭据；mgrid不参与此次运行。缺少wout及结果NetCDF时，不能仅靠本公开目录复现主程序或后处理。
+
+## 初始源场直接求导
+
+网站补充了初始线圈场、LCFS内wout重构场、LCFS外virtual-casing场的float64 JAX直接求导结果，未使用HINT网格磁场插值。线圈场及外部casing核散度接近舍入量级，但当前wout重构场包含径向系数插值，不应据此假定其数值散度也达到机器精度。LCFS跳跃需单独看待；这些有限采样结果不代表界面连续性。数据及核验脚本见 `Documents/docs-data/initial_source_ad.json` 和 `tools/check_initial_source_divergence.py`。
