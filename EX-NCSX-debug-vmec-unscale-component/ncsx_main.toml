@@ -1,5 +1,5 @@
-# NCSX HINT-debug 2.2.0, direct-B FIELDLINES initialization and component cubic.
-# Source commit: 84c2cf2e2ce7fb956c7b101a57722a681156e9ac.
+# NCSX HINT-debug 2.3.0, direct-B FIELDLINES initialization and component cubic.
+# Source commit: 0495705cb52feb85e8db2f31f0cc91034197a01b
 # A fresh run; old physical inputs/grid/tolerances are retained.
 [paths]
 output_file = "run/hint_debug_ncsx_vmec.nc"

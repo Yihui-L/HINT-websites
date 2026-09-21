@@ -1,67 +1,109 @@
 {
-  "version": "2.2.0",
-  "outer_step": 0,
-  "dtype": "float64",
-  "method": "JAX analytic derivatives of continuous source expressions, not HINT-grid interpolation",
-  "source_refinement": 3,
+  "method": "JAX jacfwd of continuous source expressions in Cartesian coordinates",
+  "lcfs_crossing_status": "not_defined; no classical pointwise analytic divergence at a possible normal-field jump; no crossing value computed or stored",
+  "note": "Finite samples, not a global bound or field-fidelity proof.",
   "fields": {
+    "vacuum_domain": {
+      "sample_count": 256,
+      "divergence_mean_abs": 1.5677427888868833e-15,
+      "divergence_relative_mean": 2.3214510097645105e-17,
+      "divergence_relative_p50": 1.0113987773935073e-17,
+      "divergence_relative_p95": 8.839428270318539e-17,
+      "divergence_relative_p99": 1.7757897464086043e-16,
+      "divergence_relative_max": 2.243466378945598e-16,
+      "divergence_exceedance_fraction": 0.0,
+      "divergence_relative_threshold": 5e-11,
+      "divergence_rms": 2.8504967055150507e-15,
+      "divergence_max": 1.7985612998927536e-14,
+      "divergence_relative_rms": 3.9508731059349274e-17,
+      "source": "smooth-core coil B"
+    },
     "vacuum_wall": {
-      "samples": 512,
-      "mean_abs_t_m": 7.849276445286678e-16,
-      "max_abs_t_m": 7.105427357601002e-15,
-      "rms_t_m": 1.171390257035836e-15,
-      "mean_normalized": 7.940220864612324e-18,
-      "p95_t_m": 2.4424906541753444e-15
+      "sample_count": 256,
+      "divergence_mean_abs": 7.665241596836736e-16,
+      "divergence_relative_mean": 7.698438792302199e-18,
+      "divergence_relative_p50": 5.038589972964305e-18,
+      "divergence_relative_p95": 2.463310653449216e-17,
+      "divergence_relative_p99": 4.030871978371444e-17,
+      "divergence_relative_max": 5.822370635425419e-17,
+      "divergence_exceedance_fraction": 0.0,
+      "divergence_relative_threshold": 5e-11,
+      "divergence_rms": 1.1465638613758712e-15,
+      "divergence_max": 5.773159728050814e-15,
+      "divergence_relative_rms": 1.1414399244529064e-17,
+      "source": "smooth-core coil B"
     },
-    "total_wout_interior": {
-      "samples": 256,
-      "mean_abs_t_m": 0.006126275966207342,
-      "max_abs_t_m": 0.05654791439543305,
-      "rms_t_m": 0.011020336508031334,
-      "mean_normalized": 5.8723282481920295e-05,
-      "p95_t_m": 0.025549208778503477
+    "vacuum_lcfs_inside": {
+      "sample_count": 64,
+      "divergence_mean_abs": 7.251957281212418e-16,
+      "divergence_relative_mean": 6.9272972329434424e-18,
+      "divergence_relative_p50": 4.953246844233874e-18,
+      "divergence_relative_p95": 2.0893971295754745e-17,
+      "divergence_relative_p99": 2.7968224521271724e-17,
+      "divergence_relative_max": 2.8636407359663883e-17,
+      "divergence_exceedance_fraction": 0.0,
+      "divergence_relative_threshold": 5e-11,
+      "divergence_rms": 1.022032550250055e-15,
+      "divergence_max": 2.9976021664879227e-15,
+      "divergence_relative_rms": 9.742913039013511e-18,
+      "source": "smooth-core coil B"
     },
-    "response_wout_minus_coils_interior": {
-      "samples": 256,
-      "mean_abs_t_m": 0.006126275966207322,
-      "max_abs_t_m": 0.056547914395429055,
-      "rms_t_m": 0.011020336508031275,
-      "mean_normalized": 0.0011567492041877113,
-      "p95_t_m": 0.02554920877850425
+    "response_lcfs_inside": {
+      "sample_count": 64,
+      "divergence_mean_abs": 9.240655116093954e-16,
+      "divergence_relative_mean": 1.6914833948171996e-16,
+      "divergence_relative_p50": 1.2067214825680414e-16,
+      "divergence_relative_p95": 4.527110909339472e-16,
+      "divergence_relative_p99": 7.018800235871544e-16,
+      "divergence_relative_max": 7.723017488435465e-16,
+      "divergence_exceedance_fraction": 0.0,
+      "divergence_relative_threshold": 5e-11,
+      "divergence_rms": 1.250098175414739e-15,
+      "divergence_max": 4.218847493575595e-15,
+      "divergence_relative_rms": 2.194065098968718e-16,
+      "source": "geometry/flux/lambda VMEC total B minus smooth-core coil B"
     },
-    "response_virtual_casing_exterior": {
-      "samples": 64,
-      "mean_abs_t_m": 1.3852038006217926e-16,
-      "max_abs_t_m": 7.494005416219807e-16,
-      "rms_t_m": 2.143192376618781e-16,
-      "mean_normalized": 3.899225356360722e-17,
-      "p95_t_m": 5.113964807179627e-16
+    "vacuum_lcfs_outside": {
+      "sample_count": 64,
+      "divergence_mean_abs": 8.14262936590926e-16,
+      "divergence_relative_mean": 8.641397925604992e-18,
+      "divergence_relative_p50": 3.574986065397679e-18,
+      "divergence_relative_p95": 3.4945488789262284e-17,
+      "divergence_relative_p99": 4.969230630902771e-17,
+      "divergence_relative_max": 5.719977704636286e-17,
+      "divergence_exceedance_fraction": 0.0,
+      "divergence_relative_threshold": 5e-11,
+      "divergence_rms": 1.3900606580667031e-15,
+      "divergence_max": 5.329070518200751e-15,
+      "divergence_relative_rms": 1.462163550484756e-17,
+      "source": "smooth-core coil B"
     },
-    "total_coils_plus_casing_exterior": {
-      "samples": 64,
-      "mean_abs_t_m": 8.916478666520788e-16,
-      "max_abs_t_m": 3.6637359812630166e-15,
-      "rms_t_m": 1.2905998743092865e-15,
-      "mean_normalized": 9.637150289406902e-18,
-      "p95_t_m": 3.3903435614490656e-15
+    "response_lcfs_outside": {
+      "sample_count": 64,
+      "divergence_mean_abs": 1.6202215621669708e-16,
+      "divergence_max": 1.3357370765021415e-15,
+      "divergence_rms": 2.7896734725378696e-16,
+      "divergence_relative_mean": 4.1081813695168793e-17,
+      "source": "Supplementary fixed-node source B virtual casing AD; field difference accepted by user"
     }
   },
-  "limitations": [
-    "Finite samples are not a global bound.",
-    "VC derivatives use fixed 24-point Gauss source panels away from LCFS; field values are checked against adaptive quadrature.",
-    "Wout reconstruction includes the production radial coefficient interpolation.",
-    "No classical analytic divergence is assigned at a discontinuous LCFS interface."
-  ],
-  "vacuum_saved_grid_max_vector_difference_t": 3.778430030019572e-15,
-  "vc_adaptive_field_max_difference_t": 1.6643117863361939e-09,
-  "vc_panels": [
-    30,
-    8
-  ],
-  "exterior_min_sampled_surface_distance_m": 0.0816775217111387,
-  "seconds": 15.643796227872372,
-  "input_sha256": {
-    "ncsx_coils.txt": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
-    "wout_ncsx_c09r00_free_nonnegative.nc": "f479637de1aa77cba5a58c679fa62deced67864ab6ed493bacf4916492ebec25"
-  }
+  "response_lcfs_outside_status": "Supplemented separately; original production gate unchanged",
+  "exterior_supplement": {
+    "method": "JAX jacfwd of source B virtual casing in Cartesian coordinates; fixed order24; CPU float64",
+    "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+    "source_run": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z",
+    "selection": "64 LCFS-exterior wall nodes with full5x5x5 exterior stencil; interface excluded",
+    "sample_count": 64,
+    "divergence_mean_abs_T_per_m": 1.6202215621669708e-16,
+    "divergence_max_T_per_m": 1.3357370765021415e-15,
+    "divergence_rms_T_per_m": 2.7896734725378696e-16,
+    "divergence_relative_mean": 4.1081813695168793e-17,
+    "divergence_relative_max": 3.2997764188754454e-16,
+    "fixed_adaptive_B_error_max_T": 6.967586755485645e-08,
+    "original_field_gate_T": 1.5362011241180944e-08,
+    "field_difference_accepted_by_user": true,
+    "note": "Supplementary source-expression diagnostic; not interpolant AD or grid FD4. Production gates unchanged. Finite samples, not a global bound or cross-LCFS derivative."
+  },
+  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z"
 }

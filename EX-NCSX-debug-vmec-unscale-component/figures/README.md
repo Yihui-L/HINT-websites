@@ -1,6 +1,6 @@
 # 当前 NCSX 图集
 
-全部为本次 2.2.0 任务，初始化第0步、末态第50步。详细方法见网站。
+全部为本次 2.3.0 任务，初始化第0步、末态第50步。详细方法见网站。
 
 - [庞加莱 · 第 50 步 · 三截面](poincare_final_three_sections.png)
 - [压强](section_pressure.png)
@@ -16,6 +16,9 @@
 - [压强、场强及流速峰值](convergence_checkpoint_peaks.png)
 - [流速与力残差体 RMS](convergence_checkpoint_rms.png)
 - [流速变化率体 RMS](convergence_checkpoint_velocity_change_rate.png)
+- [响应场 HINT 网格四阶差分散度](convergence_fd4_response.png)
+- [总场 HINT 网格四阶差分散度](convergence_fd4_total.png)
+- [真空场 HINT 网格四阶差分散度](convergence_fd4_vacuum.png)
 - [末态高精度散度核验 · 节点与离网格点](convergence_final_divergence_precision.png)
 - [Step-B 存储诊断 · 01](convergence_stepb_01.png)
 - [Step-B 存储诊断 · 02](convergence_stepb_02.png)

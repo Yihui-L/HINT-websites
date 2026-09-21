@@ -19,6 +19,7 @@ from hint_debug_plotting import HintPlots
 
 CASE = Path("/root/LYH-HINT/cases/ncsx-debug")
 RUN = (CASE / "run").resolve()
+assert RUN.name == 'ncsx-debug-b-2.3.0-component-20260921T054202Z'
 OUT = RUN / "final-poincare-step050-wall-coverage"
 OUT.mkdir(exist_ok=True)
 START = time.perf_counter()

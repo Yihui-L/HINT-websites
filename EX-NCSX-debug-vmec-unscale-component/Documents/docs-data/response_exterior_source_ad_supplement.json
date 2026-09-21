@@ -1,0 +1,16 @@
+{
+  "method": "JAX jacfwd of source B virtual casing in Cartesian coordinates; fixed order24; CPU float64",
+  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "source_run": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z",
+  "selection": "64 LCFS-exterior wall nodes with full5x5x5 exterior stencil; interface excluded",
+  "sample_count": 64,
+  "divergence_mean_abs_T_per_m": 1.6202215621669708e-16,
+  "divergence_max_T_per_m": 1.3357370765021415e-15,
+  "divergence_rms_T_per_m": 2.7896734725378696e-16,
+  "divergence_relative_mean": 4.1081813695168793e-17,
+  "divergence_relative_max": 3.2997764188754454e-16,
+  "fixed_adaptive_B_error_max_T": 6.967586755485645e-08,
+  "original_field_gate_T": 1.5362011241180944e-08,
+  "field_difference_accepted_by_user": true,
+  "note": "Supplementary source-expression diagnostic; not interpolant AD or grid FD4. Production gates unchanged. Finite samples, not a global bound or cross-LCFS derivative."
+}

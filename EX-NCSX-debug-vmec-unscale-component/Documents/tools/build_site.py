@@ -38,6 +38,9 @@ SPECIAL = {
  'convergence_ad_vacuum':'真空场插值器 JAX AD 散度',
  'convergence_ad_response':'响应场插值器 JAX AD 散度',
  'convergence_ad_total':'总场插值器 JAX AD 散度',
+ 'convergence_fd4_vacuum':'真空场 HINT 网格四阶差分散度',
+ 'convergence_fd4_response':'响应场 HINT 网格四阶差分散度',
+ 'convergence_fd4_total':'总场 HINT 网格四阶差分散度',
  'convergence_final_divergence_precision':'末态高精度散度核验 · 节点与离网格点',
 }
 
@@ -77,6 +80,8 @@ def entry(path):
             caption='第50步：每类32768个壁内节点及32768个离网格点，float64 AD；另以扩展精度多项式导数交叉核验。数值求导精确不代表场散度接近零。'
         elif '_ad_' in stem:
             caption='直接读取每个外迭代保存的 JAX AD 统计量；作用于 component 插值器，不代表解析源场散度。'
+        elif '_fd4_' in stem:
+            caption='直接读取每个外迭代保存的 HINT 网格四阶差分统计量，SI单位；包含网格尺度截断误差，不代表解析源场散度。'
         elif '_checkpoint_' in stem:
             caption='0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。'
         elif stem.endswith('timings'):
@@ -117,7 +122,8 @@ def build():
     assert expected_fields.issubset({f['id'] for f in figures})
     assert summary['outer_step']==50 and config['solver']['magnetic_interpolation']=='component'
     counts=Counter(f['category'] for f in figures)
-    manifest=dict(version='2.2.0',outer_step=50,configuration=config,provenance=provenance,
+    assert provenance['version'] == summary['version'] == '2.3.0'
+    manifest=dict(version=provenance['version'],outer_step=50,configuration=config,provenance=provenance,
                   figure_counts=dict(counts),figures=figures)
     (DATA/'results.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     priorities=['poincare_final_three_sections','section_pressure','convergence_checkpoint_means',
@@ -126,10 +132,13 @@ def build():
     figures.sort(key=lambda f:(priorities.index(f['id']) if f['id'] in priorities else 99,f['id']))
     cards=[]
     for f in figures:
+        vectors=''.join(f' <a href="../figures/{f["id"]}.{suffix}" download>{label}</a>'
+                        for suffix,label in [('pdf','PDF'),('svg.gz','SVG (gzip)')]
+                        if (CASE/'figures'/f'{f["id"]}.{suffix}').exists())
         cards.append(f'''<article id="figure-{f['id']}" class="figure-card" data-category="{f['category']}" data-id="{f['id']}">
 <div class="figure-text"><span class="category">{GROUPS[f['category']]}</span><h2>{html.escape(f['title'])}</h2><p>{html.escape(f['caption'])}</p></div>
 <a class="image-link" href="{f['file']}" aria-label="查看原图：{html.escape(f['title'])}"><img src="{f['file']}" alt="{html.escape(f['title'])}" width="{f['width']}" height="{f['height']}" loading="lazy" decoding="async"></a>
-<div class="figure-text"><div class="figure-foot"><small>{f['width']} × {f['height']} px</small><a href="{f['file']}" download>下载 PNG</a></div><code>{f['id']}</code></div></article>''')
+<div class="figure-text"><div class="figure-foot"><small>{f['width']} × {f['height']} px</small><a href="{f['file']}" download>下载 PNG</a>{vectors}</div><code>{f['id']}</code></div></article>''')
     tabs=f'<button class="category-tab active" data-category="all" aria-pressed="true">全部 <small>{len(figures)}</small></button>'
     tabs+=''.join(f'<button class="category-tab" data-category="{k}" aria-pressed="false">{v} <small>{counts[k]}</small></button>' for k,v in GROUPS.items())
     last=summary['last']; diag=last['diagnostic']; ad=last['magnetic_statistics']; fields=checkpoints[-1]
@@ -154,15 +163,15 @@ def build():
         check=precision['fields'][key]['independent_polynomial_check']
         precisionrows.append((label+' / AD与独立导数最大差',f"{check['max_abs_difference_t_per_m']:.10g} T/m",f"{check['samples']}离网格点；此值是求导误差而非磁场散度"))
     sourcerows=[]
-    for key,label in [('vacuum_wall','初始真空场 / 直接线圈模型'),
-                      ('total_wout_interior','LCFS内初始总场 / wout重构'),
-                      ('response_wout_minus_coils_interior','LCFS内响应场 / wout−线圈'),
-                      ('response_virtual_casing_exterior','LCFS外响应场 / virtual-casing'),
-                      ('total_coils_plus_casing_exterior','LCFS外初始总场 / 线圈+casing')]:
+    for key,label in [('vacuum_domain','初始真空场 / 全计算域抽样'),
+                      ('vacuum_wall','初始真空场 / 壁内抽样'),
+                      ('response_lcfs_inside','LCFS内响应场 / 一致重构总场−线圈'),
+                      ('response_lcfs_outside','LCFS外响应场 / virtual-casing')]:
         v=sources['fields'][key]
-        sourcerows.append((label, f"{v['mean_abs_t_m']:.8g} / {v['max_abs_t_m']:.8g} T/m",
-                          f"绝对均值 / 最大值；{v['samples']}个样本；平均归一化={v['mean_normalized']:.8g}"))
-    source_section='<h3>初始场解析表达式的直接散度核验</h3>'+table(sourcerows)+f'''<p>这是同一组输入、同一源场模型的补充 float64 JAX 直接求导，不使用 HINT 网格磁场插值，也不使用有限差分步长。真空场采用本次实际的第3级线圈中心线加密，其512个壁内节点与已保存真空场的最大矢量差为 {sources['vacuum_saved_grid_max_vector_difference_t']:.3g} T。LCFS内256点在 s∈[0.02,0.98] 的磁坐标中取样，通过坐标Jacobian换算为空间散度；保留程序实际的wout径向系数插值，因此该重构误差不应冒充理想VMEC解析误差。</p><p>LCFS外64点距离离散表面采样至少 {sources['exterior_min_sampled_surface_distance_m']:.3g} m，采用与初始化相同的30×8面板、24点Gauss规则，对固定源节点表达式求导；与自适应积分的场值最大差为 {sources['vc_adaptive_field_max_difference_t']:.3g} T。这是远离界面的源表达式检验，不是整个初始化场的保真度证明。</p><p class="notice">理论上平滑核心线圈核和离开积分面的casing核散度恒为0；表中非零小值是其浮点求值结果。理想VMEC场也满足∇·B=0，但有限精度wout系数的重构需要单独检验。两侧散度很小并不保证LCFS拼接无散：若法向分量有跳跃，会有分布意义的表面散度，不能为界面赋予一个普通的解析散度值。完整口径见<a href="docs-data/initial_source_ad.json">初始源场核验数据</a>和<a href="../tools/check_initial_source_divergence.py">核验脚本</a>。</p>'''
+        sourcerows.append((label, f"{v['divergence_mean_abs']:.8g} / {v['divergence_max']:.8g} T/m",
+                          f"绝对均值 / 最大值；{v['sample_count']}个样本；平均归一化={v['divergence_relative_mean']:.8g}"))
+    supplement=sources['exterior_supplement']
+    source_section='<h3>初始场解析表达式的直接散度核验</h3>'+table(sourcerows)+f'''<p>这是本次2.3.0任务源场表达式的float64 JAX直接求导，不使用HINT网格磁场插值，也没有有限差分步长。真空场分别在全计算域和壁内抽样256点；LCFS内响应场在壁内64点取样，采用几何、磁通、旋转变换和λ一致的VMEC总场重构，再减去平滑核心线圈场。</p><p>LCFS外64点位于壁内，且具有完整的5×5×5外区模板，排除界面。补充诊断使用24阶固定节点virtual-casing源表达式；其与自适应积分的磁场矢量最大差为 {supplement['fixed_adaptive_B_error_max_T']:.8g} T，用户已接受该场值差。原诊断保真阈值 {supplement['original_field_gate_T']:.8g} T 未更改，该门槛原先导致主诊断未保存外区散度，故此项来自单独的补充文件。场值差与散度T/m是不同量。</p><p class="notice">这些是有限样本，不是全空间严格上界，也不单独证明磁场保真。两侧散度很小不保证LCFS拼接无散：法向跳跃可能产生分布意义的表面散度，跨LCFS的普通点值解析散度未定义，未计算也未伪造。详见<a href="docs-data/initial_source_ad.json">汇总数据</a>、<a href="docs-data/initialization.json">本次初始化诊断</a>及<a href="docs-data/response_exterior_source_ad_supplement.json">外区补充诊断</a>。</p>'''
     inputnames=['ncsx_main.toml','ncsx_follow.toml','ncsx_post.toml','inputs/ncsx_coils.txt','inputs/NCSX_physical_vessel_half_period.txt']
     links=''.join(f'<li><a href="../{name}" download>{name}</a></li>' for name in inputnames)
     safe_json=json.dumps(figures,ensure_ascii=False).replace('<','\\u003c')
@@ -188,11 +197,22 @@ def build():
 <footer>当前 NCSX 第 50 步结果 · 所有图像为本次任务数据 · <a href="../../Source-Code/">HINT 程序文档</a></footer></main>
 <dialog id="viewer" aria-labelledby="viewer-title"><div class="viewer-toolbar"><button id="prev" title="上一张" aria-label="上一张">←</button><button id="next" title="下一张" aria-label="下一张">→</button><div class="viewer-heading"><p class="viewer-archive">HINT-debug 2.2.0 · 当前 NCSX 任务</p><h2 id="viewer-title"></h2></div><a id="original-link" target="_blank" rel="noopener">原始 PNG</a><button id="close-viewer" title="关闭" aria-label="关闭">×</button></div><div class="viewer-scroll"><img id="viewer-image" alt=""><p id="viewer-caption"></p></div></dialog><script id="figure-data" type="application/json">{safe_json}</script></body></html>'''
     page=page.replace('<h3>已存插值器 AD 散度</h3>',source_section+'<h3>已存插值器 AD 散度</h3>')
+    page=page.replace('2.2.0',provenance['version'])
+    fdrows=[]
+    for key,label in [('vacuum','真空场'),('response','响应场'),('total','总场')]:
+        fdrows.append((label+' FD4 绝对均值 / 最大值',
+                       f"{ad[f'divb_fd4_{key}_mean_abs']:.8g} / {ad[f'divb_fd4_{key}_max']:.8g} T/m",
+                       f"HINT网格壁内{ad[f'divb_fd4_{key}_sample_count']}点；平均归一化={ad[f'divb_fd4_{key}_mean_normalized']:.8g}"))
+    page=page.replace('<h3>结束后的高数值精度散度核验</h3>',
+                      '<h3>已存HINT网格FD4散度</h3>'+table(fdrows)+
+                      '<p>网格尺度截断误差包含在内；供离散系统诊断，不是源表达式解析散度。</p><h3>结束后的高数值精度散度核验</h3>')
+    page=page.replace('真空場','真空场')
+    page=page.replace('未据此宣称力平衡已收敛。','末期力残差和动能持续上升，未通过力平衡收敛验收。')
     page=page.replace('<img id="viewer-image" alt=""><p id="viewer-caption"></p>',
                       '<p id="viewer-caption"></p><img id="viewer-image" alt="">')
     (DOCS/'index.html').write_text(page)
     (CASE/'index.html').write_text('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=Documents/index.html"><title>NCSX 第50步结果</title><a href="Documents/index.html">查看当前 NCSX 结果</a></html>\n')
-    (CASE/'figures/README.md').write_text('# 当前 NCSX 图集\n\n全部为本次 2.2.0 任务，初始化第0步、末态第50步。详细方法见网站。\n\n'+
+    (CASE/'figures/README.md').write_text('# 当前 NCSX 图集\n\n全部为本次 2.3.0 任务，初始化第0步、末态第50步。详细方法见网站。\n\n'+
         '\n'.join(f'- [{f["title"]}]({f["id"]}.png)' for f in figures)+'\n')
     print(json.dumps(dict(figures=len(figures),categories=dict(counts)),ensure_ascii=False))
 

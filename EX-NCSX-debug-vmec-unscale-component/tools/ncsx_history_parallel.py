@@ -14,7 +14,7 @@ def worker(lane):
     os.environ.update(OMP_NUM_THREADS='4',OPENBLAS_NUM_THREADS='4',MKL_NUM_THREADS='4')
     import numpy as np
     import postprocess_ncsx_220_complete as api
-    p=api.frame()
+    p=api.frame(backend='cpu', engine='native')
     weights=np.broadcast_to(p.grid.r[:,None,None],p.grid.shape)
     names=['speed','force_residual','force_residual_relative','pressure','field_strength',
            'response_field_strength','velocity_change_rate','speed_change_rate']

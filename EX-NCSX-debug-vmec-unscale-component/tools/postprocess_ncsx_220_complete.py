@@ -21,6 +21,7 @@ from hint_debug_plotting.variables import FIELDS, METRICS
 
 CASE = Path('/root/LYH-HINT/cases/ncsx-debug')
 RUN = (CASE / 'run').resolve()
+assert RUN.name == 'ncsx-debug-b-2.3.0-component-20260921T054202Z'
 OUT = RUN / 'postprocess-step050-complete'
 FIG = OUT / 'figures'
 FIG.mkdir(parents=True, exist_ok=True)
@@ -50,17 +51,17 @@ def save(result, name):
                     legend.remove()
             result.figure.legend(handles, labels, loc='outside lower center', ncol=3, fontsize=8)
     old_title = result.figure._suptitle.get_text() if result.figure._suptitle else name
-    result.figure.suptitle('NCSX | HINT-debug 2.2.0 | outer 50 | VMEC / unscaled\n' + old_title,
+    result.figure.suptitle('NCSX | HINT-debug 2.3.0 | outer 50 | VMEC / unscaled\n' + old_title,
                           fontsize=12)
     result.save(FIG / (name + '.png'), dpi=300)
     plt.close(result.figure)
     log('figure', name=name)
 
 
-def frame():
-    assert hint_debug.__version__ == '2.2.0'
+def frame(backend='gpu', engine='jax'):
+    assert hint_debug.__version__ == '2.3.0'
     p = HintPlots(RUN/'hint_debug_ncsx_vmec.nc', outer_step=50,
-                  wout=CASE/'inputs/wout_ncsx_c09r00_free_nonnegative.nc', backend='gpu', engine='jax')
+                  wout=CASE/'inputs/wout_ncsx_c09r00_free_nonnegative.nc', backend=backend, engine=engine)
     config = p.store.load_solver_configuration(p.record)
     assert p.state.outer_step == 50 and config['scale_after'] is False
     assert p.backend.magnetic_interpolation == 'component'
@@ -93,15 +94,16 @@ def static(p):
     history, _ = p.history(last_inner=True)
     magnetic_history = p.magnetic_history()
     available = [key for key in METRICS if key in history or key in magnetic_history]
-    ordinary = [key for key in available if not key.startswith('divb_ad_')]
+    ordinary = [key for key in available if not key.startswith(('divb_ad_', 'divb_fd4_'))]
     for index in range(0, len(ordinary), 4):
         save(p.time_series(ordinary[index:index+4], ramp_end=0),
              f'convergence_stepb_{index//4+1:02d}')
-    for field in ('vacuum','response','total'):
-        keys = [f'divb_ad_{field}_{suffix}' for suffix in ('mean_abs','mean_normalized','rms','max')]
-        keys = [key for key in keys if key in magnetic_history]
-        if keys:
-            save(p.time_series(keys, ramp_end=0), f'convergence_ad_{field}')
+    for method in ('ad', 'fd4'):
+        for field in ('vacuum','response','total'):
+            keys = [f'divb_{method}_{field}_{suffix}' for suffix in ('mean_abs','mean_normalized','rms','max')]
+            keys = [key for key in keys if key in magnetic_history]
+            if keys:
+                save(p.time_series(keys, ramp_end=0), f'convergence_{method}_{field}')
     log('stored_diagnostics', available=available, missing=sorted(set(METRICS)-set(available)))
 
 
@@ -224,10 +226,12 @@ def existing(p):
     initial=RUN/'initial-poincare-component'
     for old,new in [('final_poincare_wall_coverage','poincare_final_three_sections'),
                     *[(f'final_poincare_phi_{v:03d}',f'poincare_final_phi_{v:03d}') for v in (0,30,60)]]:
-        shutil.copy2(final/(old+'.png'),FIG/(new+'.png'))
+        for suffix in ('png', 'svg', 'pdf'):
+            shutil.copy2(final/(old+'.'+suffix),FIG/(new+'.'+suffix))
     for old,new in [('initial_poincare_domain','poincare_initial_three_sections'),
                     *[(f'initial_poincare_domain_phi_{v:03d}',f'poincare_initial_phi_{v:03d}') for v in (0,30,60)]]:
-        shutil.copy2(initial/(old+'.png'),FIG/(new+'.png'))
+        for suffix in ('png', 'svg', 'pdf'):
+            shutil.copy2(initial/(old+'.'+suffix),FIG/(new+'.'+suffix))
     for origin,name in [(final/'plot_metadata.json','poincare_final_metadata.json'),
                         (initial/'plot_metadata.json','poincare_initial_metadata.json')]:
         shutil.copy2(origin,OUT/name)

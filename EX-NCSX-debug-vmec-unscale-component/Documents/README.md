@@ -1,5 +1,3 @@
-# 当前结果网站维护
+# 当前结果网站
 
-`docs-data/` 为当前任务数据、图像清单与溯源。`assets/` 为此站独立资源，`tools/build_site.py` 读取PNG、输入和统计数据生成网站，不重新进行物理计算。
-
-构建：`python Documents/tools/build_site.py`（标准库）。源数据在远程运行目录；生成图像的脚本见上一级 `tools/`。更新必须整体匹配源码版本、输入、迭代步及图像，不混入历史任务数据。
+docs-data包含本次数据及来源，assets为本网站独立资源，tools/build_site.py生成静态页面。构建：python Documents/tools/build_site.py。图像先由上级tools内脚本调用2.3.0绘图API生成；这些算例脚本的远程路径需随部署修改。历史命名中的220不表示使用历史版本，运行时严格检查2.3.0及本次run。

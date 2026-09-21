@@ -16,28 +16,28 @@
     "atol": 1e-10
   },
   "interpolation": "component",
-  "source": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/hint_debug_ncsx_vmec.nc",
-  "snapshot": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component/initial-poincare-component/snapshot.nc",
+  "source": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z/hint_debug_ncsx_vmec.nc",
+  "snapshot": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z/initial-poincare-component/snapshot.nc",
   "outer_step": 0,
   "marker_area_pt2": 0.025,
   "dpi": 320,
   "sections": [
     {
       "phi_degrees": 0.0,
-      "valid_crossings": 190054,
+      "valid_crossings": 190166,
       "surviving_seeds": 126
     },
     {
       "phi_degrees": 29.999999999999996,
-      "valid_crossings": 190059,
+      "valid_crossings": 190171,
       "surviving_seeds": 126
     },
     {
       "phi_degrees": 59.99999999999999,
-      "valid_crossings": 190056,
+      "valid_crossings": 190167,
       "surviving_seeds": 126
     }
   ],
-  "elapsed_s": 392.8154559843242,
+  "elapsed_s": 413.6112788040191,
   "note": "Saved pre-iteration total B; one seed set traced through all sections. VMEC curves are geometric references, not traced return points."
 }

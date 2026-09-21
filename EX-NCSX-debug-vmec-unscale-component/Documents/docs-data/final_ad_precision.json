@@ -48,79 +48,79 @@
     "response": {
       "nodes_wall": {
         "sample_count": 32768,
-        "divergence_mean_abs": 0.015604843838270304,
-        "divergence_relative_mean": 0.003343965327321414,
-        "divergence_relative_p50": 0.0011523730111214978,
-        "divergence_relative_p95": 0.014270749774075726,
-        "divergence_relative_p99": 0.024645308356634154,
-        "divergence_relative_max": 0.051328801004841294,
+        "divergence_mean_abs": 0.01560788530784591,
+        "divergence_relative_mean": 0.0033446472985521163,
+        "divergence_relative_p50": 0.0011527016144744647,
+        "divergence_relative_p95": 0.01429390314755459,
+        "divergence_relative_p99": 0.02465234758645405,
+        "divergence_relative_max": 0.05129269784820097,
         "divergence_exceedance_fraction": 1.0,
         "divergence_relative_threshold": 5e-11,
-        "divergence_rms": 0.02877384738276339,
-        "divergence_max": 0.2390596205037073,
-        "divergence_relative_rms": 0.005787400935250862,
-        "minimum_abs_t_per_m": 1.9846910746801338e-07
+        "divergence_rms": 0.02878367070115609,
+        "divergence_max": 0.23888886068325646,
+        "divergence_relative_rms": 0.0057894593603562755,
+        "minimum_abs_t_per_m": 2.8942217414340554e-08
       },
       "offgrid_wall": {
         "sample_count": 32768,
-        "divergence_mean_abs": 0.020192962386307876,
-        "divergence_relative_mean": 0.004307334049621517,
-        "divergence_relative_p50": 0.0015419248760097787,
-        "divergence_relative_p95": 0.01821172995189076,
-        "divergence_relative_p99": 0.03035961857411012,
-        "divergence_relative_max": 0.06996682457349729,
+        "divergence_mean_abs": 0.02019229594393561,
+        "divergence_relative_mean": 0.004307231702018219,
+        "divergence_relative_p50": 0.0015408126432614904,
+        "divergence_relative_p95": 0.018236996583926066,
+        "divergence_relative_p99": 0.030349405477412692,
+        "divergence_relative_max": 0.06998612108182606,
         "divergence_exceedance_fraction": 1.0,
         "divergence_relative_threshold": 5e-11,
-        "divergence_rms": 0.036687664797541285,
-        "divergence_max": 0.32737907461775256,
-        "divergence_relative_rms": 0.00735477582738687,
-        "minimum_abs_t_per_m": 1.5962635444358164e-07
+        "divergence_rms": 0.03669474735532021,
+        "divergence_max": 0.3274656577080712,
+        "divergence_relative_rms": 0.007356305154098482,
+        "minimum_abs_t_per_m": 3.6361565675102625e-08
       },
       "independent_polynomial_check": {
         "samples": 2048,
-        "mean_abs_difference_t_per_m": 5.521156841510294e-16,
-        "max_abs_difference_t_per_m": 4.717797333353424e-15,
-        "reference_mean_abs_t_per_m": 0.021123563393913605,
-        "reference_max_abs_t_per_m": 0.295470643418172
+        "mean_abs_difference_t_per_m": 5.479646566077517e-16,
+        "max_abs_difference_t_per_m": 5.332594175261329e-15,
+        "reference_mean_abs_t_per_m": 0.02112367037454947,
+        "reference_max_abs_t_per_m": 0.2952654487958789
       }
     },
     "total": {
       "nodes_wall": {
         "sample_count": 32768,
-        "divergence_mean_abs": 0.01597275991911059,
-        "divergence_relative_mean": 0.0001614743169985974,
-        "divergence_relative_p50": 6.041332721506788e-05,
-        "divergence_relative_p95": 0.0006744054655912419,
-        "divergence_relative_p99": 0.0011621919604280935,
-        "divergence_relative_max": 0.0024168119710289656,
+        "divergence_mean_abs": 0.01597518132845349,
+        "divergence_relative_mean": 0.0001614986034093476,
+        "divergence_relative_p50": 6.061986490069173e-05,
+        "divergence_relative_p95": 0.0006751443474565534,
+        "divergence_relative_p99": 0.001162400654274131,
+        "divergence_relative_max": 0.002415082279397217,
         "divergence_exceedance_fraction": 1.0,
         "divergence_relative_threshold": 5e-11,
-        "divergence_rms": 0.02887108966937517,
-        "divergence_max": 0.2386065949853704,
-        "divergence_relative_rms": 0.0002887260927707657,
-        "minimum_abs_t_per_m": 1.4708699647147938e-07
+        "divergence_rms": 0.028880861771811046,
+        "divergence_max": 0.23843583516492417,
+        "divergence_relative_rms": 0.00028882379374036397,
+        "minimum_abs_t_per_m": 5.229951360874452e-08
       },
       "offgrid_wall": {
         "sample_count": 32768,
-        "divergence_mean_abs": 0.020343172348253877,
-        "divergence_relative_mean": 0.00020588962079754052,
-        "divergence_relative_p50": 7.483030777128167e-05,
-        "divergence_relative_p95": 0.0008645322386003109,
-        "divergence_relative_p99": 0.0014409926223469185,
-        "divergence_relative_max": 0.0033199333398533743,
+        "divergence_mean_abs": 0.02034247989957646,
+        "divergence_relative_mean": 0.000205882156267931,
+        "divergence_relative_p50": 7.467633552849884e-05,
+        "divergence_relative_p95": 0.000864316393839333,
+        "divergence_relative_p99": 0.0014419265889961293,
+        "divergence_relative_max": 0.0033208110924490227,
         "divergence_exceedance_fraction": 1.0,
         "divergence_relative_threshold": 5e-11,
-        "divergence_rms": 0.03670199907043808,
-        "divergence_max": 0.32740567369938983,
-        "divergence_relative_rms": 0.00036771787590627935,
-        "minimum_abs_t_per_m": 3.8719509226625703e-07
+        "divergence_rms": 0.03670909840644064,
+        "divergence_max": 0.3274922567897119,
+        "divergence_relative_rms": 0.00036778896192225303,
+        "minimum_abs_t_per_m": 2.957955468618767e-07
       },
       "independent_polynomial_check": {
         "samples": 2048,
-        "mean_abs_difference_t_per_m": 1.0854098587440918e-14,
-        "max_abs_difference_t_per_m": 6.150299453749897e-14,
-        "reference_mean_abs_t_per_m": 0.021281820189297886,
-        "reference_max_abs_t_per_m": 0.29625347605414953
+        "mean_abs_difference_t_per_m": 1.1381104392026258e-14,
+        "max_abs_difference_t_per_m": 5.980754628522045e-14,
+        "reference_mean_abs_t_per_m": 0.021281994634190227,
+        "reference_max_abs_t_per_m": 0.29604828143185646
       }
     }
   }

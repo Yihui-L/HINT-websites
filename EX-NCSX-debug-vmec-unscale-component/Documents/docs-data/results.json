@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.3.0",
   "outer_step": 50,
   "configuration": {
     "paths": {
@@ -76,17 +76,52 @@
     }
   },
   "provenance": {
-    "source_commit": "84c2cf2e2ce7fb956c7b101a57722a681156e9ac",
-    "version": "2.2.0",
+    "version": "2.3.0",
+    "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
     "outer_step": 50,
-    "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-b-2.2.0-component",
-    "plotting_library": "installed hint_debug_plotting 2.2.0",
+    "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-b-2.3.0-component-20260921T054202Z",
+    "plotting_library": "installed hint_debug_plotting 2.3.0",
+    "completed_utc": "2026-09-21T08:48:39.422802+00:00",
+    "postprocess_axis_warnings": [
+      "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=1.974e-08, strict=1.611e-08",
+      "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=2.325e-08, strict=1.404e-08"
+    ],
+    "original_toml_checksums": {
+      "ncsx_main.toml": {
+        "sha256": "994d330b634bad0e5f9ad756fa21a0b8d52fd6289898a5b8ae921c8b1a1b73e9",
+        "bytes": 2021
+      },
+      "ncsx_follow.toml": {
+        "sha256": "07004d5d38e35764a959c991bb4d5278783f6cc8d6b744fcb6ed920103cad525",
+        "bytes": 445
+      },
+      "ncsx_post.toml": {
+        "sha256": "efe233b5a0a37e7185b9fc93e91fcbd09ed69b87cc0c19fc458fd66e6128d0cb",
+        "bytes": 809
+      }
+    },
+    "input_comments_updated_only": true,
     "input_checksums": {
-      "ncsx_main.toml": "994d330b634bad0e5f9ad756fa21a0b8d52fd6289898a5b8ae921c8b1a1b73e9",
-      "ncsx_follow.toml": "07004d5d38e35764a959c991bb4d5278783f6cc8d6b744fcb6ed920103cad525",
-      "ncsx_post.toml": "efe233b5a0a37e7185b9fc93e91fcbd09ed69b87cc0c19fc458fd66e6128d0cb",
-      "inputs/ncsx_coils.txt": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
-      "inputs/NCSX_physical_vessel_half_period.txt": "b21c015e188459f7b5d0bcfec1f3570a621c915baeeb1a6a65c4d2c4e2033814"
+      "ncsx_main.toml": {
+        "sha256": "c122d2e5ed009c357ae15aec5a3d8ace2ac17f27af2017228b1c6041f75a07f0",
+        "bytes": 2020
+      },
+      "ncsx_follow.toml": {
+        "sha256": "2ad75d759fb272f69eb0d704cbf10f58ce0f477f001ea0b96852235ea9ba183d",
+        "bytes": 445
+      },
+      "ncsx_post.toml": {
+        "sha256": "efe233b5a0a37e7185b9fc93e91fcbd09ed69b87cc0c19fc458fd66e6128d0cb",
+        "bytes": 809
+      },
+      "inputs/ncsx_coils.txt": {
+        "sha256": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
+        "bytes": 351283
+      },
+      "inputs/NCSX_physical_vessel_half_period.txt": {
+        "sha256": "b21c015e188459f7b5d0bcfec1f3570a621c915baeeb1a6a65c4d2c4e2033814",
+        "bytes": 961443
+      }
     },
     "not_published_source_checksums": {
       "wout_ncsx_c09r00_free_nonnegative.nc": {
@@ -94,18 +129,13 @@
         "bytes": 4222792
       },
       "hint_debug_ncsx_vmec.nc": {
-        "sha256": "7d98ecab5dedf9ecbe43131852a5b1a9648f29ebfcf9326a9821e09ced23610b",
-        "bytes": 6440095397
+        "sha256": "877cadd857e9189f39bf71f6b230a90f8d0623e62298c366b95b1189263b3695",
+        "bytes": 6440191110
       }
-    },
-    "postprocess_axis_warnings": [
-      "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=1.640e-08, strict=1.611e-08",
-      "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=4.727e-08, strict=1.495e-08",
-      "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=5.093e-08, strict=1.404e-08"
-    ]
+    }
   },
   "figure_counts": {
-    "convergence": 13,
+    "convergence": 16,
     "poincare": 8,
     "profile": 32,
     "iota": 5,
@@ -118,11 +148,11 @@
       "title": "响应场插值器 JAX AD 散度",
       "caption": "直接读取每个外迭代保存的 JAX AD 统计量；作用于 component 插值器，不代表解析源场散度。",
       "outer_step": null,
-      "file": "../figures/convergence_ad_response.png?v=d13775798efc",
+      "file": "../figures/convergence_ad_response.png?v=a23ed7768a91",
       "width": 2884,
       "height": 4684,
-      "bytes": 521755,
-      "sha256": "d13775798efce425e27f9551ca81f1c45fa93d1b360fdc2d1ec54b1cb0434566"
+      "bytes": 510361,
+      "sha256": "a23ed7768a915dac3d3d6f43d38779a4ef1da4959d74689bed38c04f275bdf4b"
     },
     {
       "id": "convergence_ad_total",
@@ -130,11 +160,11 @@
       "title": "总场插值器 JAX AD 散度",
       "caption": "直接读取每个外迭代保存的 JAX AD 统计量；作用于 component 插值器，不代表解析源场散度。",
       "outer_step": null,
-      "file": "../figures/convergence_ad_total.png?v=08a4cfc0f9bb",
+      "file": "../figures/convergence_ad_total.png?v=badca18ee92a",
       "width": 2884,
       "height": 4684,
-      "bytes": 503101,
-      "sha256": "08a4cfc0f9bbe3b8e884d0008e11060d11d3bc49d07a37b48c98a70af6ae7e20"
+      "bytes": 489249,
+      "sha256": "badca18ee92a20afd015f52cb56fd2b6e4cee3e3cb4c4ff91b6636f194603b82"
     },
     {
       "id": "convergence_ad_vacuum",
@@ -142,11 +172,11 @@
       "title": "真空场插值器 JAX AD 散度",
       "caption": "直接读取每个外迭代保存的 JAX AD 统计量；作用于 component 插值器，不代表解析源场散度。",
       "outer_step": null,
-      "file": "../figures/convergence_ad_vacuum.png?v=753482b34ee9",
+      "file": "../figures/convergence_ad_vacuum.png?v=8a1d70047504",
       "width": 2884,
       "height": 4684,
-      "bytes": 328747,
-      "sha256": "753482b34ee9bad681ad71913be6867f5be6ea7ad69ad42a181e58f186a6df86"
+      "bytes": 315097,
+      "sha256": "8a1d70047504475afa9c896472ffd76e8aecbafa33c14e10300461d3d3d9b790"
     },
     {
       "id": "convergence_checkpoint_field_means",
@@ -154,11 +184,11 @@
       "title": "压强及磁场体平均",
       "caption": "0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。",
       "outer_step": null,
-      "file": "../figures/convergence_checkpoint_field_means.png?v=1f191a68ac92",
+      "file": "../figures/convergence_checkpoint_field_means.png?v=0d4a23a5f973",
       "width": 2850,
       "height": 2880,
-      "bytes": 315663,
-      "sha256": "1f191a68ac9235984c297316a507b69e2c75cc1e42e6c4f5349c61d7253807b7"
+      "bytes": 315908,
+      "sha256": "0d4a23a5f973fc4dc78eab84aa03dc10ed8cafc6777a9bf070c49c4e16156c89"
     },
     {
       "id": "convergence_checkpoint_means",
@@ -166,11 +196,11 @@
       "title": "流速与力残差体平均",
       "caption": "0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。",
       "outer_step": null,
-      "file": "../figures/convergence_checkpoint_means.png?v=4f6e5fdbcea2",
+      "file": "../figures/convergence_checkpoint_means.png?v=3e88ec96f2c0",
       "width": 2850,
       "height": 2880,
-      "bytes": 383146,
-      "sha256": "4f6e5fdbcea2a26686b594446f056bb1d9cafb9c258096be7be9b400c280a877"
+      "bytes": 383646,
+      "sha256": "3e88ec96f2c005587d0f56492b9870d1cd7c4d76d3c87843d5a78e1bc5690af1"
     },
     {
       "id": "convergence_checkpoint_peaks",
@@ -178,11 +208,11 @@
       "title": "压强、场强及流速峰值",
       "caption": "0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。",
       "outer_step": null,
-      "file": "../figures/convergence_checkpoint_peaks.png?v=eb761eafe3ab",
+      "file": "../figures/convergence_checkpoint_peaks.png?v=47d2e8cabbb7",
       "width": 2850,
       "height": 3840,
-      "bytes": 471954,
-      "sha256": "eb761eafe3ab834d297cf787000d3377e6cda8fd744b883aac059d7eb2143983"
+      "bytes": 471978,
+      "sha256": "47d2e8cabbb7fd8cb4dfb6c9d69428cab6e2081b1abe7d7bcf6ebe502da2bf6d"
     },
     {
       "id": "convergence_checkpoint_rms",
@@ -190,11 +220,11 @@
       "title": "流速与力残差体 RMS",
       "caption": "0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。",
       "outer_step": null,
-      "file": "../figures/convergence_checkpoint_rms.png?v=5a9cb3397c04",
+      "file": "../figures/convergence_checkpoint_rms.png?v=bdda5ddd586c",
       "width": 2850,
       "height": 2880,
-      "bytes": 363683,
-      "sha256": "5a9cb3397c040fda2d9f23567669733b89f4ccc148e338fd19d32e9cd6111e67"
+      "bytes": 363221,
+      "sha256": "bdda5ddd586c454c16a34e0a62aba2c930aef18ab3a12b04ea745d09e1734baf"
     },
     {
       "id": "convergence_checkpoint_velocity_change_rate",
@@ -202,11 +232,47 @@
       "title": "流速变化率体 RMS",
       "caption": "0–50 步完整保存态；R 加权体统计，分别显示壁内及壁内演化 0≤s<1 区域；max 为网格峰值。",
       "outer_step": null,
-      "file": "../figures/convergence_checkpoint_velocity_change_rate.png?v=8a46ba0df5a8",
+      "file": "../figures/convergence_checkpoint_velocity_change_rate.png?v=14e9afd4d662",
       "width": 2850,
       "height": 1920,
-      "bytes": 297176,
-      "sha256": "8a46ba0df5a85fa621a04fde99fadce52bf2d675c50a597ecc4857668b68b1d6"
+      "bytes": 297321,
+      "sha256": "14e9afd4d662edd160f80266929981bf6d6300d888cb8aac4ca93aef9a625a57"
+    },
+    {
+      "id": "convergence_fd4_response",
+      "category": "convergence",
+      "title": "响应场 HINT 网格四阶差分散度",
+      "caption": "直接读取每个外迭代保存的 HINT 网格四阶差分统计量，SI单位；包含网格尺度截断误差，不代表解析源场散度。",
+      "outer_step": null,
+      "file": "../figures/convergence_fd4_response.png?v=64e24bbadb69",
+      "width": 2884,
+      "height": 4684,
+      "bytes": 490794,
+      "sha256": "64e24bbadb698f015e64ee8ac12624ff8a47bd28d1c78e69e58ee73d99d176c5"
+    },
+    {
+      "id": "convergence_fd4_total",
+      "category": "convergence",
+      "title": "总场 HINT 网格四阶差分散度",
+      "caption": "直接读取每个外迭代保存的 HINT 网格四阶差分统计量，SI单位；包含网格尺度截断误差，不代表解析源场散度。",
+      "outer_step": null,
+      "file": "../figures/convergence_fd4_total.png?v=ec3e2db8f58a",
+      "width": 2884,
+      "height": 4684,
+      "bytes": 469338,
+      "sha256": "ec3e2db8f58a2518c38bd6c5af06b6e68a3927aeffa15c4e8f70e55bc5020a8c"
+    },
+    {
+      "id": "convergence_fd4_vacuum",
+      "category": "convergence",
+      "title": "真空场 HINT 网格四阶差分散度",
+      "caption": "直接读取每个外迭代保存的 HINT 网格四阶差分统计量，SI单位；包含网格尺度截断误差，不代表解析源场散度。",
+      "outer_step": null,
+      "file": "../figures/convergence_fd4_vacuum.png?v=af4377ededa8",
+      "width": 2884,
+      "height": 4684,
+      "bytes": 306643,
+      "sha256": "af4377ededa899fb4c0f96534403b90a9b98be2ca0ece4a69730baf573718c28"
     },
     {
       "id": "convergence_final_divergence_precision",
@@ -214,11 +280,11 @@
       "title": "末态高精度散度核验 · 节点与离网格点",
       "caption": "第50步：每类32768个壁内节点及32768个离网格点，float64 AD；另以扩展精度多项式导数交叉核验。数值求导精确不代表场散度接近零。",
       "outer_step": 50,
-      "file": "../figures/convergence_final_divergence_precision.png?v=9317eb4c2ff3",
+      "file": "../figures/convergence_final_divergence_precision.png?v=d74a07897b7f",
       "width": 2700,
       "height": 3000,
-      "bytes": 268693,
-      "sha256": "9317eb4c2ff3e8c96414f1720d0f800bf4269cf3aa861c8cc9454e4238eac6c1"
+      "bytes": 268798,
+      "sha256": "d74a07897b7fd886a3a098da810f3648e9f4e121ea80c8726f40be6c52d7f616"
     },
     {
       "id": "convergence_stepb_01",
@@ -226,11 +292,11 @@
       "title": "Step-B 存储诊断 · 01",
       "caption": "每个外迭代最后一个 Step-B 内步；保留求解器归一化，勿与 SI 或局域相对力残差混用。",
       "outer_step": null,
-      "file": "../figures/convergence_stepb_01.png?v=9f38e0e4ba9a",
+      "file": "../figures/convergence_stepb_01.png?v=08e5a59a5041",
       "width": 2884,
       "height": 4684,
-      "bytes": 532805,
-      "sha256": "9f38e0e4ba9a10685b1f47a71cb5867ab4999d32eea7f99efbd61de7526e4532"
+      "bytes": 533357,
+      "sha256": "08e5a59a5041aae54e1f7d59f96d79c23b306e492c771cf7a84f2be3001d7247"
     },
     {
       "id": "convergence_stepb_02",
@@ -238,11 +304,11 @@
       "title": "Step-B 存储诊断 · 02",
       "caption": "每个外迭代最后一个 Step-B 内步；保留求解器归一化，勿与 SI 或局域相对力残差混用。",
       "outer_step": null,
-      "file": "../figures/convergence_stepb_02.png?v=0b46c94b960f",
+      "file": "../figures/convergence_stepb_02.png?v=2dcd5b97c7cb",
       "width": 2884,
       "height": 4684,
-      "bytes": 575256,
-      "sha256": "0b46c94b960f2cc1399be65352a1e014f53275b690f625e6d78db0a8552949dc"
+      "bytes": 561125,
+      "sha256": "2dcd5b97c7cba625424ec49760bbaf1da44ceedefd249e87325be9fba6351a86"
     },
     {
       "id": "convergence_stepb_03",
@@ -250,11 +316,11 @@
       "title": "Step-B 存储诊断 · 03",
       "caption": "每个外迭代最后一个 Step-B 内步；保留求解器归一化，勿与 SI 或局域相对力残差混用。",
       "outer_step": null,
-      "file": "../figures/convergence_stepb_03.png?v=7999bfe8abb4",
+      "file": "../figures/convergence_stepb_03.png?v=a1fea126c078",
       "width": 2884,
       "height": 3574,
-      "bytes": 306069,
-      "sha256": "7999bfe8abb4b2c010a387e4c1bb03151e688562c76086702b3d191cb48814e9"
+      "bytes": 306885,
+      "sha256": "a1fea126c07844c56b62740f3e6e361318ae837c70d5541736cb49c654269004"
     },
     {
       "id": "convergence_wall_clock_timings",
@@ -262,11 +328,11 @@
       "title": "每次外迭代实际耗时",
       "caption": "运行日志中的 Step-A、Step-B 和完整外迭代墙钟时间；不同于归一化弛豫时间。",
       "outer_step": null,
-      "file": "../figures/convergence_wall_clock_timings.png?v=1740d4c583fa",
+      "file": "../figures/convergence_wall_clock_timings.png?v=1c9fd8d8c413",
       "width": 2850,
       "height": 3000,
-      "bytes": 319176,
-      "sha256": "1740d4c583faa0c89475ddb74075953c30f016eef91df9448bdb82373dc9fa9f"
+      "bytes": 353387,
+      "sha256": "1c9fd8d8c4132aeb9e7724259d94dab15d0fe7d2e6c3248889cf8eecfa404032"
     },
     {
       "id": "poincare_final_phi_000",
@@ -274,11 +340,11 @@
       "title": "庞加莱 · 第 50 步 · 0°",
       "caption": "1,422 个壁内起点，含 1,284 个二维网格起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 50,
-      "file": "../figures/poincare_final_phi_000.png?v=498abc7e1169",
+      "file": "../figures/poincare_final_phi_000.png?v=472cb3d7c69f",
       "width": 2038,
       "height": 2506,
-      "bytes": 865285,
-      "sha256": "498abc7e116960ef56add635ddc828df833065875798adbe6216e747a46a63b1"
+      "bytes": 867154,
+      "sha256": "472cb3d7c69f1b0a5563579a74116fdd74ccaa71bb461f9b0831c6bf4aa1ccc1"
     },
     {
       "id": "poincare_final_phi_030",
@@ -286,11 +352,11 @@
       "title": "庞加莱 · 第 50 步 · 30°",
       "caption": "1,422 个壁内起点，含 1,284 个二维网格起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 50,
-      "file": "../figures/poincare_final_phi_030.png?v=19197fc131a8",
+      "file": "../figures/poincare_final_phi_030.png?v=5b952733124e",
       "width": 2038,
       "height": 2506,
-      "bytes": 840839,
-      "sha256": "19197fc131a8f5711720152278fdd431430e1fbba70217f41e6b15b2b371ffb4"
+      "bytes": 844013,
+      "sha256": "5b952733124e7c80b76dcda73717079c2b5915b3060514838e32c788acbb1d2e"
     },
     {
       "id": "poincare_final_phi_060",
@@ -298,11 +364,11 @@
       "title": "庞加莱 · 第 50 步 · 60°",
       "caption": "1,422 个壁内起点，含 1,284 个二维网格起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 50,
-      "file": "../figures/poincare_final_phi_060.png?v=28f09124356f",
+      "file": "../figures/poincare_final_phi_060.png?v=b701547cd1c1",
       "width": 2038,
       "height": 2506,
-      "bytes": 807179,
-      "sha256": "28f09124356f5f2bd837e57aeb40f5a9d9a83b69016270e73260a4ed992f45bc"
+      "bytes": 811507,
+      "sha256": "b701547cd1c137619e1e33b8c8ef4666c5f8ea122c8196effa178d357d99f713"
     },
     {
       "id": "poincare_final_three_sections",
@@ -310,11 +376,11 @@
       "title": "庞加莱 · 第 50 步 · 三截面",
       "caption": "1,422 个壁内起点，含 1,284 个二维网格起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 50,
-      "file": "../figures/poincare_final_three_sections.png?v=0c150f585033",
+      "file": "../figures/poincare_final_three_sections.png?v=23998911bd5c",
       "width": 1710,
       "height": 5731,
-      "bytes": 1718099,
-      "sha256": "0c150f585033692e8835c27264268fcf31efc70fe81c56155e0d9254b2c075c9"
+      "bytes": 1721708,
+      "sha256": "23998911bd5c7ac76a27a5ba0364c2e3d2dc1a8f434976da8dad172e2c05753e"
     },
     {
       "id": "poincare_initial_phi_000",
@@ -322,11 +388,11 @@
       "title": "庞加莱 · 第 0 步 · 0°",
       "caption": "138 个中平面径向起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 0,
-      "file": "../figures/poincare_initial_phi_000.png?v=6f373ec6b9a0",
+      "file": "../figures/poincare_initial_phi_000.png?v=f01b09b38977",
       "width": 2011,
       "height": 2504,
-      "bytes": 824653,
-      "sha256": "6f373ec6b9a09a8019c0470e6da8e57743addcf74244bba4c6316fd38d90fd4f"
+      "bytes": 831959,
+      "sha256": "f01b09b38977649451f4c3d6aaf467e67365a3af8cba3a051076a878e8195caf"
     },
     {
       "id": "poincare_initial_phi_030",
@@ -334,11 +400,11 @@
       "title": "庞加莱 · 第 0 步 · 30°",
       "caption": "138 个中平面径向起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 0,
-      "file": "../figures/poincare_initial_phi_030.png?v=373e5ab7d006",
+      "file": "../figures/poincare_initial_phi_030.png?v=c11859f46052",
       "width": 2011,
       "height": 2504,
-      "bytes": 806853,
-      "sha256": "373e5ab7d0068ca29e1ecbc482b621bb0583d75dd025047d1ffae25426a7532d"
+      "bytes": 814443,
+      "sha256": "c11859f4605286a0355f0334bff5ddc4ec21b14b606c433c4ac2c57ca48bcea1"
     },
     {
       "id": "poincare_initial_phi_060",
@@ -346,11 +412,11 @@
       "title": "庞加莱 · 第 0 步 · 60°",
       "caption": "138 个中平面径向起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 0,
-      "file": "../figures/poincare_initial_phi_060.png?v=161be0af31b9",
+      "file": "../figures/poincare_initial_phi_060.png?v=78e5293ee1c7",
       "width": 2011,
       "height": 2504,
-      "bytes": 776055,
-      "sha256": "161be0af31b99c08e360826d291ffa17c4f97bc0e4b3bc864be83910f88be787"
+      "bytes": 784373,
+      "sha256": "78e5293ee1c7f8447d05df8448a7fda127de1e5dac27ad318330beb56d417c41"
     },
     {
       "id": "poincare_initial_three_sections",
@@ -358,11 +424,11 @@
       "title": "庞加莱 · 第 0 步 · 三截面",
       "caption": "138 个中平面径向起点；统一从 φ=0 追踪最多 500 全环向圈，触壁即停，只画真实截面交点。",
       "outer_step": 0,
-      "file": "../figures/poincare_initial_three_sections.png?v=33f492d37e9d",
+      "file": "../figures/poincare_initial_three_sections.png?v=3d4ebd78b65f",
       "width": 1772,
       "height": 5731,
-      "bytes": 1544366,
-      "sha256": "33f492d37e9d356765fe3b225aaa371df2a4b73fc891cbb6f81c05fa101b5612"
+      "bytes": 1567633,
+      "sha256": "3d4ebd78b65f4b01b2cce196fb1752b5c012d600f4eedb420f6e2850ca1122fa"
     },
     {
       "id": "profile_enclosed_toroidal_current_rho",
@@ -370,11 +436,11 @@
       "title": "累计环向电流 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_enclosed_toroidal_current_rho.png?v=0507e8276458",
+      "file": "../figures/profile_enclosed_toroidal_current_rho.png?v=5511c5c14966",
       "width": 2884,
       "height": 3570,
-      "bytes": 488136,
-      "sha256": "0507e82764586f2c19056c0cc09182898ab019132694f1af9300042fbfec0da8"
+      "bytes": 489052,
+      "sha256": "5511c5c149665c6695a312f33c448491bb72ad37e25a12cbee5096f327ca7c8e"
     },
     {
       "id": "profile_enclosed_toroidal_current_s",
@@ -382,11 +448,11 @@
       "title": "累计环向电流 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_enclosed_toroidal_current_s.png?v=3182ccd10add",
+      "file": "../figures/profile_enclosed_toroidal_current_s.png?v=cad3cdbad73d",
       "width": 2884,
       "height": 3570,
-      "bytes": 517169,
-      "sha256": "3182ccd10add5db3938721f70becace39f7963e826767c264d2d517bb3e16149"
+      "bytes": 518421,
+      "sha256": "cad3cdbad73d69950a8818d29e92e22563c02158c93fda79ba2e6157ef067e64"
     },
     {
       "id": "profile_field_strength_R",
@@ -394,11 +460,11 @@
       "title": "总场强 · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_field_strength_R.png?v=e28ae9cd25b5",
+      "file": "../figures/profile_field_strength_R.png?v=bb35ae7595f7",
       "width": 2884,
       "height": 3570,
-      "bytes": 395791,
-      "sha256": "e28ae9cd25b5e707bcd1119d8a29e2033ae1a3987dcb127866039ce1e00cc9cb"
+      "bytes": 396464,
+      "sha256": "bb35ae7595f74c06a7dcdb935a9e46008c061bb6621c81bd6d30207af45643b0"
     },
     {
       "id": "profile_field_strength_Z",
@@ -406,11 +472,11 @@
       "title": "总场强 · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_field_strength_Z.png?v=880856c9b638",
+      "file": "../figures/profile_field_strength_Z.png?v=6bdaada58325",
       "width": 2884,
       "height": 3570,
-      "bytes": 438051,
-      "sha256": "880856c9b638f3563b21bb3edbc4ad0886020ebe30e341af8f777a284f7d9725"
+      "bytes": 438705,
+      "sha256": "6bdaada5832563b047934630ff5a43efaa4e912d16834f2565fdb19de3f5d6c2"
     },
     {
       "id": "profile_field_strength_phi",
@@ -418,11 +484,11 @@
       "title": "总场强 · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_field_strength_phi.png?v=453dcbe0963a",
+      "file": "../figures/profile_field_strength_phi.png?v=aed148b93c43",
       "width": 2884,
       "height": 1350,
-      "bytes": 198905,
-      "sha256": "453dcbe0963a322b4ac9dc7e207f040766a55c738f697e90f2cfe006a411a1c6"
+      "bytes": 200975,
+      "sha256": "aed148b93c4356fbc1cce5cf50de7eec284294f826998f093e3628baaf832fa6"
     },
     {
       "id": "profile_field_strength_rho",
@@ -430,11 +496,11 @@
       "title": "总场强 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_field_strength_rho.png?v=64a01edc1666",
+      "file": "../figures/profile_field_strength_rho.png?v=8ee3ac575db7",
       "width": 2884,
       "height": 3570,
-      "bytes": 614264,
-      "sha256": "64a01edc1666c24db469d81ead44c840ed779c21dac54648bb86897275216c8e"
+      "bytes": 614943,
+      "sha256": "8ee3ac575db752bd2c532c2e283135571cf9167114b94de28a60131eee0810a3"
     },
     {
       "id": "profile_field_strength_s",
@@ -442,11 +508,11 @@
       "title": "总场强 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_field_strength_s.png?v=9f3f4600b8e6",
+      "file": "../figures/profile_field_strength_s.png?v=b94d30f12787",
       "width": 2884,
       "height": 3570,
-      "bytes": 654488,
-      "sha256": "9f3f4600b8e64ceb2632a9da517050d677dd486ab84d4bddda30a56ec1547ae9"
+      "bytes": 653973,
+      "sha256": "b94d30f12787d93736fbc64f2688cb3fa7eb5ff0d52e058f7f909fc6c7c20e20"
     },
     {
       "id": "profile_force_residual_R",
@@ -454,11 +520,11 @@
       "title": "力残差大小 · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_R.png?v=0f2a9b8b7d2e",
+      "file": "../figures/profile_force_residual_R.png?v=d51116be212e",
       "width": 2884,
       "height": 3570,
-      "bytes": 472345,
-      "sha256": "0f2a9b8b7d2e928d1ca71d8d053d3030aa26dd260f31580cdf653e138bf600e0"
+      "bytes": 472581,
+      "sha256": "d51116be212ec5e0e0d0359109b6cee9c53f8551fb5292ef36e7d54fefd6992b"
     },
     {
       "id": "profile_force_residual_Z",
@@ -466,11 +532,11 @@
       "title": "力残差大小 · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_Z.png?v=39d7d4c1b37d",
+      "file": "../figures/profile_force_residual_Z.png?v=fca749ec5009",
       "width": 2884,
       "height": 3570,
-      "bytes": 481592,
-      "sha256": "39d7d4c1b37d00e1171857c182530f70a3178fcc16fffc23f810b4dfece17bb7"
+      "bytes": 481840,
+      "sha256": "fca749ec5009317f23d15d77336fcfd30b2f6faa442c876b90600ce5c8ddac98"
     },
     {
       "id": "profile_force_residual_phi",
@@ -478,11 +544,11 @@
       "title": "力残差大小 · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_phi.png?v=b68c80ffe44c",
+      "file": "../figures/profile_force_residual_phi.png?v=1545e00eb4ed",
       "width": 2884,
       "height": 1350,
-      "bytes": 239443,
-      "sha256": "b68c80ffe44cdfb9290a7ae53481560c63426ca4e456dd7c9c002cfa25b8716a"
+      "bytes": 240188,
+      "sha256": "1545e00eb4ed220defeeaa61cfa8b67f1a0248894e2c4e506ac9300b0e323442"
     },
     {
       "id": "profile_force_residual_relative_R",
@@ -490,11 +556,11 @@
       "title": "局域归一化力残差 · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_relative_R.png?v=be37e2d686d2",
+      "file": "../figures/profile_force_residual_relative_R.png?v=815ceffc5ecd",
       "width": 2884,
       "height": 3570,
-      "bytes": 368556,
-      "sha256": "be37e2d686d22789c45db63ca04dc3aa8560547ac542e56704df8572f2bdb9d8"
+      "bytes": 370478,
+      "sha256": "815ceffc5ecdfd003942870773d49bee841dfbf1655334206456ae91780910d4"
     },
     {
       "id": "profile_force_residual_relative_Z",
@@ -502,11 +568,11 @@
       "title": "局域归一化力残差 · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_relative_Z.png?v=c3f0cfd91ce5",
+      "file": "../figures/profile_force_residual_relative_Z.png?v=67bec55a51ce",
       "width": 2884,
       "height": 3570,
-      "bytes": 396978,
-      "sha256": "c3f0cfd91ce57e6974918213d1cb5fa60f889980ba2d6b807d2a3d4cf56b0927"
+      "bytes": 398137,
+      "sha256": "67bec55a51ce401e40e12cff5e142616765ba0a8298c9a79ce689442a2fa6847"
     },
     {
       "id": "profile_force_residual_relative_phi",
@@ -514,11 +580,11 @@
       "title": "局域归一化力残差 · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_relative_phi.png?v=e7ba6dcda16e",
+      "file": "../figures/profile_force_residual_relative_phi.png?v=3be0fce8f102",
       "width": 2884,
       "height": 1350,
-      "bytes": 173803,
-      "sha256": "e7ba6dcda16ed4a366c9814312c75cd3b4c0dd335a5e33363b9f92eadcb80477"
+      "bytes": 175582,
+      "sha256": "3be0fce8f1027b2efe2dd9b8fa5e7d1c3baff789a097949fcb05bbe1ca180560"
     },
     {
       "id": "profile_force_residual_relative_rho",
@@ -526,11 +592,11 @@
       "title": "局域归一化力残差 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_relative_rho.png?v=22214a2f851d",
+      "file": "../figures/profile_force_residual_relative_rho.png?v=adf52f9b63aa",
       "width": 2884,
       "height": 3570,
-      "bytes": 499580,
-      "sha256": "22214a2f851d6e7d5f5696b0b90f16d0a43be4d8fca7fea2e0ede0c8dadb2a98"
+      "bytes": 496531,
+      "sha256": "adf52f9b63aae1e98e95a5d8026d27e6d8da795aa3df7e1a423a9efa5a10ef37"
     },
     {
       "id": "profile_force_residual_relative_s",
@@ -538,11 +604,11 @@
       "title": "局域归一化力残差 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_relative_s.png?v=faa4d57f87ec",
+      "file": "../figures/profile_force_residual_relative_s.png?v=a04bb7b45f55",
       "width": 2884,
       "height": 3570,
-      "bytes": 507984,
-      "sha256": "faa4d57f87ec54c400575870e217754b3ece2990202dd404f7a0e70a2f582b7d"
+      "bytes": 504354,
+      "sha256": "a04bb7b45f55ca43a09bf3b19588b7b5220611d5272a3dcbc9268307900b7767"
     },
     {
       "id": "profile_force_residual_rho",
@@ -550,11 +616,11 @@
       "title": "力残差大小 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_rho.png?v=346aba6d5e47",
+      "file": "../figures/profile_force_residual_rho.png?v=f15b8338d58e",
       "width": 2884,
       "height": 3570,
-      "bytes": 524983,
-      "sha256": "346aba6d5e47e9b164ab1ea51a7911ec1058e242a3ceb901f6b3790a4fcf03b8"
+      "bytes": 525646,
+      "sha256": "f15b8338d58e224e9cfa8c45b74a63015c4af3a0abefb31b43cf3b4852bfbc74"
     },
     {
       "id": "profile_force_residual_s",
@@ -562,11 +628,11 @@
       "title": "力残差大小 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_force_residual_s.png?v=966388a814bd",
+      "file": "../figures/profile_force_residual_s.png?v=726cad668653",
       "width": 2884,
       "height": 3570,
-      "bytes": 568808,
-      "sha256": "966388a814bd875b67495bfdf6b5b6984e4010805697cddcf5e6db995ad89d85"
+      "bytes": 568587,
+      "sha256": "726cad6686538074821e0e123900748a8a9796eafaebd06cc80ee8a3796244d1"
     },
     {
       "id": "profile_pressure_R",
@@ -574,11 +640,11 @@
       "title": "压强 · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_pressure_R.png?v=d50518d58014",
+      "file": "../figures/profile_pressure_R.png?v=0eb202069ec1",
       "width": 2884,
       "height": 3570,
-      "bytes": 393248,
-      "sha256": "d50518d5801472f30b3264b776c4dba83af4f37c80b2b43cf3e61e043ad87362"
+      "bytes": 394079,
+      "sha256": "0eb202069ec19b912810e752ed9b5f174da02013840dce2c2d65620465964fce"
     },
     {
       "id": "profile_pressure_Z",
@@ -586,11 +652,11 @@
       "title": "压强 · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_pressure_Z.png?v=3a5da89dc053",
+      "file": "../figures/profile_pressure_Z.png?v=bb649e25b9bd",
       "width": 2884,
       "height": 3570,
-      "bytes": 421148,
-      "sha256": "3a5da89dc05391d64fbb780db32e7717721c4c723b4ce6e4031faa4116049638"
+      "bytes": 422274,
+      "sha256": "bb649e25b9bd65c555c9597bb17c917d33d3e4f4f7a22b15180c53c082e89520"
     },
     {
       "id": "profile_pressure_phi",
@@ -598,11 +664,11 @@
       "title": "压强 · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_pressure_phi.png?v=ebde4af6603b",
+      "file": "../figures/profile_pressure_phi.png?v=37b4522371c3",
       "width": 2884,
       "height": 1350,
-      "bytes": 195715,
-      "sha256": "ebde4af6603b277542d8ba352c6fe81b9c0ab42519a7ee22eb838dd0814967cd"
+      "bytes": 196658,
+      "sha256": "37b4522371c39e4c34489d4923822b834b7d59620feed83ec6bab60b98298a47"
     },
     {
       "id": "profile_pressure_rho",
@@ -610,11 +676,11 @@
       "title": "压强 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_pressure_rho.png?v=7b3033e1120a",
+      "file": "../figures/profile_pressure_rho.png?v=7306fa297814",
       "width": 2884,
       "height": 3570,
-      "bytes": 444333,
-      "sha256": "7b3033e1120ae0fa2c344d589fa7059d3fa0683b62c3e0d47164f4e98ed411a1"
+      "bytes": 445315,
+      "sha256": "7306fa2978149f6bc2e1fe7cd5e71333cd6fe302e4c01b514e62725fe0ab14d5"
     },
     {
       "id": "profile_pressure_s",
@@ -622,11 +688,11 @@
       "title": "压强 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_pressure_s.png?v=3d8e202478f8",
+      "file": "../figures/profile_pressure_s.png?v=0d14c7e49823",
       "width": 2884,
       "height": 3570,
-      "bytes": 474694,
-      "sha256": "3d8e202478f826ab34a9c0da5ef55dde87220268da76f48ec372119fc93297fc"
+      "bytes": 475258,
+      "sha256": "0d14c7e498234f1d962128f9da877ce5989c3f5bde009c76a86f795b951245b8"
     },
     {
       "id": "profile_rotational_transform_R",
@@ -634,11 +700,11 @@
       "title": "旋转变换 ι · R",
       "caption": "每截面 191 个初始 VMEC s 起点；512 场周期、每周期 128 个积分步。实心为通过检查，空心为未充分解析，失败点不绘制。",
       "outer_step": 50,
-      "file": "../figures/profile_rotational_transform_R.png?v=052835f19cb8",
+      "file": "../figures/profile_rotational_transform_R.png?v=a6360997c469",
       "width": 2884,
       "height": 3570,
-      "bytes": 498046,
-      "sha256": "052835f19cb8e6cc84bf47034b75e0f9ccb0088c6a8660583abd05d04b9e85db"
+      "bytes": 501641,
+      "sha256": "a6360997c46906f2f4e59d226f1fc179a5c85c656fc9d7b8e12ee3ce830f9f94"
     },
     {
       "id": "profile_rotational_transform_Z",
@@ -646,11 +712,11 @@
       "title": "旋转变换 ι · Z",
       "caption": "每截面 191 个初始 VMEC s 起点；512 场周期、每周期 128 个积分步。实心为通过检查，空心为未充分解析，失败点不绘制。",
       "outer_step": 50,
-      "file": "../figures/profile_rotational_transform_Z.png?v=c5a6474ca8ef",
+      "file": "../figures/profile_rotational_transform_Z.png?v=b13dc0c185d6",
       "width": 2884,
       "height": 3570,
-      "bytes": 429248,
-      "sha256": "c5a6474ca8ef8edf7c961be361ea7a5d00bb33ed80f24324f8d80233aca9b4b7"
+      "bytes": 433665,
+      "sha256": "b13dc0c185d6324df0c1324cbaed0f0fba7baee94b5ad6dcaeef3c0299ab1019"
     },
     {
       "id": "profile_rotational_transform_initial_vmec_s",
@@ -658,11 +724,11 @@
       "title": "旋转变换 ι · 初始 VMEC s",
       "caption": "每截面 191 个初始 VMEC s 起点；512 场周期、每周期 128 个积分步。实心为通过检查，空心为未充分解析，失败点不绘制。",
       "outer_step": 50,
-      "file": "../figures/profile_rotational_transform_initial_vmec_s.png?v=2bab7ff07623",
+      "file": "../figures/profile_rotational_transform_initial_vmec_s.png?v=b49d64be3bb0",
       "width": 2850,
       "height": 3420,
-      "bytes": 571828,
-      "sha256": "2bab7ff076230af32c30f953bc21d8589d6055dfc53a9392a43d1b881bb92255"
+      "bytes": 574509,
+      "sha256": "b49d64be3bb0e07dd42a92ede19ca91fad9d0c6ea5ca1015e5c066059adaac9d"
     },
     {
       "id": "profile_rotational_transform_rho",
@@ -670,11 +736,11 @@
       "title": "旋转变换 ι · rho",
       "caption": "每截面 191 个初始 VMEC s 起点；512 场周期、每周期 128 个积分步。实心为通过检查，空心为未充分解析，失败点不绘制。",
       "outer_step": 50,
-      "file": "../figures/profile_rotational_transform_rho.png?v=879249ddf762",
+      "file": "../figures/profile_rotational_transform_rho.png?v=38f52db364e5",
       "width": 2884,
       "height": 3570,
-      "bytes": 483084,
-      "sha256": "879249ddf76263134edb8914cda1d9b1025ca0e9241ba229c30b70806d568d05"
+      "bytes": 486810,
+      "sha256": "38f52db364e543a0268cbec016651a324e21190d26ba1ebf66b1ae78ec5222f6"
     },
     {
       "id": "profile_rotational_transform_s",
@@ -682,11 +748,11 @@
       "title": "旋转变换 ι · s",
       "caption": "每截面 191 个初始 VMEC s 起点；512 场周期、每周期 128 个积分步。实心为通过检查，空心为未充分解析，失败点不绘制。",
       "outer_step": 50,
-      "file": "../figures/profile_rotational_transform_s.png?v=c7c076c5702f",
+      "file": "../figures/profile_rotational_transform_s.png?v=465b3a0aec71",
       "width": 2884,
       "height": 3570,
-      "bytes": 492086,
-      "sha256": "c7c076c5702f09e414931ce7f13b715d25976cd12d27c1ad60d80ad394ffe1d4"
+      "bytes": 495654,
+      "sha256": "465b3a0aec71bd58e0d0441015bd8beb829fada47459ebc34b9e46c6a1845c25"
     },
     {
       "id": "profile_speed_R",
@@ -694,11 +760,11 @@
       "title": "流速大小 · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_speed_R.png?v=ae80f5775ff0",
+      "file": "../figures/profile_speed_R.png?v=e866a0daefc0",
       "width": 2884,
       "height": 3570,
-      "bytes": 386882,
-      "sha256": "ae80f5775ff0a9b4a8467698d89172dbee6d1aead455b0738da01c22c884c453"
+      "bytes": 388040,
+      "sha256": "e866a0daefc0cb73d982926aac8f8de8a861773591f233473a276ab56b8a3bec"
     },
     {
       "id": "profile_speed_Z",
@@ -706,11 +772,11 @@
       "title": "流速大小 · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_speed_Z.png?v=b801d7d27b42",
+      "file": "../figures/profile_speed_Z.png?v=09e0be00309c",
       "width": 2884,
       "height": 3570,
-      "bytes": 455735,
-      "sha256": "b801d7d27b42008310c2bee994af76338589ee8c03116b32ff7f401ab118dbf8"
+      "bytes": 457171,
+      "sha256": "09e0be00309c2ba39cea2cbc35b5191b4bdcbf4ec826c96ad436a698ee02dabd"
     },
     {
       "id": "profile_speed_phi",
@@ -718,11 +784,11 @@
       "title": "流速大小 · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_speed_phi.png?v=f821429fa058",
+      "file": "../figures/profile_speed_phi.png?v=5b2294998f24",
       "width": 2884,
       "height": 1350,
-      "bytes": 172557,
-      "sha256": "f821429fa058829878c1226f748a4d4a77229802e44c26419480c4a8716aaebf"
+      "bytes": 174396,
+      "sha256": "5b2294998f24694c005552f3aba3f7246c40a159331ed74bb879146728dead54"
     },
     {
       "id": "profile_speed_rho",
@@ -730,11 +796,11 @@
       "title": "流速大小 · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_speed_rho.png?v=7f26978e0f9b",
+      "file": "../figures/profile_speed_rho.png?v=1a7f99a40052",
       "width": 2884,
       "height": 3570,
-      "bytes": 526187,
-      "sha256": "7f26978e0f9b39f43ebe92b73d6cc09cc167c6491b748153a99eac9e709c83e0"
+      "bytes": 527975,
+      "sha256": "1a7f99a400521791e30df38ee36c611c3016d0804f7b98cc73fd41bd2a960721"
     },
     {
       "id": "profile_speed_s",
@@ -742,11 +808,11 @@
       "title": "流速大小 · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_speed_s.png?v=8df8b9fe0c8b",
+      "file": "../figures/profile_speed_s.png?v=fad541763e0d",
       "width": 2884,
       "height": 3570,
-      "bytes": 555077,
-      "sha256": "8df8b9fe0c8b1ab167fb0545b0eb076e9d7ab1a3068bcd9e6f4b83ff6edb4115"
+      "bytes": 557813,
+      "sha256": "fad541763e0d337dcd22394f347d19352f4d53fd2583dd84a41deb775b64ead1"
     },
     {
       "id": "profile_toroidal_current_density_R",
@@ -754,11 +820,11 @@
       "title": "环向电流密度 Jφ · R",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_toroidal_current_density_R.png?v=da0a98f7a4b2",
+      "file": "../figures/profile_toroidal_current_density_R.png?v=65d3d63e571a",
       "width": 2884,
       "height": 3570,
-      "bytes": 454294,
-      "sha256": "da0a98f7a4b2826a3421e80c8c27beb7501289e2cc1fedc236c7e63929a0a848"
+      "bytes": 455306,
+      "sha256": "65d3d63e571ae8140d0f38bb102a80964d41e3ddd9d7a1b0e152f96377d30ed2"
     },
     {
       "id": "profile_toroidal_current_density_Z",
@@ -766,11 +832,11 @@
       "title": "环向电流密度 Jφ · Z",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_toroidal_current_density_Z.png?v=2537130553c3",
+      "file": "../figures/profile_toroidal_current_density_Z.png?v=39899c82e2b5",
       "width": 2884,
       "height": 3570,
-      "bytes": 524749,
-      "sha256": "2537130553c310db9387a57236975e6b3777dc019fd27459fe9726d87ddcb335"
+      "bytes": 526284,
+      "sha256": "39899c82e2b5e0c06c2806303ca86a30fc727fd364dc2a3b77736fbedaa52feb"
     },
     {
       "id": "profile_toroidal_current_density_phi",
@@ -778,11 +844,11 @@
       "title": "环向电流密度 Jφ · phi",
       "caption": "固定位置剖面；取样位置和单位见坐标标注。",
       "outer_step": 50,
-      "file": "../figures/profile_toroidal_current_density_phi.png?v=51c22b1c4039",
+      "file": "../figures/profile_toroidal_current_density_phi.png?v=99bf6344392c",
       "width": 2884,
       "height": 1350,
-      "bytes": 209041,
-      "sha256": "51c22b1c4039149ed0a83879765b53b79d41d046422181c278236694f7cea6e2"
+      "bytes": 209775,
+      "sha256": "99bf6344392c2428c3c9dbefc264e9e45c58e3db66b0b50836b2c83e2bb09c9c"
     },
     {
       "id": "profile_toroidal_current_density_rho",
@@ -790,11 +856,11 @@
       "title": "环向电流密度 Jφ · rho",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_toroidal_current_density_rho.png?v=1818b13d9721",
+      "file": "../figures/profile_toroidal_current_density_rho.png?v=8eefbb3d7725",
       "width": 2884,
       "height": 3570,
-      "bytes": 708105,
-      "sha256": "1818b13d972145d3b516c0cab9a9d362230a2be5e615858ebe43281676ee0079"
+      "bytes": 715143,
+      "sha256": "8eefbb3d7725e0e313b3b1c0a40bda2bcdc62e1d9ddaa553523618b98b5e35f7"
     },
     {
       "id": "profile_toroidal_current_density_s",
@@ -802,11 +868,11 @@
       "title": "环向电流密度 Jφ · s",
       "caption": "s / ρ 为各自数据的标签；HINT 为截面面积分箱，不是假定存在磁面后的磁面平均。",
       "outer_step": 50,
-      "file": "../figures/profile_toroidal_current_density_s.png?v=dcc4d8c383b0",
+      "file": "../figures/profile_toroidal_current_density_s.png?v=f0c94bf87f06",
       "width": 2884,
       "height": 3570,
-      "bytes": 748424,
-      "sha256": "dcc4d8c383b0eae803ec2ff56ffde04f65712066a7a691dfaa5d2ffb6b11c22e"
+      "bytes": 753584,
+      "sha256": "f0c94bf87f06a70a1cebc8fc6b910fdb6b7e8ff09c700947b0060bdaaa6c1245"
     },
     {
       "id": "section_current_density",
@@ -814,11 +880,11 @@
       "title": "响应电流密度大小",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_current_density.png?v=c58bfe0cdd7b",
+      "file": "../figures/section_current_density.png?v=36600225a9b1",
       "width": 2239,
       "height": 4380,
-      "bytes": 1141432,
-      "sha256": "c58bfe0cdd7b862c70a0e001c9f4667b268a0c1286c1b6e182f7d7be2a485a34"
+      "bytes": 1138970,
+      "sha256": "36600225a9b1d584391849758a578f811544e669b35170b037421e1aaa6e31f9"
     },
     {
       "id": "section_divergence_b",
@@ -826,11 +892,11 @@
       "title": "总场网格散度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b.png?v=a41016c50e1a",
+      "file": "../figures/section_divergence_b.png?v=1455cf504375",
       "width": 2148,
       "height": 4380,
-      "bytes": 750027,
-      "sha256": "a41016c50e1a07d1b29a5e0f45865d6471eb3df7349b530dc0188d9127b1055b"
+      "bytes": 753884,
+      "sha256": "1455cf5043758c7d0802b43194dff71e1b141c9c08637ee681e95faa9428ddf4"
     },
     {
       "id": "section_divergence_b_abs",
@@ -838,11 +904,11 @@
       "title": "总场网格散度绝对值",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b_abs.png?v=8d013e929c0d",
+      "file": "../figures/section_divergence_b_abs.png?v=84822fb17c3c",
       "width": 2148,
       "height": 4380,
-      "bytes": 932132,
-      "sha256": "8d013e929c0d943ab33925465f40476be57c99ae0dca830b5f87f39d5354ea4a"
+      "bytes": 934941,
+      "sha256": "84822fb17c3c64825e789c10a1a30d6c031175e18c67fe0673334bc34780698e"
     },
     {
       "id": "section_divergence_b_response",
@@ -850,11 +916,11 @@
       "title": "响应场网格散度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b_response.png?v=3b3a070297c5",
+      "file": "../figures/section_divergence_b_response.png?v=36405924aade",
       "width": 2148,
       "height": 4380,
-      "bytes": 746409,
-      "sha256": "3b3a070297c598754a31582b12eec55764167a49e2d026e3d9694a6bf56f668a"
+      "bytes": 749624,
+      "sha256": "36405924aade57e1610f0c1cc01882f2774c3f6e8da557916f5917d94bc310e1"
     },
     {
       "id": "section_divergence_b_response_abs",
@@ -862,11 +928,11 @@
       "title": "响应场网格散度绝对值",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b_response_abs.png?v=50b2b2786531",
+      "file": "../figures/section_divergence_b_response_abs.png?v=02622b4912ef",
       "width": 2148,
       "height": 4380,
-      "bytes": 931506,
-      "sha256": "50b2b2786531c0c2ac1ffdaefc4630f1f9311bfae3a6da6b3e573b2141a847bf"
+      "bytes": 931996,
+      "sha256": "02622b4912ef8a1ef71c91b37b2c801798d0515c027707a8810e328a2d3064e3"
     },
     {
       "id": "section_divergence_b_vacuum",
@@ -874,11 +940,11 @@
       "title": "真空场网格散度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b_vacuum.png?v=81ff6b2cdb0d",
+      "file": "../figures/section_divergence_b_vacuum.png?v=167de446952e",
       "width": 2148,
       "height": 4380,
-      "bytes": 640748,
-      "sha256": "81ff6b2cdb0d2eb60da25871bee1ed78744c2ddf7b4648a4135a52a11aa84e67"
+      "bytes": 641542,
+      "sha256": "167de446952e48d8cd4d4a6ba27145e23d3f22123ed6379ec728201700c6b6be"
     },
     {
       "id": "section_divergence_b_vacuum_abs",
@@ -886,11 +952,11 @@
       "title": "真空场网格散度绝对值",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。 此图为四阶网格差分散度，不是解析源场或插值器 AD 散度。",
       "outer_step": 50,
-      "file": "../figures/section_divergence_b_vacuum_abs.png?v=258eeedae0f7",
+      "file": "../figures/section_divergence_b_vacuum_abs.png?v=bea4d49650b2",
       "width": 2148,
       "height": 4380,
-      "bytes": 826050,
-      "sha256": "258eeedae0f72be29122448dc059e9f134e8b25b6a8589dcb2c3b6e8079366fc"
+      "bytes": 826951,
+      "sha256": "bea4d49650b2566b69a0f9449ce4c1b677a5f5beb751cb8911b47f04d680de87"
     },
     {
       "id": "section_field_phi",
@@ -898,11 +964,11 @@
       "title": "总磁场 phi 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_field_phi.png?v=c1e4cce55d95",
+      "file": "../figures/section_field_phi.png?v=09aed472f5d3",
       "width": 2237,
       "height": 4380,
-      "bytes": 773682,
-      "sha256": "c1e4cce55d95558ddabe979cac13b6855286f8910b45f92633e77ad08df86aab"
+      "bytes": 774843,
+      "sha256": "09aed472f5d37ee5196fdc93f8c7eda3ec1f10749e61c9b96b8131248cd4bd69"
     },
     {
       "id": "section_field_r",
@@ -910,11 +976,11 @@
       "title": "总磁场 r 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_field_r.png?v=170e0ec6b77a",
+      "file": "../figures/section_field_r.png?v=5f90fd8b06a5",
       "width": 2237,
       "height": 4380,
-      "bytes": 717029,
-      "sha256": "170e0ec6b77a4f4d1ca2f213591127ad2fb02557c3601d53c1c660abe0b27d1b"
+      "bytes": 718229,
+      "sha256": "5f90fd8b06a52bdb4e8c3e6e9bffcbfb57c8e7e351e5ab1c722308f6b675a5cc"
     },
     {
       "id": "section_field_strength",
@@ -922,11 +988,11 @@
       "title": "总场强",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_field_strength.png?v=805534568757",
+      "file": "../figures/section_field_strength.png?v=76e31334537b",
       "width": 2237,
       "height": 4380,
-      "bytes": 797650,
-      "sha256": "80553456875768e75b5225ea5fe85e6249d761345771771b36613045f8c100d6"
+      "bytes": 798530,
+      "sha256": "76e31334537baf9641d983f2db2a35f49dd46cfa2019a723fdac5208fbb1f891"
     },
     {
       "id": "section_field_z",
@@ -934,11 +1000,11 @@
       "title": "总磁场 z 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_field_z.png?v=d24e5b1d9b9f",
+      "file": "../figures/section_field_z.png?v=969b3c073d8a",
       "width": 2237,
       "height": 4380,
-      "bytes": 757723,
-      "sha256": "d24e5b1d9b9f8e90059174689158e194107682928f3f5e1e282664f77801947e"
+      "bytes": 758248,
+      "sha256": "969b3c073d8a1cc9264918eb868ce9f797aa16ddb545172ffe0e28d630910ff1"
     },
     {
       "id": "section_force_residual",
@@ -946,11 +1012,11 @@
       "title": "力残差大小",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_force_residual.png?v=461035bd26e4",
+      "file": "../figures/section_force_residual.png?v=2bfd80897bbd",
       "width": 2148,
       "height": 4380,
-      "bytes": 1072562,
-      "sha256": "461035bd26e4b72dd967af4ab05dcaa6b5b0fcbc7d3cc9279209159aed56be6b"
+      "bytes": 1075435,
+      "sha256": "2bfd80897bbd794feea00e8e51ff7202c0062656acc33329236c36f4b634d275"
     },
     {
       "id": "section_force_residual_relative",
@@ -958,11 +1024,11 @@
       "title": "局域归一化力残差",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_force_residual_relative.png?v=c3f66ae75bab",
+      "file": "../figures/section_force_residual_relative.png?v=a94e7b6e538c",
       "width": 2148,
       "height": 4380,
-      "bytes": 941505,
-      "sha256": "c3f66ae75bab05d438e1256b6b8b39ba05c388159fabdd36ff6054326e2c6698"
+      "bytes": 940773,
+      "sha256": "a94e7b6e538cb4b0b5290d743ef3d39efe186a7946a266f7cd0c0628e3b4beef"
     },
     {
       "id": "section_lorentz_force",
@@ -970,11 +1036,11 @@
       "title": "洛伦兹力",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_lorentz_force.png?v=897f76ced8a1",
+      "file": "../figures/section_lorentz_force.png?v=8fd62d497c5f",
       "width": 2148,
       "height": 4380,
-      "bytes": 1140755,
-      "sha256": "897f76ced8a171f4f5b6569c3497909e9d79ec4e19b6b5e09406d02e904630de"
+      "bytes": 1134825,
+      "sha256": "8fd62d497c5f723ed2d47f70b46fddd8319b909b0bc2c2ccb69cf810d4cf1419"
     },
     {
       "id": "section_parallel_current_density",
@@ -982,11 +1048,11 @@
       "title": "平行电流密度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_parallel_current_density.png?v=0a04c2606c2b",
+      "file": "../figures/section_parallel_current_density.png?v=361261df6fa7",
       "width": 2188,
       "height": 4380,
-      "bytes": 1086832,
-      "sha256": "0a04c2606c2bf8ea78227e10045d099af1cbcb0948d29a1ccd4e9c984cfef484"
+      "bytes": 1086207,
+      "sha256": "361261df6fa72fe9376c5b968da09357e69e887f169177fc970626bc3ca2441d"
     },
     {
       "id": "section_parallel_pressure_gradient",
@@ -994,11 +1060,11 @@
       "title": "平行压强梯度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_parallel_pressure_gradient.png?v=9ff87be5677c",
+      "file": "../figures/section_parallel_pressure_gradient.png?v=4a078496caa5",
       "width": 2148,
       "height": 4380,
-      "bytes": 852850,
-      "sha256": "9ff87be5677c31066c59d42a9edfb388573e0f7ba9d9af53f63eea5dcae355aa"
+      "bytes": 853028,
+      "sha256": "4a078496caa5af5eaa834d31291042958a6b1d266e76a3ef13fb5bcb860a7090"
     },
     {
       "id": "section_pressure",
@@ -1006,11 +1072,11 @@
       "title": "压强",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_pressure.png?v=b8f3a03dfe0b",
+      "file": "../figures/section_pressure.png?v=a19d1485e1d0",
       "width": 2237,
       "height": 4380,
-      "bytes": 891801,
-      "sha256": "b8f3a03dfe0b1edc0cb7e78bb583643ee7a78dfddbb1fb6c2be537802250a7bb"
+      "bytes": 892647,
+      "sha256": "a19d1485e1d091464b06afd4a8a15fa0513ebdf691d5a74eda78a83f9956b4e6"
     },
     {
       "id": "section_pressure_gradient",
@@ -1018,11 +1084,11 @@
       "title": "压强梯度",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_pressure_gradient.png?v=0dee26e9ecfd",
+      "file": "../figures/section_pressure_gradient.png?v=64cd5754c718",
       "width": 2148,
       "height": 4380,
-      "bytes": 1082676,
-      "sha256": "0dee26e9ecfd419820e8b660ead3754d602a5f258ad01ead7a633bfc28cf078b"
+      "bytes": 1084535,
+      "sha256": "64cd5754c718c7f6701c7c9de7e64d8a77fd71851a54b84e5eacbf34889a6978"
     },
     {
       "id": "section_response_field_phi",
@@ -1030,11 +1096,11 @@
       "title": "响应磁场 phi 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_response_field_phi.png?v=fe099aa8046f",
+      "file": "../figures/section_response_field_phi.png?v=2f1ca653398d",
       "width": 2148,
       "height": 4380,
-      "bytes": 924353,
-      "sha256": "fe099aa8046f6074782c338dd6f7e90f5fff8a157d2de8077d3a7b78ffd2f48d"
+      "bytes": 923673,
+      "sha256": "2f1ca653398d15ab6cd7580a030effd5cf5998e0da4b53c05dbca6637854f25a"
     },
     {
       "id": "section_response_field_r",
@@ -1042,11 +1108,11 @@
       "title": "响应磁场 r 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_response_field_r.png?v=9cdec4625370",
+      "file": "../figures/section_response_field_r.png?v=7cbf83ee9317",
       "width": 2148,
       "height": 4380,
-      "bytes": 821690,
-      "sha256": "9cdec46253704ba6878a16ab359fa5e4cc477c4d99f4458f32c9a1faa60cd417"
+      "bytes": 821796,
+      "sha256": "7cbf83ee9317737506499eabbdfabd5683eb5a476304fc58d1b8fe776b44ba85"
     },
     {
       "id": "section_response_field_strength",
@@ -1054,11 +1120,11 @@
       "title": "响应场强",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_response_field_strength.png?v=6ade31b8b099",
+      "file": "../figures/section_response_field_strength.png?v=113198360bca",
       "width": 2148,
       "height": 4380,
-      "bytes": 955378,
-      "sha256": "6ade31b8b0995e58b1d40749c34185ded83453acaa8b8d0a530a8a0b79bba41f"
+      "bytes": 955829,
+      "sha256": "113198360bcaf807cf0e743f4e3b25be920c1c87cd3d95e4cd3b58c6fd02c112"
     },
     {
       "id": "section_response_field_z",
@@ -1066,11 +1132,11 @@
       "title": "响应磁场 z 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_response_field_z.png?v=97cb232ec50c",
+      "file": "../figures/section_response_field_z.png?v=a82b60d3c0bf",
       "width": 2148,
       "height": 4380,
-      "bytes": 827326,
-      "sha256": "97cb232ec50cf3d7b6e276f6563639419576e979e87ec5ed032635acbd40a765"
+      "bytes": 827561,
+      "sha256": "a82b60d3c0bf39d934d76f21ed666170b63b94611741ce7e5f4a243cbc1eb24a"
     },
     {
       "id": "section_rho",
@@ -1078,11 +1144,11 @@
       "title": "ρ 标签",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_rho.png?v=1650edaaa9a0",
+      "file": "../figures/section_rho.png?v=a01d241fc962",
       "width": 2237,
       "height": 4380,
-      "bytes": 903440,
-      "sha256": "1650edaaa9a0f79917267da42a0612f59235ce69e65e3bb1d810c0e41fd27eb3"
+      "bytes": 904636,
+      "sha256": "a01d241fc96228373f14037481bf56c0add31fd87f4cca3907180abbe15883e9"
     },
     {
       "id": "section_s",
@@ -1090,11 +1156,11 @@
       "title": "演化 s 标签",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_s.png?v=1752cb839371",
+      "file": "../figures/section_s.png?v=d0e8f920e132",
       "width": 2237,
       "height": 4380,
-      "bytes": 969794,
-      "sha256": "1752cb8393713e3253da4634e9b94a4b4fbff4912668aa5d692b71768450dcb6"
+      "bytes": 969973,
+      "sha256": "d0e8f920e13285873e5c6f9b99b47ec2b3bc73c01108bf355248a8e4089660f8"
     },
     {
       "id": "section_speed",
@@ -1102,11 +1168,11 @@
       "title": "流速大小",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_speed.png?v=e1b4dae6823e",
+      "file": "../figures/section_speed.png?v=e6e867ef27b3",
       "width": 2148,
       "height": 4380,
-      "bytes": 923038,
-      "sha256": "e1b4dae6823e7fc61a1ad0ec02932f6a643c7512cf556a52d51ab79b58427613"
+      "bytes": 913240,
+      "sha256": "e6e867ef27b39ce03ebcf6556426c4cc69440d25679959c43d341d414b6f2c65"
     },
     {
       "id": "section_speed_change_rate",
@@ -1114,11 +1180,11 @@
       "title": "流速大小变化率",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_speed_change_rate.png?v=f30797828400",
+      "file": "../figures/section_speed_change_rate.png?v=960762a7338d",
       "width": 2159,
       "height": 4380,
-      "bytes": 710496,
-      "sha256": "f307978284005fe065b4e4752e3820326658a0b15455735329413b85f1d4b88e"
+      "bytes": 710677,
+      "sha256": "960762a7338dc477126c903752120835efe5c2d0850dca66afdeb1e5166eb33e"
     },
     {
       "id": "section_toroidal_current_density",
@@ -1126,11 +1192,11 @@
       "title": "环向电流密度 Jφ",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_toroidal_current_density.png?v=eeec3d894756",
+      "file": "../figures/section_toroidal_current_density.png?v=9cde4450b9ea",
       "width": 2237,
       "height": 4380,
-      "bytes": 1085148,
-      "sha256": "eeec3d8947560dc945d82251f243fc90bcf63c0b92127b7390fbaef74b94e60a"
+      "bytes": 1085987,
+      "sha256": "9cde4450b9ea68143c8f42a0e17038718dca1b7215ec88390b024f1b6a67f3bd"
     },
     {
       "id": "section_vacuum_field_strength",
@@ -1138,11 +1204,11 @@
       "title": "真空场强",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_vacuum_field_strength.png?v=e64883769206",
+      "file": "../figures/section_vacuum_field_strength.png?v=dba87bb5b62b",
       "width": 2148,
       "height": 4380,
-      "bytes": 761319,
-      "sha256": "e648837692067b5c9de65090e0b1b0c7a7211f61f1b324ae769b6922d06b9b0d"
+      "bytes": 762255,
+      "sha256": "dba87bb5b62b8f8bb6f919d1204db2124a3b44e2978ef1f1379ddc0faf56d299"
     },
     {
       "id": "section_velocity_change_rate",
@@ -1150,11 +1216,11 @@
       "title": "流速矢量变化率",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_velocity_change_rate.png?v=97403adef16b",
+      "file": "../figures/section_velocity_change_rate.png?v=f13d35712c36",
       "width": 2182,
       "height": 4380,
-      "bytes": 868448,
-      "sha256": "97403adef16b3877a3b6d45a417f2ac939ba81d245d3b89123c789ce02113ed5"
+      "bytes": 868509,
+      "sha256": "f13d35712c3695894f60ed729315bba1451df13922d6013352c6b98a58cd6366"
     },
     {
       "id": "section_velocity_phi",
@@ -1162,11 +1228,11 @@
       "title": "流速 phi 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_velocity_phi.png?v=be84c92cde06",
+      "file": "../figures/section_velocity_phi.png?v=cce1879edc1b",
       "width": 2148,
       "height": 4380,
-      "bytes": 691606,
-      "sha256": "be84c92cde0673fee7a03e6c7dc9d175c34bcd140690729aa1c1013bc889c6ed"
+      "bytes": 698943,
+      "sha256": "cce1879edc1b8f56b1697d9beecf3d16fab671caa393d7c8a58290d839000a30"
     },
     {
       "id": "section_velocity_r",
@@ -1174,11 +1240,11 @@
       "title": "流速 r 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_velocity_r.png?v=f767a00ac3d8",
+      "file": "../figures/section_velocity_r.png?v=17b99fcfc5c3",
       "width": 2148,
       "height": 4380,
-      "bytes": 926043,
-      "sha256": "f767a00ac3d894fdb107b512d61545bd4d3c8410012d11f28060ee7896f90981"
+      "bytes": 927674,
+      "sha256": "17b99fcfc5c34801864c920eeab4a8099e33860497796a1e17e8e5dd01497548"
     },
     {
       "id": "section_velocity_z",
@@ -1186,11 +1252,11 @@
       "title": "流速 z 分量",
       "caption": "完整第 50 步；0° / 30° / 60°，壁内 contourf + contour；叠加真实壁、计算域与初始 VMEC 参考。",
       "outer_step": 50,
-      "file": "../figures/section_velocity_z.png?v=5ac433279e13",
+      "file": "../figures/section_velocity_z.png?v=85cb24936e3a",
       "width": 2148,
       "height": 4380,
-      "bytes": 860980,
-      "sha256": "5ac433279e13ccc2ca34e7fc3fbaf821ced5beb80123a1964e2eae20c1581f3b"
+      "bytes": 862861,
+      "sha256": "85cb24936e3ac262539ade70fb2e6d425d8b8ff7aad9cfab07cf1b7c8305bcfa"
     }
   ]
 }
