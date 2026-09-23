@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NCSX HINT-wall | 结果待发布</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #193036; background: #f5f7f6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { border-bottom: 1px solid #d1dadd; padding: 1rem max(1.25rem, calc((100vw - 48rem) / 2)); }
+    a { color: #075d74; }
+    main { max-width: 48rem; margin: 0 auto; padding: 3rem 1.25rem; }
+    h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.2; margin: 0 0 1rem; }
+    h2 { font-size: 1.15rem; margin-top: 2.5rem; }
+    p, dd { line-height: 1.65; }
+    dl { display: grid; grid-template-columns: minmax(7rem, 11rem) 1fr; gap: .75rem 1rem; }
+    dt { font-weight: 650; }
+    dd { margin: 0; }
+    @media (max-width: 35rem) { dl { grid-template-columns: 1fr; gap: .2rem; } dd { margin-bottom: .7rem; } }
+  </style>
+</head>
+<body>
+  <header><a href="../Source-Code/">HINT 程序手册</a></header>
+  <main>
+    <h1>NCSX | HINT-wall</h1>
+    <p>VMEC 启动、自由压强演化、分量磁场插值。计算结果与后处理图像将在远程任务完成并核验后发布。</p>
+    <h2>运行设置</h2>
+    <dl>
+      <dt>版本</dt><dd>HINT-wall 2.3.2</dd>
+      <dt>网格</dt><dd>144 x 144 x 144</dd>
+      <dt>迭代计划</dt><dd>50 个外迭代；每步 Step-B 1000 个内步</dd>
+      <dt>壁面条件</dt><dd>响应场法向分量保持初始化值</dd>
+      <dt>结果状态</dt><dd>待任务完成与核验</dd>
+    </dl>
+  </main>
+</body>
+</html>
