@@ -1,0 +1,80 @@
+# W7-X EIM, HINT-debug 2.3.0 (latest debug package on 2026-09-23).
+# VMEC free-boundary initial state; no post-initial axis-pressure rescaling.
+# Vessel contour is sourced from W7-X vessel.part (ORNL-Fusion/util-library).
+# It represents the physical plasma vessel, not every in-vessel plasma-facing component.
+
+[paths]
+output_file = "run/hint_debug_w7x_eim.nc"
+vmec_wout = "inputs/wout_eim_demo_repro.nc"
+coils = "inputs/coils_hint.txt"
+vessel = "inputs/wall_physical_vessel_half_period.txt"
+
+[grid]
+nr = 144
+nz = 144
+ntor = 144
+nfp = 5
+r_min = 4.15
+r_max = 6.62
+z_min = -1.42
+z_max = 1.42
+
+[flux]
+ntheta = 181
+inverse_tolerance_m = 1e-4
+max_inverse_iterations = 500
+
+[vacuum]
+# Reference smooth-core centerline current density, as in the NCSX run.
+# This is a numerical model assumption, not a W7-X engineering measurement.
+current_density_a_mm2 = 50.0
+quadrature_tolerance = 1e-5
+
+[wall]
+# Source vessel.part rounds individual point coordinates to about 10 micrometres.
+# The builder symmetrizes only the two terminal cuts after this check.
+periodic_closure_rtol = 2e-6
+minimum_exterior_layers = 3
+
+[profiles]
+source = "vmec"
+pressure_scale = 1.0
+
+[solver]
+mode = "initial"
+start_point = "vmec"
+scale_after = false
+backend = "gpu"
+engine = "jax"
+magnetic_interpolation = "component"
+outer_steps = 50
+save_every = 1
+axis_seed_r_m = 6.045165700955489
+axis_seed_z_m = 0.0
+axis_residual_tolerance_scale = 100.0
+
+[solver.step_a]
+max_step = 0.002
+trace_length = 10.0
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[solver.step_b]
+inner_steps = 1000
+time_step = 0.001
+resistivity = 1e-4
+eta1 = 0.0
+viscosity = 1e-8
+kdivb = 1e-4
+divergence_projection_iterations = 0
+smoothing_every = 1
+reference_every = 1000
+diagnostics_every = 100
+preconditioner_smoothing_passes = 10
+preconditioner_b_critical = 1.0
+preconditioner_j_low = 4.0
+preconditioner_j_high = 8.0
+
+[output]
+compression_level = 4
+store_stepb_diagnostics = true

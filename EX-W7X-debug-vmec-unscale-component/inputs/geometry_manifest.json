@@ -1,0 +1,63 @@
+{
+  "coils": {
+    "physical_coils": 70,
+    "group_counts": {
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10,
+      "5": 10,
+      "6": 10,
+      "7": 10
+    },
+    "turn_factors": {
+      "1": 108.0,
+      "2": 108.0,
+      "3": 108.0,
+      "4": 108.0,
+      "5": 108.0,
+      "6": 36.0,
+      "7": 36.0
+    },
+    "signed_current_a_per_coil": {
+      "1": 1454760.0,
+      "2": 1454760.0,
+      "3": 1454760.0,
+      "4": 1454760.0,
+      "5": 1454760.0,
+      "6": 0.0,
+      "7": 0.0
+    },
+    "nonzero_coils": 50,
+    "names_unique": true
+  },
+  "wall": {
+    "source": "ORNL-Fusion/util-library/matlab/bfield_library_jdl/W7X/vessel.part",
+    "source_commit": "803cec6866ddf4b39507f9640afa3d1af230f1d1",
+    "physical_extent": "plasma vessel contour; excludes detailed plasma-facing components",
+    "nfp": 5,
+    "stellarator_symmetric": true,
+    "toroidal_planes": 21,
+    "poloidal_points": 72,
+    "r_range_m": [
+      4.29765,
+      6.46617
+    ],
+    "z_range_m": [
+      -1.28295,
+      1.28295
+    ],
+    "lcfs_outside_count_by_plane": [],
+    "sampled_lcfs_wall_point_distance_min_m": 0.11757683427310314,
+    "full_period_symmetry_difference_max_m": 1.0049875620747054e-05
+  },
+  "extcur_a": [
+    13470.0,
+    13470.0,
+    13470.0,
+    13470.0,
+    13470.0,
+    0.0,
+    0.0
+  ]
+}

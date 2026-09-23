@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>W7-X EIM | HINT-debug 输入几何</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}
+  </script>
+  <script defer src="./vendor/lucide.min.js"></script>
+  <script type="module" src="./assets/viewer.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#data">跳转到数据来源</a>
+  <header class="site-header">
+    <a class="wordmark" href="../Source-Code/" title="返回 HINT 程序手册">HINT <span>/ W7-X</span></a>
+    <span class="case-mark">EIM 自由边界 VMEC · HINT-debug 2.3.0</span>
+    <a class="header-link" href="#data">输入与来源 <i data-lucide="arrow-down-right" aria-hidden="true"></i></a>
+  </header>
+
+  <main>
+    <section class="viewer" aria-label="W7-X 线圈和等离子体 LCFS 三维交互图">
+      <canvas id="scene" aria-label="可旋转的线圈和最后闭合磁面三维图"></canvas>
+      <div class="viewer-title">
+        <div class="eyebrow">输入几何 · 五个场周期</div>
+        <h1>Wendelstein 7-X</h1>
+        <p>复现的 VMEC 最后闭合磁面与线圈中心线</p>
+      </div>
+      <div class="view-modes" role="group" aria-label="观察方向">
+        <button type="button" class="selected" data-view="iso" aria-pressed="true">斜视</button>
+        <button type="button" data-view="top" aria-pressed="false">俯视</button>
+        <button type="button" data-view="side" aria-pressed="false">侧视</button>
+      </div>
+      <div class="load-status" id="load-status" role="status">正在载入几何...</div>
+      <div class="scene-tools">
+        <button type="button" class="icon-button" id="reset-view" title="重置视角" aria-label="重置视角"><i data-lucide="rotate-ccw" aria-hidden="true"></i></button>
+        <label class="check"><input type="checkbox" id="show-lcfs" checked> LCFS</label>
+        <label class="check"><input type="checkbox" id="show-idle" checked> 未通电线圈</label>
+        <label class="check"><input type="checkbox" id="auto-rotate"> 自动旋转</label>
+        <label class="opacity-control" for="surface-opacity">磁面透明度 <input type="range" id="surface-opacity" min="20" max="90" value="58"></label>
+      </div>
+      <aside class="legend" aria-label="线圈电流图例">
+        <div class="legend-title">等效回路电流 <em>|I|</em></div>
+        <div class="legend-unit">MA·turn / model loop</div>
+        <div class="legend-row"><span class="swatch powered"></span><strong>1.455</strong><span>50 条非平面</span></div>
+        <div class="legend-row"><span class="swatch idle"></span><strong>0</strong><span>20 条平面</span></div>
+        <div class="legend-row lcfs-row"><span class="swatch surface"></span><strong>LCFS</strong><span>VMEC s = 1</span></div>
+      </aside>
+    </section>
+
+    <section class="data-section" id="data">
+      <div class="section-label">CASE / W7-X EIM</div>
+      <div class="section-grid">
+        <div>
+          <h2>计算输入</h2>
+          <p>平衡由 W7-X EIM 的自由边界 VMEC 配置复现。HINT-debug 使用完整环向线圈、物理真空容器轮廓和矩形 R-Z 计算域；该三维图不包含演化场、壁法向场或收敛结论。</p>
+          <dl class="facts">
+            <div><dt>场周期</dt><dd>5</dd></div>
+            <div><dt>线圈</dt><dd>70 条闭合中心线，50 条通电</dd></div>
+            <div><dt>主程序</dt><dd>VMEC 启动 · 不持续缩放轴上压强</dd></div>
+            <div><dt>计算域</dt><dd>R = 4.15–6.62 m，Z = −1.42–1.42 m</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h2>下载与核对</h2>
+          <ul class="file-list">
+            <li><a href="./inputs/input.eim_demo_repro">VMEC 输入</a><span>input.eim_demo_repro</span></li>
+            <li><a href="./inputs/wout_eim_demo_repro.nc">复现的 VMEC 平衡</a><span>wout_eim_demo_repro.nc</span></li>
+            <li><a href="./inputs/coils_hint.txt">HINT 线圈</a><span>coils_hint.txt</span></li>
+            <li><a href="./inputs/wall_physical_vessel_half_period.txt">HINT 壁轮廓</a><span>wall_physical_vessel_half_period.txt</span></li>
+            <li><a href="./main.toml">HINT 主程序配置</a><span>main.toml</span></li>
+            <li><a href="./inputs/README.md">数据与几何来源</a><span>README.md</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="source-note">物理容器轮廓来自 <a href="https://github.com/ORNL-Fusion/util-library/blob/803cec6866ddf4b39507f9640afa3d1af230f1d1/matlab/bfield_library_jdl/W7X/vessel.part">ORNL-Fusion 的 W7-X vessel.part</a>。它不含所有偏滤器及面向等离子体部件，不能代表完整第一壁 CAD。线圈可视化的管径仅为显示效果，不代表真实导体截面。</p>
+    </section>
+  </main>
+  <footer><span>W7-X EIM / input geometry</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

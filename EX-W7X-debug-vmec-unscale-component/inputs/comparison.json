@@ -1,0 +1,252 @@
+{
+  "reference": "wout_EIM_5_c_para_reference.nc",
+  "reproduced": "wout_eim_demo_repro.nc",
+  "scalars": {
+    "ier_flag": {
+      "reference": 0,
+      "reproduced": 0
+    },
+    "lfreeb__logical__": {
+      "reference": 1,
+      "reproduced": 1
+    },
+    "lasym__logical__": {
+      "reference": 0,
+      "reproduced": 0
+    },
+    "nfp": {
+      "reference": 5,
+      "reproduced": 5
+    },
+    "ns": {
+      "reference": 99,
+      "reproduced": 99
+    },
+    "mpol": {
+      "reference": 12,
+      "reproduced": 12
+    },
+    "ntor": {
+      "reference": 12,
+      "reproduced": 12
+    },
+    "niter": {
+      "reference": 2674,
+      "reproduced": 921
+    },
+    "fsqr": {
+      "reference": 9.97153493161187e-12,
+      "reproduced": 9.991895733203442e-12
+    },
+    "fsqz": {
+      "reference": 5.091784444831475e-12,
+      "reproduced": 4.480225112050286e-12
+    },
+    "fsql": {
+      "reference": 1.6280059517110133e-12,
+      "reproduced": 1.301780194436455e-12
+    },
+    "betatotal": {
+      "reference": 0.04966432439616247,
+      "reproduced": 0.04963291302739113
+    },
+    "betaxis": {
+      "reference": 0.10523797776546567,
+      "reproduced": 0.10515709757496296
+    },
+    "betapol": {
+      "reference": 0.5723915399476831,
+      "reproduced": 0.5725001200755323
+    },
+    "betator": {
+      "reference": 0.05438293296358678,
+      "reproduced": 0.054344292938730186
+    },
+    "Rmajor_p": {
+      "reference": 5.565329279868078,
+      "reproduced": 5.563936142945443
+    },
+    "Aminor_p": {
+      "reference": 0.5507662049430037,
+      "reproduced": 0.5506753755986743
+    },
+    "volume_p": {
+      "reference": 33.32385025112661,
+      "reproduced": 33.30452096693205
+    },
+    "b0": {
+      "reference": -2.290725724256678,
+      "reproduced": -2.291582104689211
+    },
+    "ctor": {
+      "reference": 5.409208185523931e-11,
+      "reproduced": -1.791644090032296e-09
+    }
+  },
+  "profiles": {
+    "presf": {
+      "reference_axis": 230000.0,
+      "reproduced_axis": 230000.0,
+      "reference_mid": 115000.0,
+      "reproduced_mid": 115000.00000000001,
+      "reference_edge": -1.3027988197184e-11,
+      "reproduced_edge": 2.898943069042268e-11,
+      "rms_difference": 1.746994137053783e-11,
+      "relative_rms": 7.595626682842534e-17,
+      "max_abs_difference": 5.820766091346741e-11
+    },
+    "iotaf": {
+      "reference_axis": 0.8772128893250772,
+      "reproduced_axis": 0.8762825045236737,
+      "reference_mid": 0.9017990154015436,
+      "reproduced_mid": 0.8993711211617665,
+      "reference_edge": 0.9660390612026238,
+      "reproduced_edge": 0.9643472264996548,
+      "rms_difference": 0.002084711237412464,
+      "relative_rms": 0.0021579989061904013,
+      "max_abs_difference": 0.0025313404745679335
+    },
+    "jcurv": {
+      "reference_axis": 3.372561243737875e-10,
+      "reproduced_axis": 5.411360395545567e-10,
+      "reference_mid": 6.995063507535682e-10,
+      "reproduced_mid": 1.4729046576625592e-08,
+      "reference_edge": -2.808811491980275e-08,
+      "reproduced_edge": -9.469880692204743e-08,
+      "rms_difference": 1.5431017506736766e-08,
+      "relative_rms": 0.4233991968614712,
+      "max_abs_difference": 6.661069200224468e-08
+    },
+    "buco": {
+      "reference_axis": 0.0,
+      "reproduced_axis": 0.0,
+      "reference_mid": -5.5398381996199276e-17,
+      "reproduced_mid": 2.0057740190981832e-17,
+      "reference_edge": -3.656103778803191e-17,
+      "reproduced_edge": -1.1167282376600696e-17,
+      "rms_difference": 1.338408952093393e-16,
+      "relative_rms": 0.4347616564439693,
+      "max_abs_difference": 4.975842744597239e-16
+    },
+    "bvco": {
+      "reference_axis": 0.0,
+      "reproduced_axis": 0.0,
+      "reference_mid": -14.204287158006606,
+      "reproduced_mid": -14.204491425272996,
+      "reference_edge": -14.54427762731025,
+      "reproduced_edge": -14.544306799076825,
+      "rms_difference": 0.0002385520595476951,
+      "relative_rms": 1.6401781213235256e-05,
+      "max_abs_difference": 0.00042499244284854854
+    },
+    "phi": {
+      "reference_axis": -0.0,
+      "reproduced_axis": -0.0,
+      "reference_mid": -1.1025000000000003,
+      "reproduced_mid": -1.1024999999999974,
+      "reference_edge": -2.2049999999999965,
+      "reproduced_edge": -2.204999999999994,
+      "rms_difference": 2.368122495443626e-15,
+      "relative_rms": 1.0739784559835057e-15,
+      "max_abs_difference": 3.1086244689504383e-15
+    },
+    "am": {
+      "reference_axis": 230000.0,
+      "reproduced_axis": 230000.0,
+      "reference_mid": 0.0,
+      "reproduced_mid": 0.0,
+      "reference_edge": 0.0,
+      "reproduced_edge": 0.0,
+      "rms_difference": 0.0,
+      "relative_rms": 0.0,
+      "max_abs_difference": 0.0
+    },
+    "ac": {
+      "reference_axis": 0.0,
+      "reproduced_axis": 0.0,
+      "reference_mid": 0.0,
+      "reproduced_mid": 0.0,
+      "reference_edge": 0.0,
+      "reproduced_edge": 0.0,
+      "rms_difference": 0.0,
+      "relative_rms": null,
+      "max_abs_difference": 0.0
+    },
+    "extcur": {
+      "reference_axis": 13470.0,
+      "reproduced_axis": 13470.0,
+      "reference_mid": 13470.0,
+      "reproduced_mid": 13470.0,
+      "reference_edge": 0.0,
+      "reproduced_edge": 0.0,
+      "rms_difference": 0.0,
+      "relative_rms": 0.0,
+      "max_abs_difference": 0.0
+    }
+  },
+  "lcfs": {
+    "phi_period_fraction_0": {
+      "phi_rad": 0.0,
+      "reference_R_range_m": [
+        5.507916953161011,
+        6.276941048187682
+      ],
+      "result_R_range_m": [
+        5.5062586034406245,
+        6.275782816192323
+      ],
+      "reference_Z_range_m": [
+        -0.9259919017493307,
+        0.9259919017493307
+      ],
+      "result_Z_range_m": [
+        -0.9255024624008483,
+        0.9255024624008482
+      ],
+      "boundary_displacement_rms_m": 0.002163658606729926,
+      "boundary_displacement_max_m": 0.003677281835161941
+    },
+    "phi_period_fraction_0.25": {
+      "phi_rad": 0.3141592653589793,
+      "reference_R_range_m": [
+        4.925734812581192,
+        6.125039459579536
+      ],
+      "result_R_range_m": [
+        4.924432498227953,
+        6.123686235333219
+      ],
+      "reference_Z_range_m": [
+        -0.5727952075867258,
+        0.9432093792309793
+      ],
+      "result_Z_range_m": [
+        -0.5709780421970455,
+        0.9414729435131686
+      ],
+      "boundary_displacement_rms_m": 0.002261567556127681,
+      "boundary_displacement_max_m": 0.0033437472125516943
+    },
+    "phi_period_fraction_0.5": {
+      "phi_rad": 0.6283185307179586,
+      "reference_R_range_m": [
+        4.650826383268857,
+        6.211367604888382
+      ],
+      "result_R_range_m": [
+        4.64955998351379,
+        6.20431327012526
+      ],
+      "reference_Z_range_m": [
+        -0.5163278963195019,
+        0.516327896319502
+      ],
+      "result_Z_range_m": [
+        -0.5149545522043215,
+        0.5149545522043215
+      ],
+      "boundary_displacement_rms_m": 0.004280243819145175,
+      "boundary_displacement_max_m": 0.0070543347631222275
+    }
+  }
+}

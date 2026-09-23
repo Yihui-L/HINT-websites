@@ -8,14 +8,15 @@ HINT 的独立公开网站。源码和网站分开维护；HINT-docs 源码仓�
 | `EX-NCSX-debug-vmec-unscale-component/` | NCSX HINT-debug 2.3.0，VMEC启动，第50步结果 | [查看VMEC启动结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
 | `EX-NCSX-debug-zero-unscale-component/` | NCSX HINT-debug 2.3.0，zero启动，20步压强攀升，第70步结果及初始真空场 | [查看zero启动结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/) |
 | `EX-NCSX-wall-vmec-unscale-component/` | NCSX HINT-wall 2.3.2，VMEC启动；完成第12步，第13步中止，提供演化曲线和边界诊断 | [查看演化结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-wall-vmec-unscale-component/) |
+| `EX-W7X-debug-vmec-unscale-component/` | W7-X EIM HINT-debug 2.3.0，真实容器输入、复现的自由边界 VMEC 平衡与线圈/LCFS 三维交互图 | [查看输入几何](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/) |
 
-除 Git 管理目录外，仓库保留以上四个一级文件夹。各有独立入口，不依赖其他网站的资源文件。根目录仅保留 `.nojekyll` 和本 README，分别用于静态发布配置和仓库说明。
+除 Git 管理目录外，仓库保留以上五个一级文件夹。各有独立入口，不依赖其他网站的资源文件。根目录仅保留 `.nojekyll` 和本 README，分别用于静态发布配置和仓库说明。
 
 ## 内容边界
 
 - `Source-Code/` 包含正文、参数表、通用模板、资源、构建与校验工具。文件夹名称不表示其中包含求解器源码。
 - 实例目录分别维护图片、结果说明和可发布的小型数据。debug VMEC实例保留第0步、第50步及0-50步历史；debug zero实例展示初始真空场、第70步及0-70步历史，记录第21步检查点续算过程；wall VMEC实例记录0-12步演化及第13步中止原因，不代表收敛平衡。网站状态是静态发布快照，不是实时任务监控。
-- 不上传 wout、mgrid、计算 NetCDF、凭据、运行缓存或私有仓库 Git 历史。
+- NCSX 算例不上传 wout、mgrid、计算 NetCDF、凭据、运行缓存或私有仓库 Git 历史。W7-X 算例按用户要求单独发布复现的 VMEC `wout` 与输入；仍不发布 HINT 运行缓存或计算 NetCDF。
 - 初始化磁面图和达到预定外迭代步数均不等价于已经验证力平衡收敛。
 
 ## 维护与发布
