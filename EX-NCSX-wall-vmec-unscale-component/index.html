@@ -3,36 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NCSX HINT-wall | 结果待发布</title>
+  <title>NCSX HINT-wall | 第 0–12 步演化</title>
   <style>
     :root { color-scheme: light; font-family: system-ui, sans-serif; color: #193036; background: #f5f7f6; }
     * { box-sizing: border-box; }
     body { margin: 0; }
-    header { border-bottom: 1px solid #d1dadd; padding: 1rem max(1.25rem, calc((100vw - 48rem) / 2)); }
+    header { border-bottom: 1px solid #d1dadd; padding: 1rem max(1.25rem, calc((100vw - 64rem) / 2)); }
     a { color: #075d74; }
-    main { max-width: 48rem; margin: 0 auto; padding: 3rem 1.25rem; }
+    main { max-width: 64rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
     h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.2; margin: 0 0 1rem; }
-    h2 { font-size: 1.15rem; margin-top: 2.5rem; }
-    p, dd { line-height: 1.65; }
-    dl { display: grid; grid-template-columns: minmax(7rem, 11rem) 1fr; gap: .75rem 1rem; }
+    h2 { font-size: 1.2rem; margin-top: 2.5rem; }
+    p, dd, li { line-height: 1.65; }
+    .status { border-left: 4px solid #aa5937; padding: .75rem 1rem; background: #fff6ef; }
+    figure { margin: 1.5rem 0; }
+    figcaption { line-height: 1.55; font-weight: 600; margin-bottom: .7rem; }
+    figure img { display: block; width: 100%; height: auto; border: 1px solid #d1dadd; }
+    dl { display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: .75rem 1rem; }
     dt { font-weight: 650; }
     dd { margin: 0; }
+    code { overflow-wrap: anywhere; }
     @media (max-width: 35rem) { dl { grid-template-columns: 1fr; gap: .2rem; } dd { margin-bottom: .7rem; } }
   </style>
 </head>
 <body>
-  <header><a href="../Source-Code/">HINT 程序手册</a></header>
+  <header><a href="../Source-Code/">HINT 程序手册</a> · <a href="https://github.com/Yihui-L/HINT-websites">仓库目录</a></header>
   <main>
-    <h1>NCSX | HINT-wall</h1>
-    <p>VMEC 启动、自由压强演化、分量磁场插值。计算结果与后处理图像将在远程任务完成并核验后发布。</p>
+    <h1>NCSX | HINT-wall 演化诊断</h1>
+    <p class="status"><strong>运行未达到预定 50 步。</strong>外迭代 1–12 完成；第 13 步 Step-B 的第一壁 RK 阶段离散散度约束检查失败并中止。第 13 步没有完整结果，以下曲线不是收敛平衡的证据。</p>
+    <figure>
+      <figcaption>第 0–12 步的演化曲线。第 13 步虚线只标识中止位置，没有数据点。</figcaption>
+      <img src="figures/evolution_0_12.png" alt="第 0–12 步归一化力残差、能量、磁场、流速、响应场散度、壁上法向场误差和峰值压强的演化曲线" width="1800" height="3240">
+    </figure>
+    <p>完整数值见<a href="Documents/docs-data/history_0_12.json">逐步数据 JSON</a>；<a href="tools/plot_evolution.py">绘图及原始壁面场审计脚本</a>可复核曲线。图中全域响应场的自动微分散度与四阶差分散度是不同诊断，不能混为同一物理量。</p>
+    <h2>报错与判断</h2>
+    <p>最后的日志为 <code>first-wall RK-stage divergence constraint failed: residual/allowed=inf, wall_increment_relative_tolerance=1.000000e-05, iteration_budget=576; the step is rejected</code>。这表示壁面 RK 阶段约束未通过，求解器拒绝该步；<code>inf</code> 是报告的失败比值，不能解释为已测得无限大的物理散度。日志没有保存失败阶段的完整场，因此尚不能确定最初触发误差的算子。</p>
+    <p>在此前数步，近壁总场最大值从第 8 步的 2.362 T 增长到第 12 步的 10.726 T，最大流速从 9.11 增至 297.03 m/s，归一化力残差 RMS 从 0.0662 增至 1.5544。第 12 步最大场点离壁约 4 mm。这是逐渐失稳的数值表现；数值不稳定是可能原因，但尚不能断言为真实 MHD 不稳定或单一边界算子的错误。</p>
+    <h2>第一壁法向场</h2>
+    <p><code>vmec</code> 启动时冻结的是非零初始响应场的 <code>B1·n</code>。独立地从第 0–12 步保存的原始响应场、壁面 ghost/source 几何重建 72,930 个壁面采样值，不重新施加边界条件，测得初始 <code>max|B1·n| = 0.0717937951 T</code>；全程最大冻结误差 <code>max|B1·n(t)-B1·n(0)| = 1.1744e-15 T</code>。所以在已完成并保存的步数里，法向磁场保持良好；这不约束切向磁场增长，也不能证明未保存的第 13 步满足约束。</p>
     <h2>运行设置</h2>
     <dl>
-      <dt>版本</dt><dd>HINT-wall 2.3.2</dd>
+      <dt>版本</dt><dd>HINT-wall 2.3.2；源码提交 <code>8609e184e1d7b8bcabab662ddf1fb170243ded60</code></dd>
+      <dt>启动与压强</dt><dd><code>initial</code>、<code>vmec</code>、<code>scale_after=false</code></dd>
+      <dt>磁场插值</dt><dd><code>component</code></dd>
       <dt>网格</dt><dd>144 x 144 x 144</dd>
-      <dt>迭代计划</dt><dd>50 个外迭代；每步 Step-B 1000 个内步</dd>
-      <dt>壁面条件</dt><dd>响应场法向分量保持初始化值</dd>
-      <dt>结果状态</dt><dd>待任务完成与核验</dd>
+      <dt>迭代计划</dt><dd>50 个外迭代；每步 Step-B 1000 个内步，实际完成 12 步</dd>
+      <dt>其他控制量</dt><dd><code>kdivb=1e-4</code>；壁面增量相对容差 <code>1e-5</code></dd>
+      <dt>结果来源</dt><dd>原始 NetCDF SHA-256 <code>e3da036e255a1629e51d1dc8e67b6fcccbec2eb6f9beddee11e38bca9f1fc257</code></dd>
     </dl>
+    <p>详细分析见<a href="README.md">实例说明</a>。此公开页面不上传原始 NetCDF、wout、mgrid 或运行缓存。</p>
   </main>
 </body>
 </html>
