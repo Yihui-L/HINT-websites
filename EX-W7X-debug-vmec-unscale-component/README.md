@@ -15,10 +15,10 @@ The site intentionally does not calculate or display `Bn`.
 - `inputs/wout_eim_demo_repro.nc` and `inputs/input.eim_demo_repro`:
   reproduced five-period free-boundary VMEC equilibrium and its input.
 - `inputs/coils.w7x`: public MAKEGRID centreline source. The converted
-  `inputs/coils_hint.txt` preserves all 70 explicit closed loops. Each loop
-  carries the equivalent ampere-turns `extcur[group] * turns[group]`: the
-  50 non-planar coils use 1,454,760 A-turns per model loop, while 20 planar
-  loops are retained at zero current. The displayed tube width is symbolic.
+  `inputs/coils_hint.txt` preserves all 70 explicit closed loops. For this
+  reproduced `wout`, each HINT loop carries `-extcur[group] * turns[group]`:
+  the 50 non-planar coils use -1,454,760 A-turns per model loop, while 20
+  planar loops remain at zero. The displayed tube width is symbolic.
 - `inputs/vessel.part`: sourced W7-X **physical plasma vessel** contours,
   full field period, source units centimetres and degrees. The HINT conversion
   is `inputs/wall_physical_vessel_half_period.txt`, using only the first
@@ -56,6 +56,16 @@ included solely for reproducing this research example, with attribution.
 archived demo reference; they are close but not byte-identical. In particular,
 relative differences for profiles close to zero should not be mistaken for
 large absolute currents.
+
+`inputs/orientation_check.json` records why the HINT current direction differs
+from the public centreline file's positive MAKEGRID reference: the regenerated
+RAW mgrid has about +2.43 T near the axis, while this signed VMEC wout has
+`b0=-2.29` T. At 64 LCFS points, reversing only the coil-field sign reduces
+the vector field jump from 1.985 to 0.0155 relative to the VMEC field norm.
+The original geometry and wout are retained unchanged. This is a case-specific
+alignment, not a reconstruction of the unavailable archived demo mgrid or a
+claim about W7-X engineering current polarity. Residual LCFS mismatch is
+diagnosed, not artificially smoothed.
 
 ## Site implementation
 

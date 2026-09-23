@@ -6,13 +6,14 @@ free-boundary VMEC input and wout, and the HINT-debug text inputs.
 | File | Meaning |
 |---|---|
 | `coils.w7x` | Public MAKEGRID filament centrelines, 70 physical coils. |
-| `coils_hint.txt` | Same explicit closed centrelines, converted to HINT_COILS 1. Each current is `extcur * turns` in equivalent ampere-turns. |
+| `coils_hint.txt` | Same explicit closed centrelines, converted to HINT_COILS 1. For this signed wout, each current is `-extcur * turns` in equivalent ampere-turns. |
 | `input.eim_demo_repro` | VMEC free-boundary input reconstructed from the archived W7-X EIM wout. |
 | `wout_eim_demo_repro.nc` | Converged reproduced free-boundary equilibrium, not a HINT result. |
 | `vessel.part` | ORNL-Fusion W7-X physical plasma-vessel contours; source data are centimetres and degrees. |
 | `wall_physical_vessel_half_period.txt` | HINT_WALL 1 conversion of the first half-period of `vessel.part`, metres and radians. |
 | `comparison.json` | Reproduced versus archived VMEC-equilibrium comparison. |
 | `geometry_manifest.json` | Coil-current and vessel-geometry checks. |
+| `orientation_check.json` | 64-point LCFS field-jump comparison for both current directions. |
 
 The vessel source is [ORNL-Fusion/util-library, commit 803cec6](https://github.com/ORNL-Fusion/util-library/blob/803cec6866ddf4b39507f9640afa3d1af230f1d1/matlab/bfield_library_jdl/W7X/vessel.part).
 Its accompanying [reader](https://github.com/ORNL-Fusion/util-library/blob/803cec6866ddf4b39507f9640afa3d1af230f1d1/matlab/bfield_library_jdl/W7X/load_W7X_vessel.m)

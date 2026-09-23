@@ -2,6 +2,9 @@
 # VMEC free-boundary initial state; no post-initial axis-pressure rescaling.
 # Vessel contour is sourced from W7-X vessel.part (ORNL-Fusion/util-library).
 # It represents the physical plasma vessel, not every in-vessel plasma-facing component.
+# The HINT coil-current direction is reversed relative to the public MAKEGRID
+# centreline point order to match this reproduced wout's negative toroidal field.
+# See inputs/orientation_check.json; the original source coils are unchanged.
 
 [paths]
 output_file = "run/hint_debug_w7x_eim.nc"

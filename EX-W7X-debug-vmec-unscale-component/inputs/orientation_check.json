@@ -1,0 +1,19 @@
+{
+  "method": "same 64 VMEC LCFS samples, same B virtual-casing surface quadrature, analytic smooth-core coil B; only the coil-field sign changes",
+  "wout_phiedge_wb": -2.2049999999999965,
+  "wout_b0_t": -2.291582104689211,
+  "regenerated_raw_mgrid_bphi_near_axis_t": 2.430618767593965,
+  "orientation_plus": {
+    "normal_jump_mean_abs_t": 0.0325122801421739,
+    "normal_jump_max_abs_t": 0.10873825494248823,
+    "vector_jump_relative_l2": 1.9852193394504383
+  },
+  "orientation_minus": {
+    "normal_jump_mean_abs_t": 0.0033348104698098964,
+    "normal_jump_max_abs_t": 0.019442729210396248,
+    "vector_jump_relative_l2": 0.015512629066824594
+  },
+  "casing_quadrature_max_error_t": 2.9235856258459933e-9,
+  "hint_current_orientation_sign": -1,
+  "note": "This is a case-specific alignment of the HINT coil field with the signed reproduced wout, not a claim about the unavailable archived mgrid or engineering coil polarity. No LCFS field values were corrected."
+}
