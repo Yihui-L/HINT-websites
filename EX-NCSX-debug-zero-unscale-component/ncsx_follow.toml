@@ -1,14 +1,77 @@
-# Example only; do not run concurrently with the initial writer.
-# Current schema 22 restores B0/B/p/v/s and source/wall data from the same file.
+# Continue the completed outer step 21 through step 70 in the same NetCDF.
 [paths]
 output_file = "run/hint_debug_ncsx_zero.nc"
+vmec_wout = "inputs/wout_ncsx_c09r00_free_nonnegative.nc"
+coils = "inputs/ncsx_coils.txt"
+vessel = "inputs/NCSX_physical_vessel_half_period.txt"
+
+[grid]
+nr = 144
+nz = 144
+ntor = 144
+nfp = 3
+r_min = 0.35
+r_max = 2.5
+z_min = -1.1
+z_max = 1.1
+
+[flux]
+ntheta = 181
+inverse_tolerance_m = 0.0001
+max_inverse_iterations = 500
+
+[vacuum]
+current_density_a_mm2 = 50.0
+quadrature_tolerance = 1e-5
+
+[wall]
+periodic_closure_rtol = 1e-10
+minimum_exterior_layers = 3
+
+[profiles]
+source = "vmec"
+pressure_scale = 1.0
+
 [solver]
 mode = "follow"
+start_point = "zero"
+scale_after = false
+# The checkpoint already contains completed=20 and scale=1; do not reramp.
+pressure_ramp_iterations = 20
 backend = "gpu"
 engine = "jax"
-outer_steps = 200
+magnetic_interpolation = "component"
+# Follow counts additional iterations: 21 + 49 = 70.
+outer_steps = 49
 save_every = 1
-# Omitted solver controls inherit the checkpoint, including interpolation and scale_after=false.
+axis_seed_r_m = 1.57
+axis_seed_z_m = 0.0
+# Multiplier giving acceptance 1e-4 in normalized length at the saved axis.
+# The existing grid/axis-dependent acceptance formula remains unchanged.
+axis_residual_tolerance_scale = 902.9238869591517
+
+[solver.step_a]
+max_step = 0.002
+trace_length = 10.0
+relative_tolerance = 1e-8
+absolute_tolerance = 1e-10
+
+[solver.step_b]
+inner_steps = 1000
+time_step = 0.001
+resistivity = 0.0001
+eta1 = 0.0
+viscosity = 1e-8
+kdivb = 1e-4
+divergence_projection_iterations = 0
+smoothing_every = 1
+reference_every = 1000
+diagnostics_every = 100
+preconditioner_smoothing_passes = 10
+preconditioner_b_critical = 1.0
+preconditioner_j_low = 4.0
+preconditioner_j_high = 8.0
+
 [output]
 compression_level = 4
 store_stepb_diagnostics = true

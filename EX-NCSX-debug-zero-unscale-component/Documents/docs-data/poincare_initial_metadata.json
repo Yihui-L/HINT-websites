@@ -1,0 +1,89 @@
+{
+  "source": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/hint_debug_ncsx_zero.nc",
+  "outer_step": 0,
+  "turns": 500,
+  "nfp": 3,
+  "launch_phi_rad": 0,
+  "seeds": 138,
+  "radial_seeds": 138,
+  "wall_mesh_seeds": 0,
+  "rejected_seeds": 0,
+  "interpolation": "component",
+  "backend": "gpu",
+  "engine": "jax",
+  "max_step_phi": 0.016362461737446838,
+  "rtol": 1e-08,
+  "atol": 1e-10,
+  "elapsed_tracing_s": 63.23438427224755,
+  "sections": [
+    {
+      "phi_degrees": 0.0,
+      "points": 7683
+    },
+    {
+      "phi_degrees": 29.999999999999996,
+      "points": 7808
+    },
+    {
+      "phi_degrees": 59.99999999999999,
+      "points": 7739
+    }
+  ],
+  "final_status_counts": {
+    "0": 5,
+    "1": 133,
+    "2": 0,
+    "3": 0
+  },
+  "outputs": [
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain.png",
+      "size_bytes": 896004
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain.svg",
+      "size_bytes": 3464509
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain.pdf",
+      "size_bytes": 466542
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_000.png",
+      "size_bytes": 442381
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_000.svg",
+      "size_bytes": 1171801
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_000.pdf",
+      "size_bytes": 172179
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_030.png",
+      "size_bytes": 394755
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_030.svg",
+      "size_bytes": 1182078
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_030.pdf",
+      "size_bytes": 170577
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_060.png",
+      "size_bytes": 341670
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_060.svg",
+      "size_bytes": 1171413
+    },
+    {
+      "file": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z/initial-poincare-component/initial_poincare_domain_phi_060.pdf",
+      "size_bytes": 167698
+    }
+  ],
+  "elapsed_total_s": 72.16031801700592
+}

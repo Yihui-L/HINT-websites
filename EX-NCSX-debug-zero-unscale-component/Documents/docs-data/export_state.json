@@ -1,0 +1,17 @@
+{
+  "run": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z",
+  "version": "2.3.0",
+  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "completed": [
+    "initial_poincare",
+    "final_poincare",
+    "static",
+    "summary",
+    "precision",
+    "history_iota",
+    "existing"
+  ],
+  "phase": "existing",
+  "status": "complete",
+  "updated_utc": "2026-09-22T01:55:43.026273+00:00"
+}

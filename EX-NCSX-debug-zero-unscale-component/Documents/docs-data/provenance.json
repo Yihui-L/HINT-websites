@@ -1,0 +1,50 @@
+{
+  "version": "2.3.0",
+  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "outer_step": 70,
+  "run_directory": "/root/autodl-tmp/HINT/ncsx-debug-zero-b-2.3.0-component-20260921T094915Z",
+  "plotting_library": "installed hint_debug_plotting 2.3.0",
+  "completed_utc": "2026-09-21T16:04:24.573601+00:00",
+  "completed_beijing": "2026-09-22T00:04:24.573601+08:00",
+  "postprocess_warnings": [
+    "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=1.093e-07, strict=1.393e-08",
+    "magnetic-axis fixed point met the grid-aware tolerance but not the strict nonlinear tolerance: residual=2.989e-08, strict=1.480e-08"
+  ],
+  "input_checksums": {
+    "ncsx_main.toml": {
+      "sha256": "0ecf23894f0c49837f21d9d853090398c65e0ecf60c52d6685c5e3a40a7bd2f4",
+      "bytes": 1936
+    },
+    "ncsx_follow.toml": {
+      "sha256": "8eb65f7cb0213291343c825b7fa264089a48c382a774562c35b886237cae9f0e",
+      "bytes": 1707
+    },
+    "ncsx_post.toml": {
+      "sha256": "38775d5909f68afc0bbcd255abe70a15cfedfa01cb1d9f7d5706a7afe8c65c66",
+      "bytes": 809
+    },
+    "inputs/ncsx_coils.txt": {
+      "sha256": "60373fec15c70b0b2ea4a7c25f20a4ceb749abbe9ecd55bb09f1c21d67935c2e",
+      "bytes": 351283
+    },
+    "inputs/NCSX_physical_vessel_half_period.txt": {
+      "sha256": "b21c015e188459f7b5d0bcfec1f3570a621c915baeeb1a6a65c4d2c4e2033814",
+      "bytes": 961443
+    }
+  },
+  "not_published_source_checksums": {
+    "wout_ncsx_c09r00_free_nonnegative.nc": {
+      "sha256": "f479637de1aa77cba5a58c679fa62deced67864ab6ed493bacf4916492ebec25",
+      "bytes": 4222792
+    },
+    "hint_debug_ncsx_zero.nc": {
+      "sha256": "9dd75d346ff7af8a115264d5caa8ff98c4693dd2ce37f7a94779857da0ade0c0",
+      "bytes": 8804791723
+    }
+  },
+  "input_files_copied_byte_for_byte": true,
+  "follow_from": 21,
+  "follow_additional_steps": 49,
+  "pressure_ramp_iterations": 20,
+  "source_equilibrium_unmodified": true
+}

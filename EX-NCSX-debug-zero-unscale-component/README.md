@@ -1,20 +1,30 @@
-# NCSX: HINT-debug / Zero / Unscale / Component
+# NCSX: HINT-debug 2.3.0 / Zero / Unscale / Component
 
-[独立网站](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/)
+[结果网站](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/)
 
-本目录用于第二个NCSX实例，尚未发布结果图片。状态是提交时的静态记录，不是实时监控。
+本页只展示本次零启动任务的初始化、第70步结果和0–70步历史。源码未改动。完成70步不等于力平衡已收敛。
 
-- HINT-debug 2.3.0，源码提交 `0495705cb52feb85e8db2f31f0cc91034197a01b`。
-- `mode="initial"`，`start_point="zero"`，`scale_after=false`，`magnetic_interpolation="component"`。
-- 外迭代200步，每个Step-B 1000内步，压强攀升20步；攀升完成后不再强制放缩峰值。
-- 144×144×144网格，nfp=3，GPU/JAX；其余物理输入、网格和数值设置与前一VMEC启动例子相同。
-- 响应场从零开始，矩形R-Z边界上的响应法向场保持零；真空背景场不受该约束。
-- 第0步是真空磁场启动，不执行VMEC响应场初始化。VMEC仍提供几何标签和目标剖面。
+## 运行记录
 
-## 文件
+- 源码提交：`0495705cb52feb85e8db2f31f0cc91034197a01b`。
+- 144×144×144，nfp=3；每次Step-B 1000内步；kdivb=1e-4；GPU/JAX、1 MPI进程/1张RTX5090。
+- 初始 `mode=initial`、`start_point=zero`、`scale_after=false`、`magnetic_interpolation=component`。
+- 前20步压强攀升，后续不做轴上目标压强反馈；初始响应场B1=0，总场就是背景真空场。
+- main实际计划200步，但第22步末磁轴试探越壁导致中断，最后完整保存21步。
+- follow从第21步追加49步，总计70步；攀升状态20/20、scale=1沿用，不重新初始化。
+- follow磁轴容忍度倍率902.9238869591517，在检查点对应归一化长度约1e-4（约1.425e-4m）。这不是固定绝对容差，积分精度没有放宽。
+- 完成时间：2026-09-22T00:04:24.573601+08:00（北京时间）。
 
-`ncsx_main.toml`为实际运行配置；`ncsx_follow.toml`为未执行的续算示例；`ncsx_post.toml`为后处理配置。
-`inputs/`包含本次线圈及真实壁文本。wout、mgrid及结果NetCDF不上传。mgrid不参与本次计算，但远程原文件保留。
-本网站没有完整wout输入，不能仅凭本站文件复现。`status.json`保存版本、运行路径和输入校验和。
+## 输入与输出
 
-本目录不复用前一例图片；远程旧运行结果和缓存按用户要求清除。
+三个TOML与实际远程文件逐字节相同：main为首次输入，follow为真正执行的续算输入，post为数值后处理CLI示例（不是本网页的全部绘图参数）。线圈和真实壁为文本。wout、mgrid、大型NC与缓存不上传，只记录所用wout和输出NC的SHA-256。矩形R-Z边界约束响应场Bn=0，第一壁用于截断追踪，真空场不受该边界约束。
+
+绘图脚本位于tools，调用已安装2.3.0的hint_debug_plotting及后处理积分器；无求解器修改。重用需调整顶部算例/运行目录并提供同一输出NC和wout。tools/export_zero70.py按阶段执行并保存状态，可跳过已完成阶段。不要在主程序写入NC时执行这些脚本。
+
+## 图集
+
+全部可用二维变量、主要1D剖面、全历史统计、各类散度/耗时、密集旋转变换扫描；三截面为0°/30°/60°，叠加真实壁、计算域和适用的VMEC参考。第20步竖虚线为攀升结束，第21步点线为续算位置。初始化图是实际第0步真空场，不是VMEC总场；末态图为第70步总场。最多500整环圈，共用φ=0起点，触壁停止。PNG用于网页，庞加莱保留PDF和无损gzip压缩SVG。图注在图上方。
+
+## 诊断说明
+
+初始连续线圈源表达式AD、实际分量插值器AD、HINT网格FD4必须区分。初始响应场恒零，没有virtual-casing或LCFS拼接。低FD4响应散度不保证分量插值场无散；源AD低也不等于插值器AD低。末态高精度求导核验针对实际插值器，不是重新得到一个末态解析源场。细节、采样数、单位、归一化和哈希见Documents/docs-data。
