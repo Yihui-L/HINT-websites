@@ -3,10 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0;url=./Documents/index.html#gallery">
+  <meta name="theme-color" content="#f5f7f6">
   <title>NCSX | 完整后处理图集</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+  <script defer src="./assets/gallery.js"></script>
 </head>
 <body>
-  <p>完整的 93 张图片已整理在 <a href="./Documents/index.html#gallery">NCSX 后处理图集</a>。</p>
+  <a class="skip-link" href="#gallery">跳转到图集</a>
+  <header class="site-header">
+    <a class="wordmark" href="./">HINT <span>/ NCSX</span></a>
+    <span class="case-mark">自由边界 VMEC · HINT-debug 2.3.0</span>
+    <nav class="result-header-nav" aria-label="页面导航">
+      <a href="./">三维几何</a>
+      <a href="./results.html">重点结果</a>
+      <a href="#sections">二维截面</a>
+      <a href="#profiles">剖面</a>
+    </nav>
+  </header>
+  <main id="gallery">
+    <section class="result-intro">
+      <div class="result-inner">
+        <div class="section-label">COMPLETE FIGURE CATALOG / OUTER 0–50</div>
+        <h1>完整后处理图集</h1>
+        <p class="result-lead">本次 NCSX HINT-debug 2.3.0 的全部已发布图片：第 0 与 50 步庞加莱、二维截面、剖面与旋转变换，以及 0–50 步演化诊断。图片清单与哈希来自本次结果元数据。</p>
+        <p class="result-warning"><strong>50 步完成不等于收敛。</strong>末期力残差和动能上升，末态图片不可当作稳定力平衡。旋转变换的失败或未充分解析起点均应按图中标注解读。</p>
+        <p class="gallery-status" id="gallery-status" role="status">正在读取图片清单…</p>
+        <noscript><p class="result-copy">此图集需要 JavaScript；也可从 <a href="./Documents/docs-data/results.json">图片清单</a>查看每张 PNG 的名称和哈希。</p></noscript>
+      </div>
+    </section>
+    <section class="result-band" id="poincare"><div class="result-inner"><div class="section-label">01 / FIELD LINES</div><h2>庞加莱图</h2><p class="result-copy">第 0 步与第 50 步的起点密度不同；均含 0°、30°、60° 环向截面及初始 VMEC 磁面参考。</p><div class="figure-grid gallery-grid" data-gallery-group="poincare"></div></div></section>
+    <section class="result-band alternate" id="sections"><div class="result-inner"><div class="section-label">02 / SAVED OUTER 50</div><h2>二维截面</h2><p class="result-copy">壁内三环向截面的分布图，叠加壁、计算域和初始 VMEC 几何。空间散度图是保存网格场的数值求导，不是连续源解析散度。</p><div class="figure-grid gallery-grid" data-gallery-group="section"></div></div></section>
+    <section class="result-band" id="profiles"><div class="result-inner"><div class="section-label">03 / PROFILES</div><h2>剖面与旋转变换</h2><p class="result-copy">s 与 ρ 剖面采用截面分箱，不是严格磁面平均。旋转变换按独立起点追踪；失败和分辨率不足的起点按原图规则显示或屏蔽。</p><div class="figure-grid gallery-grid" data-gallery-group="profile"></div></div></section>
+    <section class="result-band alternate" id="convergence"><div class="result-inner"><div class="section-label">04 / HISTORY</div><h2>演化与诊断</h2><p class="result-copy">Step-B 归一化量、实际分量插值器的 JAX AD 散度、粗网格 FD4 散度及初始化连续源散度不可互相替代。</p><div class="figure-grid gallery-grid" data-gallery-group="convergence"></div></div></section>
+    <section class="result-provenance"><div class="result-inner"><div class="section-label">SOURCE / METHODS</div><h2>数据来源</h2><p>源于完整保存的第 0–50 步 HINT 输出；本站只发布图片及必要的小型元数据，不发布大型求解 NetCDF。变量定义、采样数、归一化及限制见详细文档页。</p><div class="provenance-links"><a href="./Documents/index.html#method">图像与指标说明</a><a href="./Documents/docs-data/results.json">图像清单与哈希</a><a href="./Documents/docs-data/run_summary.json">运行摘要</a><a href="./results.html">重点结果</a><a href="./">三维输入几何</a></div></div></section>
+  </main>
+  <footer><span>NCSX / completed, not converged</span><a href="../Source-Code/">HINT 程序手册</a></footer>
 </body>
 </html>
