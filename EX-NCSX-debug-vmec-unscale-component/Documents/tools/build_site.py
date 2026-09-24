@@ -179,7 +179,7 @@ def build():
 <title>NCSX · 第50步 | HINT-debug 2.2.0</title><meta name="description" content="NCSX当前50步结果：VMEC初始化、无压强再放缩、分量插值。收敛曲线、剖面、截面、庞加莱和旋转变换。">
 <link rel="stylesheet" href="assets/results.css"><script src="assets/results.js" defer></script></head><body>
 <a class="skip" href="#gallery">跳至图片</a><aside><a class="brand" href="#top">NCSX<span>HINT-debug 2.2.0 / 第 50 步</span></a>
-<p class="case-name">EX-NCSX-debug-vmec-unscale-component</p><nav aria-label="结果导航"><a class="source-link" href="../../Source-Code/">程序与使用说明</a><a href="#gallery">结果图集</a><a href="#diagnostics">末步指标</a><a href="#method">计算与统计方法</a><a href="#inputs">输入与溯源</a></nav>
+<p class="case-name">EX-NCSX-debug-vmec-unscale-component</p><nav aria-label="结果导航"><a href="../">三维输入几何</a><a href="../results.html">重点结果</a><a class="source-link" href="../../Source-Code/">程序与使用说明</a><a href="#gallery">结果图集</a><a href="#diagnostics">末步指标</a><a href="#method">计算与统计方法</a><a href="#inputs">输入与溯源</a></nav>
 <div class="case-state"><strong>50 步正常完成</strong><span>完成运行不等同于平衡收敛验收</span><dl><dt>起点</dt><dd>VMEC</dd><dt>压强反馈</dt><dd>scale_after=false</dd><dt>插值</dt><dd>component</dd><dt>边界</dt><dd>R–Z 矩形域</dd></dl></div>
 <div class="aside-links"><a href="https://github.com/Yihui-L/HINT-websites/tree/main/EX-NCSX-debug-vmec-unscale-component">GitHub 算例文件</a><a href="../README.md">算例说明</a></div></aside>
 <main id="top"><header><p class="eyebrow">HINT / NCSX RESULTS</p><h1>NCSX</h1><p class="subtitle">VMEC 初始化 · 不再放缩压强 · 分量磁场插值</p><div class="meta"><span>完整外迭代 50</span><span>144 × 144 × 144</span><span>nfp = 3</span><span>截面 0° / 30° / 60°</span><span>2026-09-21 完成（北京时间）</span></div></header>
@@ -211,7 +211,6 @@ def build():
     page=page.replace('<img id="viewer-image" alt=""><p id="viewer-caption"></p>',
                       '<p id="viewer-caption"></p><img id="viewer-image" alt="">')
     (DOCS/'index.html').write_text(page)
-    (CASE/'index.html').write_text('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=Documents/index.html"><title>NCSX 第50步结果</title><a href="Documents/index.html">查看当前 NCSX 结果</a></html>\n')
     (CASE/'figures/README.md').write_text('# 当前 NCSX 图集\n\n全部为本次 2.3.0 任务，初始化第0步、末态第50步。详细方法见网站。\n\n'+
         '\n'.join(f'- [{f["title"]}]({f["id"]}.png)' for f in figures)+'\n')
     print(json.dumps(dict(figures=len(figures),categories=dict(counts)),ensure_ascii=False))

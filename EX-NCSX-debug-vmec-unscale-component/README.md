@@ -2,7 +2,9 @@
 
 仅展示本次50步运行及第0步初始化。程序正常达到迭代上限，但末期力残差和动能上升，不能视为力平衡收敛结果。
 
-- [结果网站](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/)
+- [三维输入几何](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/)
+- [重点结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/results.html)
+- [完整后处理图集](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/gallery.html)
 - 源码提交：0495705cb52feb85e8db2f31f0cc91034197a01b
 - 完成时间：2026-09-21T08:48:39.422802+00:00
 - 144×144×144，nfp=3，50次外迭代，每次Step-B 1000内步。
@@ -15,6 +17,8 @@
 main是实际配置，follow是未执行的续算示例，post是数值后处理CLI示例。发布副本只更新了历史注释中的版本与提交号，解析后的TOML参数与实际输入完全相同，原文件和发布文件哈希分别记录。输入含线圈及真实壁文本；不上传wout、mgrid或输出NetCDF。
 
 PNG用于网页，庞加莱另有PDF和无损gzip压缩SVG（解压后为SVG）；没有对矢量点进行栅格化。初始图138个径向起点，末态图1422个壁内起点，最多500整环圈。两者点密度不能直接比较。所有图片属于本次同一运行。
+
+三维首页只展示初始 VMEC `s=1` LCFS 与线圈中心线，不代表第50步的磁面。线圈文本的27条代表线圈按 HINT-debug 对称性规则补全为78条物理线圈，颜色编码每条线圈电流的绝对值。几何数据为 `assets/geometry.json`；`tools/build_viewer_geometry.py` 使用本次输入的 SHA-256 校验，需另行提供未发布的 `wout` 文件才能重新生成。结果图与图集沿用现有保存数据，不因三维展示而重算。
 
 ## 散度口径
 

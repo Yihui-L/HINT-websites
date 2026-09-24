@@ -1,1 +1,94 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=Documents/index.html"><title>NCSX 第50步结果</title><a href="Documents/index.html">查看当前 NCSX 结果</a></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>NCSX | HINT-debug 几何与结果</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}
+  </script>
+  <script defer src="./vendor/lucide.min.js"></script>
+  <script type="module" src="./assets/viewer.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#data">跳转到数据来源</a>
+  <header class="site-header">
+    <a class="wordmark" href="../Source-Code/" title="返回 HINT 程序手册">HINT <span>/ NCSX</span></a>
+    <span class="case-mark">自由边界 VMEC · HINT-debug 2.3.0</span>
+    <a class="header-link" href="./results.html">计算结果 <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+  </header>
+
+  <main>
+    <section class="viewer" aria-label="NCSX 线圈和初始 VMEC LCFS 三维交互图">
+      <canvas id="scene" aria-label="可旋转的线圈与最后闭合磁面三维图"></canvas>
+      <div class="viewer-title">
+        <div class="eyebrow">输入几何 · 三个场周期</div>
+        <h1>NCSX</h1>
+        <p>初始 VMEC 最后闭合磁面与完整物理线圈中心线</p>
+      </div>
+      <div class="view-modes" role="group" aria-label="观察方向">
+        <button type="button" class="selected" data-view="iso" aria-pressed="true">斜视</button>
+        <button type="button" data-view="top" aria-pressed="false">俯视</button>
+        <button type="button" data-view="side" aria-pressed="false">侧视</button>
+      </div>
+      <div class="load-status" id="load-status" role="status">正在载入几何...</div>
+      <div class="coil-tooltip" id="coil-tooltip" hidden></div>
+      <div class="scene-tools">
+        <button type="button" class="icon-button" id="reset-view" title="重置视角" aria-label="重置视角"><i data-lucide="rotate-ccw" aria-hidden="true"></i></button>
+        <label class="check"><input type="checkbox" id="show-lcfs" checked> LCFS</label>
+        <label class="check"><input type="checkbox" id="show-aux" checked> 辅助线圈</label>
+        <label class="check"><input type="checkbox" id="show-idle" checked> 近零电流线圈</label>
+        <label class="check"><input type="checkbox" id="auto-rotate"> 自动旋转</label>
+        <label class="opacity-control" for="surface-opacity">磁面透明度 <input type="range" id="surface-opacity" min="20" max="90" value="58"></label>
+      </div>
+      <aside class="legend" aria-label="线圈电流图例">
+        <div class="legend-title">线圈电流 <em>|I|</em></div>
+        <div class="legend-unit">单条闭合模型线圈的总电流；悬停显示有符号电流</div>
+        <div class="legend-row"><span class="swatch powered"></span><strong>538–652</strong><span>kA · 18 条模块线圈</span></div>
+        <div class="legend-row"><span class="swatch auxiliary"></span><strong>28–94</strong><span>kA · 44 条辅助线圈</span></div>
+        <div class="legend-row"><span class="swatch"></span><strong>≈0</strong><span>16 条近零电流线圈</span></div>
+        <div class="legend-row lcfs-row"><span class="swatch surface"></span><strong>LCFS</strong><span>初始 VMEC s = 1</span></div>
+      </aside>
+    </section>
+
+    <section class="result-teaser" aria-label="计算结果入口">
+      <div class="result-teaser-inner">
+        <div><div class="section-label">50 / 50 OUTER ITERATIONS</div><h2>计算已完成，尚未收敛</h2><p>第 0 与第 50 步庞加莱、二维截面、剖面和演化指标在独立页面展示。上方三维图只表示输入几何，不是第 50 步磁面。</p></div>
+        <a href="./results.html">查看结果图</a>
+      </div>
+    </section>
+
+    <section class="data-section" id="data">
+      <div class="section-label">CASE / NCSX</div>
+      <div class="section-grid">
+        <div>
+          <h2>几何来源</h2>
+          <p>LCFS 由本次运行使用的自由边界 VMEC <code>wout</code> 在 <code>s=1</code> 的傅里叶系数重构。线圈使用已发布的 27 条代表线圈，严格按 HINT-debug 的对称性规则补全为 78 条物理闭合线圈。三维视图不显示第一壁，也不显示演化后的第 50 步磁场结构。</p>
+          <dl class="facts">
+            <div><dt>场周期</dt><dd>3</dd></div>
+            <div><dt>线圈</dt><dd>27 条代表线圈 → 78 条物理线圈</dd></div>
+            <div><dt>主程序</dt><dd>VMEC 启动 · 不持续缩放轴上压强</dd></div>
+            <div><dt>计算域</dt><dd>R = 0.35–2.50 m，Z = −1.10–1.10 m</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h2>输入与结果</h2>
+          <ul class="file-list">
+            <li><a href="./inputs/ncsx_coils.txt">HINT 线圈</a><span>ncsx_coils.txt</span></li>
+            <li><a href="./inputs/NCSX_physical_vessel_half_period.txt">物理容器轮廓</a><span>NCSX_physical_vessel_half_period.txt</span></li>
+            <li><a href="./ncsx_main.toml">HINT 主程序配置</a><span>ncsx_main.toml</span></li>
+            <li><a href="./assets/geometry.json">三维几何数据</a><span>LCFS + 对称补全线圈</span></li>
+            <li><a href="./results.html">重点结果</a><span>results.html</span></li>
+            <li><a href="./gallery.html">完整后处理图集</a><span>93 张图片</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="source-note">几何重构脚本和输入 SHA-256 校验见 <a href="./tools/build_viewer_geometry.py">build_viewer_geometry.py</a>；不上传原始 <code>wout</code> 或约 6.4 GB 的求解输出。线圈显示管径只用于可视化，不代表工程导体截面。</p>
+    </section>
+  </main>
+  <footer><span>NCSX / input geometry and results</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

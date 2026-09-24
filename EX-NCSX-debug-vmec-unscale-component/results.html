@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>NCSX | HINT-debug 计算结果</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+</head>
+<body>
+  <a class="skip-link" href="#results">跳转到结果</a>
+  <header class="site-header">
+    <a class="wordmark" href="./">HINT <span>/ NCSX</span></a>
+    <span class="case-mark">自由边界 VMEC · HINT-debug 2.3.0</span>
+    <nav class="result-header-nav" aria-label="页面导航">
+      <a href="./">三维几何</a>
+      <a href="#poincare">庞加莱</a>
+      <a href="#sections">二维截面</a>
+      <a href="./gallery.html">完整图集</a>
+    </nav>
+  </header>
+  <main id="results">
+    <section class="result-intro">
+      <div class="result-inner">
+        <div class="section-label">CASE / NCSX / 2026-09-21</div>
+        <h1>50 步计算结果</h1>
+        <p class="result-lead"><code>initial</code> · <code>vmec</code> 启动 · <code>scale_after=false</code> · 分量磁场插值。完成 50 个外迭代，每步 1000 个 Step-B 内步；输出保留第 0–50 步。</p>
+        <p class="result-warning"><strong>尚未收敛。</strong>末期力残差和动能上升。以下末态图片仅展示已保存状态，不应作为稳定力平衡结果解读。三维首页展示初始输入几何，与第 50 步磁场结构不同。</p>
+        <dl class="result-metrics">
+          <div><dt>总耗时</dt><dd>3 h 6 min</dd></div>
+          <div><dt>第 50 步力残差 RMS</dt><dd>0.00954</dd></div>
+          <div><dt>第 50 步散度 RMS</dt><dd>0.01018</dd></div>
+          <div><dt>离散网格</dt><dd>144 × 144 × 144</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="result-band" id="poincare">
+      <div class="result-inner">
+        <div class="section-label">01 / FIELD-LINE STRUCTURE</div>
+        <h2>庞加莱截面</h2>
+        <p class="result-copy">第 0 步和第 50 步采用不同的起点密度；二者均在 0°、30°、60° 截面取交点。叠加的 VMEC 磁面只是初始几何参考，不能视为 HINT 的收敛磁面。</p>
+        <div class="figure-grid prominent">
+          <figure><figcaption><strong>第 0 步</strong><span>VMEC 初始化总场</span></figcaption><a href="./figures/poincare_initial_three_sections.png"><img src="./figures/poincare_initial_three_sections.png" loading="lazy" decoding="async" alt="NCSX 第0步三截面庞加莱图"></a></figure>
+          <figure><figcaption><strong>第 50 步</strong><span>未收敛的末态总场</span></figcaption><a href="./figures/poincare_final_three_sections.png"><img src="./figures/poincare_final_three_sections.png" loading="lazy" decoding="async" alt="NCSX 第50步三截面庞加莱图"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band alternate" id="sections">
+      <div class="result-inner">
+        <div class="section-label">02 / SAVED OUTER STEP 50</div>
+        <h2>二维截面</h2>
+        <p class="result-copy">0°、30°、60° 截面展示保存场，叠加初始 VMEC 几何、壁与计算域。空间散度图来自保存网格场，不是连续源表达式的解析散度。</p>
+        <div class="figure-grid">
+          <figure><figcaption><strong>压强</strong><span>三截面分布</span></figcaption><a href="./figures/section_pressure.png"><img src="./figures/section_pressure.png" loading="lazy" decoding="async" alt="NCSX 第50步压强分布"></a></figure>
+          <figure><figcaption><strong>总磁场强度</strong><span>三截面分布</span></figcaption><a href="./figures/section_field_strength.png"><img src="./figures/section_field_strength.png" loading="lazy" decoding="async" alt="NCSX 第50步总磁场强度分布"></a></figure>
+          <figure><figcaption><strong>流速大小</strong><span>三截面分布</span></figcaption><a href="./figures/section_speed.png"><img src="./figures/section_speed.png" loading="lazy" decoding="async" alt="NCSX 第50步流速大小分布"></a></figure>
+          <figure><figcaption><strong>局域相对力残差</strong><span>当地归一化</span></figcaption><a href="./figures/section_force_residual_relative.png"><img src="./figures/section_force_residual_relative.png" loading="lazy" decoding="async" alt="NCSX 第50步局域相对力残差分布"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band" id="profiles">
+      <div class="result-inner">
+        <div class="section-label">03 / PROFILES</div>
+        <h2>剖面与旋转变换</h2>
+        <p class="result-copy">s 是当步演化的标签；按 s 分箱的曲线不是严格的磁面平均。旋转变换仅对通过追踪收敛与磁面分辨率检查的起点有可靠解释。</p>
+        <div class="figure-grid compact">
+          <figure><figcaption><strong>压强 / s</strong><span>与初始 VMEC 参考对照</span></figcaption><a href="./figures/profile_pressure_s.png"><img src="./figures/profile_pressure_s.png" loading="lazy" decoding="async" alt="NCSX 压强剖面"></a></figure>
+          <figure><figcaption><strong>环向响应电流密度 / s</strong><span>截面分箱结果</span></figcaption><a href="./figures/profile_toroidal_current_density_s.png"><img src="./figures/profile_toroidal_current_density_s.png" loading="lazy" decoding="async" alt="NCSX 环向响应电流密度剖面"></a></figure>
+          <figure><figcaption><strong>旋转变换 / 初始 VMEC s</strong><span>稠密起点扫描</span></figcaption><a href="./figures/profile_rotational_transform_initial_vmec_s.png"><img src="./figures/profile_rotational_transform_initial_vmec_s.png" loading="lazy" decoding="async" alt="NCSX 旋转变换扫描"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band alternate" id="evolution">
+      <div class="result-inner">
+        <div class="section-label">04 / OUTER 0–50</div>
+        <h2>演化与诊断</h2>
+        <p class="result-copy">横轴为外迭代编号，不是实验时间。Step-B 归一化诊断、分量插值器 JAX AD 散度与网格 FD4 散度具有不同定义。</p>
+        <div class="figure-grid compact">
+          <figure><figcaption><strong>流速与力残差体平均</strong><span>壁内统计</span></figcaption><a href="./figures/convergence_checkpoint_means.png"><img src="./figures/convergence_checkpoint_means.png" loading="lazy" decoding="async" alt="NCSX 流速与力残差演化"></a></figure>
+          <figure><figcaption><strong>Step-B 诊断</strong><span>第 1 组指标</span></figcaption><a href="./figures/convergence_stepb_01.png"><img src="./figures/convergence_stepb_01.png" loading="lazy" decoding="async" alt="NCSX Step-B 诊断曲线"></a></figure>
+          <figure><figcaption><strong>总场插值器 AD 散度</strong><span>不是解析源场散度</span></figcaption><a href="./figures/convergence_ad_total.png"><img src="./figures/convergence_ad_total.png" loading="lazy" decoding="async" alt="NCSX 总场插值器散度演化"></a></figure>
+          <figure><figcaption><strong>外迭代耗时</strong><span>Step-A、Step-B 与合计</span></figcaption><a href="./figures/convergence_wall_clock_timings.png"><img src="./figures/convergence_wall_clock_timings.png" loading="lazy" decoding="async" alt="NCSX 每步耗时"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-provenance">
+      <div class="result-inner">
+        <div class="section-label">DATA / REPRODUCIBILITY</div>
+        <h2>来源与界限</h2>
+        <p>当前网站保留 93 张已发布结果图及小型元数据，不上传大型 NetCDF 输出。三维首页仅重构输入 VMEC <code>s=1</code> 几何和线圈中心线；不改变任何求解数据或原有后处理图。</p>
+        <div class="provenance-links"><a href="./gallery.html">完整后处理图集</a><a href="./Documents/docs-data/provenance.json">数据溯源与哈希</a><a href="./Documents/docs-data/run_summary.json">运行摘要</a><a href="./">返回三维输入几何</a></div>
+      </div>
+    </section>
+  </main>
+  <footer><span>NCSX / completed, not converged</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

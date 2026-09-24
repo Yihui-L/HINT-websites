@@ -5,7 +5,7 @@ HINT 的独立公开网站。源码和网站分开维护；HINT-docs 源码仓�
 | 一级目录 | 内容 | 网站 |
 |---|---|---|
 | `Source-Code/` | HINT-debug / HINT-wall 程序与使用手册，无具体算例记录 | [阅读手册](https://yihui-l.github.io/HINT-websites/Source-Code/) |
-| `EX-NCSX-debug-vmec-unscale-component/` | NCSX HINT-debug 2.3.0，VMEC启动，第50步结果 | [查看VMEC启动结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
+| `EX-NCSX-debug-vmec-unscale-component/` | NCSX HINT-debug 2.3.0，VMEC启动，线圈/LCFS三维交互图及第50步结果 | [查看输入几何](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
 | `EX-NCSX-debug-zero-unscale-component/` | NCSX HINT-debug 2.3.0，zero启动，20步压强攀升，第70步结果及初始真空场 | [查看zero启动结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/) |
 | `EX-NCSX-wall-vmec-unscale-component/` | NCSX HINT-wall 2.3.2，VMEC启动；完成第12步，第13步中止，提供演化曲线和边界诊断 | [查看演化结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-wall-vmec-unscale-component/) |
 | `EX-W7X-debug-vmec-unscale-component/` | W7-X EIM HINT-debug 2.3.0，真实容器输入、复现的自由边界 VMEC 平衡与线圈/LCFS 三维交互图 | [查看输入几何](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/) |
