@@ -1,0 +1,178 @@
+{
+  "source_commit": "8609e184e1d7b8bcabab662ddf1fb170243ded60",
+  "initialization_elapsed_s": 343.2036993969232,
+  "stage_seconds": {
+    "wall": 3.817162988707423,
+    "vmec_coordinates": 76.70392249152064,
+    "vacuum": 30.3474562112242,
+    "vmec_response": 188.84379026852548,
+    "source_AD_diagnostics": 3.4251308254897594
+  },
+  "initial_source_diagnostics": {
+    "method": "JAX jacfwd of continuous source expressions in Cartesian coordinates",
+    "lcfs_crossing_status": "not_defined; no classical pointwise analytic divergence at a possible normal-field jump; no crossing value computed or stored",
+    "note": "Finite samples, not a global bound or field-fidelity proof.",
+    "fields": {
+      "vacuum_domain": {
+        "sample_count": 256,
+        "divergence_mean_abs": 1.0329871723627204E-15,
+        "divergence_relative_mean": 1.0983538092786288E-17,
+        "divergence_relative_p50": 4.721908348413444E-18,
+        "divergence_relative_p95": 3.807038605908339E-17,
+        "divergence_relative_p99": 8.582068423241426E-17,
+        "divergence_relative_max": 1.451986817137134E-16,
+        "divergence_exceedance_fraction": 0.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 1.9141489962098073E-15,
+        "divergence_max": 1.3655743202889425E-14,
+        "divergence_relative_rms": 1.736091080472204E-17,
+        "source": "smooth-core coil B"
+      },
+      "vacuum_wall": {
+        "sample_count": 256,
+        "divergence_mean_abs": 4.563152834107312E-16,
+        "divergence_relative_mean": 3.2377801365032815E-18,
+        "divergence_relative_p50": 2.3632726232737374E-18,
+        "divergence_relative_p95": 9.45309049309495E-18,
+        "divergence_relative_p99": 1.488861752662453E-17,
+        "divergence_relative_max": 2.0481696068372393E-17,
+        "divergence_exceedance_fraction": 0.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 6.417209672029914E-16,
+        "divergence_max": 2.886579864025407E-15,
+        "divergence_relative_rms": 4.538294351337155E-18,
+        "source": "smooth-core coil B"
+      },
+      "vacuum_lcfs_inside": {
+        "sample_count": 64,
+        "divergence_mean_abs": 3.544256901855114E-16,
+        "divergence_relative_mean": 2.5096651278550133E-18,
+        "divergence_relative_p50": 1.6951179572664023E-18,
+        "divergence_relative_p95": 6.978542677333146E-18,
+        "divergence_relative_p99": 1.0683665177623363E-17,
+        "divergence_relative_max": 1.4150549904136922E-17,
+        "divergence_exceedance_fraction": 0.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 5.02010778390231E-16,
+        "divergence_max": 1.9984014443252818E-15,
+        "divergence_relative_rms": 3.548975903455103E-18,
+        "source": "smooth-core coil B"
+      },
+      "response_lcfs_inside": {
+        "sample_count": 64,
+        "divergence_mean_abs": 4.95968283803494E-16,
+        "divergence_relative_mean": 1.4488733752936893E-16,
+        "divergence_relative_p50": 1.0743422207883252E-16,
+        "divergence_relative_p95": 3.729791860850035E-16,
+        "divergence_relative_p99": 6.304969893471701E-16,
+        "divergence_relative_max": 8.75690262982182E-16,
+        "divergence_exceedance_fraction": 0.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 7.000642298612822E-16,
+        "divergence_max": 2.9976021664879227E-15,
+        "divergence_relative_rms": 1.8397179563808861E-16,
+        "source": "geometry/flux/lambda VMEC total B minus smooth-core coil B"
+      },
+      "vacuum_lcfs_outside": {
+        "sample_count": 64,
+        "divergence_mean_abs": 4.899509617461995E-16,
+        "divergence_relative_mean": 3.559232356887448E-18,
+        "divergence_relative_p50": 3.226071195797962E-18,
+        "divergence_relative_p95": 9.436258247709028E-18,
+        "divergence_relative_p99": 1.4009214167752646E-17,
+        "divergence_relative_max": 1.451732038109083E-17,
+        "divergence_exceedance_fraction": 0.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 6.668770950221939E-16,
+        "divergence_max": 1.9984014443252818E-15,
+        "divergence_relative_rms": 4.8209006212158136E-18,
+        "source": "smooth-core coil B"
+      }
+    },
+    "response_lcfs_outside_status": "unavailable; see initialization diagnostic log"
+  },
+  "field_diagnostics": {
+    "vacuum": {
+      "method": "JAX jacfwd of physical component B(R,Z,phi)",
+      "fit": {
+        "method": "component cubic Lagrange",
+        "projection": false,
+        "constraints": 2985984
+      },
+      "note": "Small interpolant divergence alone does not establish field fidelity.",
+      "nodes_domain": {
+        "sample_count": 1024,
+        "divergence_mean_abs": 0.030670494199337005,
+        "divergence_relative_mean": 0.00032942078198044917,
+        "divergence_relative_p50": 0.000022478661354096986,
+        "divergence_relative_p95": 0.00169307305249862,
+        "divergence_relative_p99": 0.006374500901672077,
+        "divergence_relative_max": 0.014246051093571183,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 0.11080203746604082,
+        "divergence_max": 1.326368739707397,
+        "divergence_relative_rms": 0.0010149503964557766,
+        "node_fidelity_mean": 5.4682584854139526E-14,
+        "node_fidelity_max": 1.1207390412860028E-12
+      },
+      "nodes_wall": {
+        "sample_count": 1024,
+        "divergence_mean_abs": 0.0015342124216618407,
+        "divergence_relative_mean": 0.000010920618591226647,
+        "divergence_relative_p50": 0.000003412327491998768,
+        "divergence_relative_p95": 0.00004501661223033493,
+        "divergence_relative_p99": 0.0001298839490572509,
+        "divergence_relative_max": 0.0002682939686155356,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 0.0036328090603530193,
+        "divergence_max": 0.03769199847686211,
+        "divergence_relative_rms": 0.000025773101869301005,
+        "node_fidelity_mean": 2.6928935036753725E-14,
+        "node_fidelity_max": 1.057023099254675E-13
+      }
+    },
+    "response": {
+      "method": "JAX jacfwd of physical component B(R,Z,phi)",
+      "fit": {
+        "method": "component cubic Lagrange",
+        "projection": false,
+        "constraints": 2985984
+      },
+      "note": "Small interpolant divergence alone does not establish field fidelity.",
+      "nodes_domain": {
+        "sample_count": 1024,
+        "divergence_mean_abs": 0.010345498120167402,
+        "divergence_relative_mean": 0.010152003465294601,
+        "divergence_relative_p50": 4.130011264511726E-7,
+        "divergence_relative_p95": 0.0015304086344928327,
+        "divergence_relative_p99": 0.29906021144400724,
+        "divergence_relative_max": 1.3622036707414882,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 0.07922166047924052,
+        "divergence_max": 1.388166933070707,
+        "divergence_relative_rms": 0.051082381453357785,
+        "node_fidelity_mean": 1.8839028443447563E-15,
+        "node_fidelity_max": 6.466895793336166E-14
+      },
+      "nodes_wall": {
+        "sample_count": 1024,
+        "divergence_mean_abs": 0.023071892768050724,
+        "divergence_relative_mean": 0.011112273591307724,
+        "divergence_relative_p50": 0.000024161025314728796,
+        "divergence_relative_p95": 0.0606709203162657,
+        "divergence_relative_p99": 0.2855270249394766,
+        "divergence_relative_max": 0.7618101051127685,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5E-11,
+        "divergence_rms": 0.11588735869099913,
+        "divergence_max": 1.581710611276518,
+        "divergence_relative_rms": 0.04454412631063053,
+        "node_fidelity_mean": 4.854423842102422E-15,
+        "node_fidelity_max": 6.68496530107899E-14
+      }
+    }
+  }
+}

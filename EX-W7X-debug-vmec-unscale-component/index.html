@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f7f6">
-  <title>W7-X EIM | HINT-debug 输入几何</title>
+  <title>W7-X EIM | HINT-debug 几何与结果</title>
   <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
   <script type="importmap">
     {"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}
   </script>
@@ -17,7 +18,7 @@
   <header class="site-header">
     <a class="wordmark" href="../Source-Code/" title="返回 HINT 程序手册">HINT <span>/ W7-X</span></a>
     <span class="case-mark">EIM 自由边界 VMEC · HINT-debug 2.3.0</span>
-    <a class="header-link" href="#data">输入与来源 <i data-lucide="arrow-down-right" aria-hidden="true"></i></a>
+    <a class="header-link" href="./results.html">计算结果 <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
 
   <main>
@@ -50,12 +51,19 @@
       </aside>
     </section>
 
+    <section class="result-teaser" aria-label="计算结果入口">
+      <div class="result-teaser-inner">
+        <div><div class="section-label">50 / 50 OUTER ITERATIONS</div><h2>已完成计算，尚未收敛</h2><p>第 0 与第 50 步庞加莱、三截面分布、剖面及演化曲线已单独整理。力残差和散度在后期升高。<a href="./gallery.html">查看完整后处理图集</a>。</p></div>
+        <a href="./results.html">查看结果图</a>
+      </div>
+    </section>
+
     <section class="data-section" id="data">
       <div class="section-label">CASE / W7-X EIM</div>
       <div class="section-grid">
         <div>
           <h2>计算输入</h2>
-          <p>平衡由 W7-X EIM 的自由边界 VMEC 配置复现。HINT-debug 使用完整环向线圈、物理真空容器轮廓和矩形 R-Z 计算域；线圈电流方向按该 wout 的有符号磁场校准。该三维图不包含演化场、壁法向场或收敛结论。</p>
+          <p>平衡由 W7-X EIM 的自由边界 VMEC 配置复现。HINT-debug 使用完整环向线圈、物理真空容器轮廓和矩形 R-Z 计算域；线圈电流方向按该 wout 的有符号磁场校准。上方三维图仍只展示输入几何；演化结果在独立的<a href="./results.html">结果页面</a>，不包含壁法向场。</p>
           <dl class="facts">
             <div><dt>场周期</dt><dd>5</dd></div>
             <div><dt>线圈</dt><dd>70 条闭合中心线，50 条通电</dd></div>
@@ -79,6 +87,6 @@
       <p class="source-note">物理容器轮廓来自 <a href="https://github.com/ORNL-Fusion/util-library/blob/803cec6866ddf4b39507f9640afa3d1af230f1d1/matlab/bfield_library_jdl/W7X/vessel.part">ORNL-Fusion 的 W7-X vessel.part</a>。它不含所有偏滤器及面向等离子体部件，不能代表完整第一壁 CAD。线圈可视化的管径仅为显示效果，不代表真实导体截面。</p>
     </section>
   </main>
-  <footer><span>W7-X EIM / input geometry</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+  <footer><span>W7-X EIM / geometry and results</span><a href="../Source-Code/">HINT 程序手册</a></footer>
 </body>
 </html>

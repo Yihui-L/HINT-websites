@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>W7-X EIM | 完整后处理图集</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+  <script defer src="./assets/gallery.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#gallery">跳转到图集</a>
+  <header class="site-header">
+    <a class="wordmark" href="./">HINT <span>/ W7-X</span></a>
+    <span class="case-mark">EIM · HINT-debug 2.3.0</span>
+    <nav class="result-header-nav" aria-label="页面导航">
+      <a href="./">三维几何</a>
+      <a href="./results.html">重点结果</a>
+      <a href="#sections">二维截面</a>
+      <a href="#profiles">剖面</a>
+    </nav>
+  </header>
+  <main id="gallery">
+    <section class="result-intro">
+      <div class="result-inner">
+        <div class="section-label">COMPLETE FIGURE CATALOG / OUTER 0–50</div>
+        <h1>完整后处理图集</h1>
+        <p class="result-lead">按 NCSX 示例的范围，集中展示庞加莱、全部可用二维变量、各坐标剖面、旋转变换和演化诊断。图片由已完成的 W7-X EIM HINT-debug 2.3.0 输出只读生成。</p>
+        <p class="result-warning"><strong>50 步完成不等于收敛。</strong>第 50 步力残差及动能仍高，末态剖面和磁面不应解释为稳定平衡。旋转变换只有在追踪收敛且磁面可分辨时才可视为可信；空心点表示未通过其中至少一项检查。</p>
+        <p class="gallery-status" id="gallery-status" role="status">正在读取图片清单…</p>
+        <noscript><p class="result-copy">此图集需要 JavaScript；也可从 <a href="./result_manifest.json">图片清单</a>直接打开各张 PNG。</p></noscript>
+      </div>
+    </section>
+    <section class="result-band" id="poincare"><div class="result-inner"><div class="section-label">01 / FIELD LINES</div><h2>庞加莱图</h2><p class="result-copy">第 0 与 50 步使用相同起点组及 300 个完整环向圈；初始 VMEC 磁面仅作几何对照。</p><div class="figure-grid gallery-grid" data-gallery-group="poincare"></div></div></section>
+    <section class="result-band alternate" id="sections"><div class="result-inner"><div class="section-label">02 / SAVED OUTER 50</div><h2>二维截面</h2><p class="result-copy">0°、18°、36° 环向截面，叠加壁、计算域及初始 VMEC 磁面。空间散度截面基于已保存网格场求得，不是连续源表达式的解析散度。</p><div class="figure-grid gallery-grid" data-gallery-group="section"></div></div></section>
+    <section class="result-band" id="profiles"><div class="result-inner"><div class="section-label">03 / PROFILES</div><h2>剖面与旋转变换</h2><p class="result-copy">剖面图按演化 s 或给定空间截线统计；它们不是在每个 s 上作磁面平均。标为 VMEC 的曲线是初始化参考；初始 s 起点扫描也不等于末态磁通标签。旋转变换扫描每截面 191 个起点，0°、18°、36° 分别只有 30、50、78 个通过收敛及磁面分辨率检查。</p><div class="figure-grid gallery-grid" data-gallery-group="profile"></div></div></section>
+    <section class="result-band alternate" id="convergence"><div class="result-inner"><div class="section-label">04 / HISTORY</div><h2>演化与诊断</h2><p class="result-copy">横轴为外迭代次数。Step-B 归一化量、保存场插值器的 JAX 自动微分散度、粗网格 FD4 散度以及源表达式解析散度各有不同定义，不应相互等同。</p><div class="figure-grid gallery-grid" data-gallery-group="convergence"></div></div></section>
+    <section class="result-provenance"><div class="result-inner"><div class="section-label">SOURCE / METHODS</div><h2>数据来源</h2><p>源数据为远程已完成的 51 个 HINT NetCDF 记录（外迭代 0–50）。本仓库仅提供全部 PNG 图片、图像 SHA-256 清单及必要的小型分析元数据，不包含大体积求解结果。变量、取样和诊断定义见图像说明；程序方程见 <a href="../Source-Code/">HINT 程序手册</a>。</p><div class="provenance-links"><a href="./figure-guide.html">图像与指标说明</a><a href="./result_manifest.json">图像清单</a><a href="./results/initialization_diagnostics.json">初始化诊断</a><a href="./results/run_summary.json">计算摘要</a><a href="./results.html">重点结果</a><a href="./">三维输入几何</a></div></div></section>
+  </main>
+  <footer><span>W7-X EIM / completed, not converged</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

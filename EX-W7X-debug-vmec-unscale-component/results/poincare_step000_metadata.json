@@ -1,0 +1,37 @@
+{
+  "outer_step": 0,
+  "source_nc": "/root/autodl-tmp/HINT/w7x-debug-eim-physical-oriented-20260924/hint_debug_w7x_eim.nc",
+  "seeds": 332,
+  "radial_seeds": 138,
+  "wall_mesh_candidates": 194,
+  "rejected_seeds": 0,
+  "full_toroidal_turns": 300,
+  "nfp": 5,
+  "phi_degrees": [
+    0.0,
+    18.0,
+    36.0
+  ],
+  "max_step_phi": 0.009817477042468103,
+  "rtol": 1e-08,
+  "atol": 1e-10,
+  "interpolation": "component",
+  "vmec_surface_s": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "valid_crossings": [
+    337859,
+    337952,
+    337890
+  ],
+  "final_status_counts": {
+    "0": 216,
+    "1": 116,
+    "2": 0,
+    "3": 0
+  }
+}

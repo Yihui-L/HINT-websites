@@ -1,0 +1,901 @@
+{
+  "case": "W7-X EIM",
+  "solver_version": "HINT-debug 2.3.0",
+  "source_run": "w7x-debug-eim-physical-oriented-20260924",
+  "source_records": "outer 0..50 complete",
+  "converged": false,
+  "image_count": 99,
+  "images": [
+    {
+      "path": "figures/convergence_ad_response.png",
+      "bytes": 391337,
+      "sha256": "3f62ce833784c1569e7d6721796ec490ba7e3b622c6100e33fff19d6064ec5ca",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_ad_total.png",
+      "bytes": 370293,
+      "sha256": "793ffc3fd61d969af0c434b0e4829e89e6f23b3164f60f532d479b29ed58917a",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_ad_vacuum.png",
+      "bytes": 220931,
+      "sha256": "e9ff0f3f584f97a5cc9fd0ce4d8f4a7f360a3bac81259f8e3bf41ce02442fef2",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_checkpoint_field_means.png",
+      "bytes": 250097,
+      "sha256": "3efb1578ed39e84043d9407649cab80ff5602846d6c6a1cb171f8d58d8cccd9e",
+      "pixels": [
+        2162,
+        2208
+      ]
+    },
+    {
+      "path": "figures/convergence_checkpoint_means.png",
+      "bytes": 262638,
+      "sha256": "11f64c3b628f5328c9bb9ce18d064cf7f8b8ed1179965c9c10f70452dc800822",
+      "pixels": [
+        2162,
+        2208
+      ]
+    },
+    {
+      "path": "figures/convergence_checkpoint_peaks.png",
+      "bytes": 353461,
+      "sha256": "a1e9bc9ee42bf7fe2f825fa71ad176d61fc9c67c0c7a432dd3dc2f96baaf1f09",
+      "pixels": [
+        2162,
+        2944
+      ]
+    },
+    {
+      "path": "figures/convergence_checkpoint_rms.png",
+      "bytes": 287227,
+      "sha256": "cac01447186ae69002ffc2832714d61a38f635880f57d5139a35e223867c91f8",
+      "pixels": [
+        2162,
+        2208
+      ]
+    },
+    {
+      "path": "figures/convergence_checkpoint_velocity_change_rate.png",
+      "bytes": 238923,
+      "sha256": "3b59ebdcc449e41ec61dc7f28956222ef4658cc6f8d2bb50c72af8b4c7c4420a",
+      "pixels": [
+        2162,
+        1472
+      ]
+    },
+    {
+      "path": "figures/convergence_fd4_response.png",
+      "bytes": 340418,
+      "sha256": "434168ba11d47aab74a00d34a1d86e8ff8f8504b38911927343eaf066f683d3e",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_fd4_total.png",
+      "bytes": 316739,
+      "sha256": "394e5b199f332a3601cf4f73b2863d983359e7a952ca7915ff8a8f56b16101aa",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_fd4_vacuum.png",
+      "bytes": 213636,
+      "sha256": "0d0805d7ad0acc2c05fa8419c3ab79afebc69a7f037f0ebdef3c812ed5a6d62e",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_final_divergence_precision.png",
+      "bytes": 178448,
+      "sha256": "21b96a7f18833c45d13929e95a0843571dc5c1119bad477cb27bf00975a21805",
+      "pixels": [
+        2162,
+        2300
+      ]
+    },
+    {
+      "path": "figures/convergence_stepb_01.png",
+      "bytes": 360421,
+      "sha256": "e42bcc34196f62f497389b2482ebe70531b458e2cb26787e5d1dbb677fd259ec",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_stepb_02.png",
+      "bytes": 370619,
+      "sha256": "cffd5934c20ae9086448561cd0181f25f69da9a779aa449a956e052b4883857d",
+      "pixels": [
+        2188,
+        3499
+      ]
+    },
+    {
+      "path": "figures/convergence_stepb_03.png",
+      "bytes": 237149,
+      "sha256": "ef35bb7bbc3f3a378ca8be142a69630d2a37ec6777ae6073b696c9d859128481",
+      "pixels": [
+        2188,
+        2671
+      ]
+    },
+    {
+      "path": "figures/evolution_divergence.png",
+      "bytes": 244077,
+      "sha256": "7e1eda6b11de519889b5835901df2a792e0161886ab142aea289f32a10da9a43",
+      "pixels": [
+        2049,
+        2159
+      ]
+    },
+    {
+      "path": "figures/evolution_divergence_ad.png",
+      "bytes": 243903,
+      "sha256": "9e4328eaa66979a19d2c95facc0af8eecd5149c6304bea0ee5a87eefb43cac1f",
+      "pixels": [
+        2049,
+        2159
+      ]
+    },
+    {
+      "path": "figures/evolution_divergence_fd4.png",
+      "bytes": 211853,
+      "sha256": "b50f800ff727427b9b65af2faa8a0ca2145049cc8610ef11c98c1013b534bb89",
+      "pixels": [
+        2049,
+        2159
+      ]
+    },
+    {
+      "path": "figures/evolution_energy.png",
+      "bytes": 176280,
+      "sha256": "ea81eab97cec60aec65e72d69b29484da17071e7212869d7d1c41d5e6e68ed44",
+      "pixels": [
+        2049,
+        1499
+      ]
+    },
+    {
+      "path": "figures/evolution_force.png",
+      "bytes": 240939,
+      "sha256": "3ea7d3e5e6f0ace60bc28edd9fb1913c64eb7378ae7d7933f69568e0108c4f3c",
+      "pixels": [
+        2049,
+        2159
+      ]
+    },
+    {
+      "path": "figures/evolution_pressure_speed.png",
+      "bytes": 175313,
+      "sha256": "716f8603c6e0d6d2ee86bce92c5c49bab35136ea8b3311682f664ceb7c99ed78",
+      "pixels": [
+        2049,
+        1499
+      ]
+    },
+    {
+      "path": "figures/evolution_timing.png",
+      "bytes": 212608,
+      "sha256": "f700d69f225b7d40e2f2427146b4b94ecc1084c47df19ef57562cf99c8309474",
+      "pixels": [
+        2024,
+        2068
+      ]
+    },
+    {
+      "path": "figures/poincare_step000.png",
+      "bytes": 1443950,
+      "sha256": "17abc80af10c4c92c2ac6c38d565a74c9427f2f7dcd2013ef82209b3745cab42",
+      "pixels": [
+        1236,
+        3786
+      ]
+    },
+    {
+      "path": "figures/poincare_step000_phi000.png",
+      "bytes": 737152,
+      "sha256": "5a957e41870be10716ce4510f537ea54901e397c44dc159a49d8fe31402a27a2",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/poincare_step000_phi018.png",
+      "bytes": 775129,
+      "sha256": "b6da6ce368f8962456d7eedc174402e97c4fa03b463efcdc1d60a5de66967790",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/poincare_step000_phi036.png",
+      "bytes": 775963,
+      "sha256": "6f327f96e4e70b77935494984ed82ccf48554b612a90957aabae0c6880821ce3",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/poincare_step050.png",
+      "bytes": 1393561,
+      "sha256": "48db288fd3892247961e61e3d14c7ff229290374cf9e8a7c8f33b2ecd4b977b8",
+      "pixels": [
+        1236,
+        3786
+      ]
+    },
+    {
+      "path": "figures/poincare_step050_phi000.png",
+      "bytes": 696557,
+      "sha256": "60f13a6c58948b3a2df9cafbdc833d285196ebf70337f2a1cfe2de73dc7f67b0",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/poincare_step050_phi018.png",
+      "bytes": 728779,
+      "sha256": "4ecfaf44bf7b4ec38a8cd3846add4a200a2a04fff352441cb42922129ec07d73",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/poincare_step050_phi036.png",
+      "bytes": 725559,
+      "sha256": "489a5588431841df963aae5505eb356064f11a6dc223f86a842f562c650bce66",
+      "pixels": [
+        1301,
+        1678
+      ]
+    },
+    {
+      "path": "figures/profile_enclosed_toroidal_current_rho_step050.png",
+      "bytes": 466271,
+      "sha256": "2bbe749bf8350d42c88e0c89b89c4689ea00cd0c3cc6b3784dfc5ab57a050c9a",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_enclosed_toroidal_current_s_step050.png",
+      "bytes": 493531,
+      "sha256": "a56d6f9138574903080ef0c3fddb6304b7fc663b48f996646ed8dc051ad17db6",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_field_strength_R_step050.png",
+      "bytes": 303205,
+      "sha256": "49459c4c5e931d0b8fe18c12b23f60e82ae0c875aa871ce8ba67469bc35c48ed",
+      "pixels": [
+        2049,
+        2291
+      ]
+    },
+    {
+      "path": "figures/profile_field_strength_Z_step050.png",
+      "bytes": 324582,
+      "sha256": "2c16a109a231c22356b525d02939c6da8bc71c76540e53e755a110f63f961950",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_field_strength_phi_step050.png",
+      "bytes": 168082,
+      "sha256": "877e2d5c0748364e0e1c0c6ffdcbd5379946842d5829a171c0645aa398a073e0",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_field_strength_rho_step050.png",
+      "bytes": 412402,
+      "sha256": "68bdc8a9544dced3db76061bc1ed73fd451af4e021ae2062896d4aacd0218bb0",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_field_strength_s_step050.png",
+      "bytes": 437822,
+      "sha256": "f34c911e47581ea0ebc8008cd68efc068899cbd10088b0ba44c6441ea7769410",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_R_step050.png",
+      "bytes": 324337,
+      "sha256": "85c5af6c8cbedf0341cf494c052b99065877cdd5816bb39d3a421cef227a7086",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_Z_step050.png",
+      "bytes": 310486,
+      "sha256": "366f76b0f84e476c19bb044fc696dfbd803e23787ea8c36118eccd0026d0038f",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_phi_step050.png",
+      "bytes": 174158,
+      "sha256": "197f64fbd6a0fb6e9ec8d3bd569f4505c4d9daab9a147acf1630f6a72a6c33f6",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_relative_R_step050.png",
+      "bytes": 279960,
+      "sha256": "41a6b4a7a6e53fc5793c8fe5d1054f56f0ee011b608f4d5c3df1d5bf97927fb1",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_relative_Z_step050.png",
+      "bytes": 289985,
+      "sha256": "97a45dc3871fe89076fac1725ac650b4c30f69ef308b26f08b1e9fdfd99f603e",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_relative_phi_step050.png",
+      "bytes": 190307,
+      "sha256": "e514a718fe546490e1f406e372fd9721b9e8699b4e1b4f5ca061a092a931e2af",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_relative_rho_step050.png",
+      "bytes": 257237,
+      "sha256": "b5a3e4e7b27b9d2b0602b4a579c9b791a3cfa967119e92f0e4f72cd2159d90c6",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_relative_s_step050.png",
+      "bytes": 271413,
+      "sha256": "815c9b00ed2c0722890f2f54b7125157ac9aec7ad56bdcb91829e38219ba1301",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_rho_step050.png",
+      "bytes": 339440,
+      "sha256": "bbada5ce494a577b38e1c505d458cc26d28483ab3b461b45c2a95a492e796dbb",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_force_residual_s_step050.png",
+      "bytes": 369903,
+      "sha256": "fbc1b1f58d36825931f570dee05a5c54a436eabc16338c8493b2dfe6d94a6a2c",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_pressure_R_step050.png",
+      "bytes": 298638,
+      "sha256": "cee83d60c9120c1378cad9dba1b3991252ca9d5bb788f49c84ef7ef57bfc6fb1",
+      "pixels": [
+        2049,
+        2291
+      ]
+    },
+    {
+      "path": "figures/profile_pressure_Z_step050.png",
+      "bytes": 287603,
+      "sha256": "a4de5c15c517cb6be9eac3225c74dee7aea4d2e1769be8d10f5c82fba32140d6",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_pressure_phi_step050.png",
+      "bytes": 148363,
+      "sha256": "167ce6264aec0a3d28b14979afb2bee84a3cdf75c383fe35c25f6e1f432b7218",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_pressure_rho_step050.png",
+      "bytes": 293987,
+      "sha256": "0dd8f4667f5f3f64e3cd2693ac400e5f84d9eb8b9c505aebc76bcfee9838927b",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_pressure_s_step050.png",
+      "bytes": 314239,
+      "sha256": "02c6d3ac9316d3f4abdda20b11e698ee3aa115f28b93536fa02bbdf5ee4d63e9",
+      "pixels": [
+        2049,
+        2291
+      ]
+    },
+    {
+      "path": "figures/profile_rotational_transform_R_step050.png",
+      "bytes": 370695,
+      "sha256": "d42320aa62f16fe127f42b78477dd53dd2013d7a510331b37c9f0017ae54922a",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_rotational_transform_Z_step050.png",
+      "bytes": 324817,
+      "sha256": "9a2971ccb1d85cb597a76827f63d277646c10b02078f2e514d061d7e8b874446",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_rotational_transform_initial_vmec_s_step050.png",
+      "bytes": 449348,
+      "sha256": "b39bb0b14209fe3ce6e8af5f22efcdafd0ccaf2a9ee3c921e697b325163962af",
+      "pixels": [
+        2162,
+        2622
+      ]
+    },
+    {
+      "path": "figures/profile_rotational_transform_rho_step050.png",
+      "bytes": 370564,
+      "sha256": "023c40be98b62cf4bc20e592740affe000d34f8c15324fa13da6e2b7a580d49a",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_rotational_transform_s_step050.png",
+      "bytes": 402082,
+      "sha256": "ca357e6f17fec602913704fc25eaca59a0af113aa838027072dd4d9ce473baf7",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_speed_R_step050.png",
+      "bytes": 279331,
+      "sha256": "ba540ced260b2459c754926aa9c6261d977f652264fbf5042aa3fd355eaa2f01",
+      "pixels": [
+        2049,
+        2291
+      ]
+    },
+    {
+      "path": "figures/profile_speed_Z_step050.png",
+      "bytes": 287687,
+      "sha256": "8b090353b16466c232da963da8338cbd7a2bd87cf651a866cecb09a7d4957477",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_speed_phi_step050.png",
+      "bytes": 124486,
+      "sha256": "a3bb7749973d6087a35920a9fc63341410c1b608a0d5346ac786a04b1b839e90",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_speed_rho_step050.png",
+      "bytes": 332641,
+      "sha256": "28fb2efa1000b2ebbc86643ac166a032ad53070f3a567a2e5062740e09276dd3",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_speed_s_step050.png",
+      "bytes": 357514,
+      "sha256": "7fb2ce3336b660692a5e386942fd46b8bbf77118822f7118c3e9b2a4a00fa5c3",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_toroidal_current_density_R_step050.png",
+      "bytes": 343693,
+      "sha256": "a9392a998fe1f20698a004896d57bf49762057715cfbc9569909370d0cf1dadc",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_toroidal_current_density_Z_step050.png",
+      "bytes": 330221,
+      "sha256": "561134e35a6928f648dd8c60543a98bcb952536d97a1dec56303e8442aa4ccd2",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_toroidal_current_density_phi_step050.png",
+      "bytes": 171723,
+      "sha256": "4de0b8f40971b165f09e5b1066e2f5953f8eb5ed662b120bab672a6b52296024",
+      "pixels": [
+        2188,
+        1012
+      ]
+    },
+    {
+      "path": "figures/profile_toroidal_current_density_rho_step050.png",
+      "bytes": 438413,
+      "sha256": "eb274abb94e7aada514daa59682e8e9a789b3fffaf3ca1de67d67352dbda7d62",
+      "pixels": [
+        2188,
+        2668
+      ]
+    },
+    {
+      "path": "figures/profile_toroidal_current_density_s_step050.png",
+      "bytes": 446553,
+      "sha256": "bb96904a8aca829573e7cd267a4351b7b05ef1b25943b953d589c6317c75b777",
+      "pixels": [
+        2049,
+        2291
+      ]
+    },
+    {
+      "path": "figures/section_current_density_step050.png",
+      "bytes": 769821,
+      "sha256": "ddfb831a327eedd4ee14695dec190b45a9548c15a63a8e59ae5979c96cdee454",
+      "pixels": [
+        1647,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_abs_step050.png",
+      "bytes": 791198,
+      "sha256": "8f477c0b83b25dbf851e63bdc46a70b1aac35acb58fc4c5797f2e752ce5d664a",
+      "pixels": [
+        1741,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_response_abs_step050.png",
+      "bytes": 1054880,
+      "sha256": "f1d4f9ef53e88cdadde18972f8287c4983b66ee6802c1a45da70d09659325708",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_response_step050.png",
+      "bytes": 871949,
+      "sha256": "110e4fb47ac4b86267e7be2313ca1897ea87aa67369704c617513fdac60565c9",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_step050.png",
+      "bytes": 713365,
+      "sha256": "2f1dc768cea428b906dfb69140e8ddcf32f0fe922c4a33924a171dd65d2b60fb",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_vacuum_abs_step050.png",
+      "bytes": 620857,
+      "sha256": "42860bb751d23f40403cf9f43e87670b7f14466563da2beb89487e73f6763fb4",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_divergence_b_vacuum_step050.png",
+      "bytes": 538173,
+      "sha256": "9a1dbdac3cafaf9b8676c8215a3fd49cea93b487513e5daf8f79b8dd4065e49d",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_field_phi_step050.png",
+      "bytes": 632615,
+      "sha256": "6fdafcfc82de6e2121116a987a931b68b102637b1dd85ea676a6906ada1e108d",
+      "pixels": [
+        1714,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_field_r_step050.png",
+      "bytes": 547287,
+      "sha256": "3dbd8196849ce00c487f34c1b68d869871d9b637bc855b1f4178c573f9bac040",
+      "pixels": [
+        1714,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_field_strength_step050.png",
+      "bytes": 610751,
+      "sha256": "c4371b5cfeb312c09345799a407ff4daf78dc6c26cfbcb87ddbef4548968f139",
+      "pixels": [
+        1705,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_field_z_step050.png",
+      "bytes": 571122,
+      "sha256": "f56f37bff8bc595eb0d4d9d68f304cf7d9d997953667db739710c49049e96823",
+      "pixels": [
+        1714,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_force_residual_relative_step050.png",
+      "bytes": 662912,
+      "sha256": "f17fcb07b8c2010fe8a05f4f41df82f53700e14faf839c6fe9bffe1a494db591",
+      "pixels": [
+        1784,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_force_residual_step050.png",
+      "bytes": 749667,
+      "sha256": "0968ffaeb4f83e40ad1d04bda48421c7abfdd97f4cc59c95a7aeccd5c1f1d4a5",
+      "pixels": [
+        1708,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_lorentz_force_step050.png",
+      "bytes": 805901,
+      "sha256": "fb1939502d31865b9bd4c846b09830b602c8d3595c9faf3da09c4fb59792225b",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_parallel_current_density_step050.png",
+      "bytes": 723993,
+      "sha256": "13c21d9368c84d110bb37f33c12760056921441140725387e74ae8a4b3e298a9",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_parallel_pressure_gradient_step050.png",
+      "bytes": 689150,
+      "sha256": "b046b8f11e9b9c4bda42b1bab24c54110e2db3fd4f4cd70a86bbae8259257e2e",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_pressure_gradient_step050.png",
+      "bytes": 781172,
+      "sha256": "aa9998e59a0f24b7ac6e4cac11f3dcee53b06a6955159178bcede90da91ea57c",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_pressure_step050.png",
+      "bytes": 653690,
+      "sha256": "73cb0cbdf867b3d469155a07e6dbda672ebc37af412c77a8834d22d81ff36d8e",
+      "pixels": [
+        1662,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_response_field_phi_step050.png",
+      "bytes": 650744,
+      "sha256": "d3eeb17570ef959fc42efc4d6a73f6e94fd241879f6146242f4f8e19d4e270a9",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_response_field_r_step050.png",
+      "bytes": 689569,
+      "sha256": "27eeeb0700e25b0115f16390ec702c4bebc0f3784064c398f85ade2cbeb16646",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_response_field_strength_step050.png",
+      "bytes": 672448,
+      "sha256": "62dab0579284ff47636799293b252cd1073ca054aa459c0da1a36965242e9c6a",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_response_field_z_step050.png",
+      "bytes": 655057,
+      "sha256": "65a231d8048e9b3260d8f4b7c3c9e6c06d0b603d215dfcc668c59de6388bd85d",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_rho_step050.png",
+      "bytes": 661993,
+      "sha256": "1e178382db81462c99d53cb8f72f21705b773b62d0ccd5112abc1d377472e144",
+      "pixels": [
+        1714,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_s_step050.png",
+      "bytes": 704124,
+      "sha256": "8644b30034701f7c5185a5734d371f8769e0cd4a379c42bebc6a61e32efbfc41",
+      "pixels": [
+        1714,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_speed_change_rate_step050.png",
+      "bytes": 683813,
+      "sha256": "e249aa8d03abe5f972a99bf8c98b456dd1fb46c2848c00bdc385a46f5d1b852a",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_speed_step050.png",
+      "bytes": 729145,
+      "sha256": "151b4dbfdc8f1b4865298aa854ea2c0b431b8e26170f724a292e73a85c6ba412",
+      "pixels": [
+        1638,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_toroidal_current_density_step050.png",
+      "bytes": 704194,
+      "sha256": "3a7df8d041fe595a34a5e4a3f3db0b187b5dc165cbd72ebca72cce12714931d9",
+      "pixels": [
+        1799,
+        3083
+      ]
+    },
+    {
+      "path": "figures/section_vacuum_field_strength_step050.png",
+      "bytes": 598361,
+      "sha256": "8bc7434af4b097cf55ad95d0b70ce7c8b93c6eb7bf6f5456e1a38601b0ccbfe2",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_velocity_change_rate_step050.png",
+      "bytes": 748591,
+      "sha256": "33e13cb847647a488a3cfe7be8aff8f00db7386fc91e4f629520f5fe88a3c784",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_velocity_phi_step050.png",
+      "bytes": 645715,
+      "sha256": "31022e397b2d59e8971b7913a1f5ab4da30e9b42e6aa6910066d11277342b264",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_velocity_r_step050.png",
+      "bytes": 752687,
+      "sha256": "7b4b984cee87bf86d052be8ece51ffc39bf92a25ca66b5dfc4e5fa68afb45de0",
+      "pixels": [
+        1637,
+        3220
+      ]
+    },
+    {
+      "path": "figures/section_velocity_z_step050.png",
+      "bytes": 749158,
+      "sha256": "90b013d91b154930853ac9be0a8eb209aed7c24335cb03cd2d78c3718d6406eb",
+      "pixels": [
+        1637,
+        3220
+      ]
+    }
+  ]
+}

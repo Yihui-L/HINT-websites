@@ -1,11 +1,57 @@
-# W7-X EIM / HINT-debug input geometry
+# W7-X EIM / HINT-debug case
 
 [Open the interactive site](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/)
 
-This independent site displays the 70 W7-X coil centrelines and the `s=1`
-surface from the **reproduced** free-boundary VMEC wout. It is an input-data
-view, not a HINT evolution result and not a proof of force-balance convergence.
-The site intentionally does not calculate or display `Bn`.
+The [geometry page](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/)
+displays the 70 W7-X coil centrelines and the `s=1` surface from the
+**reproduced** free-boundary VMEC wout. The separate
+[results page](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/results.html)
+shows selected figures from the completed HINT-debug run; the
+[full figure catalog](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/gallery.html)
+contains every generated PNG, grouped by Poincare plots, spatial sections,
+profiles and convergence diagnostics. The companion
+[figure and metric guide](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/figure-guide.html)
+defines the plotted quantities and their limits. The calculation finished all
+50 requested outer iterations, but the force residual, divergence and kinetic
+energy increased during the later iterations: **completion is not convergence**.
+The geometry viewer does not calculate or display `Bn`.
+
+## HINT output and plots
+
+- Version HINT-debug 2.3.0; `initial`, `start_point="vmec"`, `scale_after=false`,
+  component magnetic interpolation, 144 x 144 x 144 cylindrical grid, GPU/JAX.
+- 50 outer iterations, 1000 Step-B inner steps each. The output NetCDF has 51
+  continuous complete records for outer 0..50 and the run log has `finished`.
+- Total wall-clock time: 15,564.0 s (4 h 19 min 24 s). Force RMS grew from
+  0.00392 at step 5 to 0.07214 at step 50; normalized divergence RMS grew
+  from 0.00754 to 0.09908 over the same interval. The end state must not be
+  described as a converged equilibrium. There is also a sharp force-RMS jump
+  from 0.00466 at step 9 to 0.05383 at step 10; its cause is not established.
+- Figures in `figures/` are generated from the saved run using the
+  HINT-debug `HintPlots` API. `poincare_step000.png` traces the saved
+  pre-iteration total field; `poincare_step050.png` traces the final saved
+  field. Both use one set of launch points at phi=0, 300 full toroidal turns,
+  and 0/18/36-degree return sections. Initial VMEC surfaces are overlays, not
+  return points.
+- The full catalog follows the previous NCSX example's scope: every available
+  2-D field variable at three toroidal planes; pressure, current, velocity,
+  force and field profiles in s, rho, R, Z and phi; enclosed current and
+  rotational-transform profiles; stored Step-B, AD and FD4 diagnostics;
+  wall/plasma checkpoint reductions; and an independent final-interpolant
+  divergence audit. A finite rotational-transform estimate without adequate
+  trajectory or surface-resolution checks is marked unresolved, not accepted
+  as an equilibrium rotational transform.
+- `result_manifest.json` records hashes and dimensions for all 99 nonduplicate
+  PNG figures. `results/` contains the concise run summary, initialization
+  and final-interpolant diagnostics, per-record volume statistics, rotational
+  transform data and Poincare tracing metadata.
+  The 6.2 GB HINT NetCDF output is deliberately not in GitHub.
+- The Step-B `divb_*` normalization, selected component-interpolant JAX AD,
+  and saved-grid FD4 divergence are distinct metrics; none is a direct
+  replacement for the continuous initialization source-expression AD result.
+  The final-interpolant audit is likewise a numerical derivative of the saved
+  component interpolation, not an analytic divergence of the coil or plasma
+  source field.
 
 ## Calculation inputs
 

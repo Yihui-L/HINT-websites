@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>W7-X EIM | 图像与指标说明</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+</head>
+<body>
+  <a class="skip-link" href="#methods">跳转到指标说明</a>
+  <header class="site-header">
+    <a class="wordmark" href="./">HINT <span>/ W7-X</span></a>
+    <span class="case-mark">EIM · HINT-debug 2.3.0</span>
+    <nav class="result-header-nav" aria-label="页面导航">
+      <a href="./">三维几何</a>
+      <a href="./results.html">重点结果</a>
+      <a href="./gallery.html">完整图集</a>
+    </nav>
+  </header>
+  <main id="methods">
+    <section class="result-intro"><div class="result-inner">
+      <div class="section-label">DATA / DEFINITIONS</div>
+      <h1>图像与指标说明</h1>
+      <p class="result-lead">所有图片只读分析 HINT-debug 2.3.0 的连续完整记录，外迭代为 0–50。这里的演化过程<strong>尚未满足力平衡收敛</strong>；输出完整和磁力线可追踪都不等价于得到稳定平衡。</p>
+    </div></section>
+    <section class="result-band"><div class="result-inner method-copy">
+      <div class="section-label">01 / FIELD LINES</div><h2>庞加莱</h2>
+      <p>初始与末态图分别追踪第 0、50 步保存的总磁场。从 φ=0° 的同组 332 个有效起点出发，最多追踪 300 个完整环向圈，在 φ=0°、18°、36° 取交点。虚线 VMEC 磁面仅为初始化几何参考，不是 HINT 的返回点。</p>
+    </div></section>
+    <section class="result-band alternate"><div class="result-inner method-copy">
+      <div class="section-label">02 / SPATIAL QUANTITIES</div><h2>二维截面</h2>
+      <p>三个环向角是一个仿星器对称半周期的起点、中点和终点。第 50 步的 32 个可用场变量在壁内展示，叠加壁、计算域及适用时的初始 VMEC 磁面。<code>s</code> 是演化的 HINT 标签，后续不必然仍是环向磁通坐标。<code>J_phi</code> 是响应电流密度的点值，不是 VMEC 的 <code>jcurv</code> 或 <code>dI/ds</code>。</p>
+      <p>当地相对力残差定义为 <code>|J_response × B_total − ∇p| / max(|J_response × B_total|, |∇p|)</code>；两项分母都为零的位置不定义。绝对力残差单位为 N/m³。空间散度图来自保存的网格场，不能等同于初始化连续源表达式的解析散度。</p>
+    </div></section>
+    <section class="result-band"><div class="result-inner method-copy">
+      <div class="section-label">03 / PROFILES</div><h2>剖面与旋转变换</h2>
+      <p>压强、环向响应电流密度、流速、绝对与相对力残差、总场强分别以演化 <code>s</code>、<code>ρ=√s</code>、R、Z、φ 为横坐标；R 截线使用 Z=0，Z/φ 截线使用 R=6.0 m。按 <code>s</code> 分箱得到的是点统计曲线，不是严格的磁面平均。适用时叠加初始 VMEC 剖面。环向包围电流则对阈值以下截面的 <code>J_phi</code> 积分。</p>
+      <p>旋转变换在每个截面用 191 个严格位于 0&lt;s&lt;1 的初始 VMEC 起点扫描，最多追踪 512 个场周期返回点，每周期 128 个环向子步。检查两段轨迹的绕转差异以及返回截面的分辨率。φ=0°、18°、36° 分别仅有 30、50、78 个起点通过全部检查。即使绕转估计有限，未通过检查的空心点仍<strong>不能</strong>视为存在完整不变磁面。</p>
+    </div></section>
+    <section class="result-band alternate"><div class="result-inner method-copy">
+      <div class="section-label">04 / DIAGNOSTICS</div><h2>演化与精度</h2>
+      <p>Step-B 曲线读取求解器保存的归一化诊断。JAX 自动微分散度针对实际使用的<strong>分量磁场插值器</strong>；FD4 散度针对保存的粗柱坐标网格场。末态节点/离网格精度对照也仅检验实际分量插值器，而不是线圈场或等离子体源表达式的解析散度。初始化源表达式的 AD 另见<a href="./results/initialization_diagnostics.json">初始化诊断</a>；LCFS 跨界面经典点值散度未定义，LCFS 外响应源解析散度在本次初始化记录中不可用，不应补造数值。</p>
+      <p>检查点统计从每个保存的外迭代重新计算派生场。壁内与壁内 <code>0≤s&lt;1</code> 区分别统计，使用柱坐标均匀网格的体积因子 R 加权。速度变化率是相邻保存步的弛豫时间割线，不等于直接测量的物理加速度。耗时曲线是计算墙钟时间，而非物理演化时间。</p>
+      <div class="provenance-links"><a href="./gallery.html">返回完整图集</a><a href="./result_manifest.json">图像 SHA-256 清单</a><a href="./results/run_summary.json">运行摘要</a></div>
+    </div></section>
+  </main>
+  <footer><span>W7-X EIM / completed, not converged</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>W7-X EIM | HINT-debug 计算结果</title>
+  <link rel="stylesheet" href="./assets/viewer.css">
+  <link rel="stylesheet" href="./assets/results.css">
+</head>
+<body>
+  <a class="skip-link" href="#results">跳转到结果</a>
+  <header class="site-header">
+    <a class="wordmark" href="./">HINT <span>/ W7-X</span></a>
+    <span class="case-mark">EIM · HINT-debug 2.3.0</span>
+    <nav class="result-header-nav" aria-label="页面导航">
+      <a href="./">三维几何</a>
+      <a href="#poincare">庞加莱</a>
+      <a href="#sections">二维截面</a>
+      <a href="./gallery.html">完整图集</a>
+    </nav>
+  </header>
+
+  <main id="results">
+    <section class="result-intro">
+      <div class="result-inner">
+        <div class="section-label">CASE / W7-X EIM / 2026-09-24</div>
+        <h1>50 步计算结果</h1>
+        <p class="result-lead"><code>initial</code> · <code>vmec</code> 启动 · <code>scale_after=false</code> · 分量磁场插值。计算正常完成 50 个外迭代，每步 1000 个 Step-B 内步；输出含第 0–50 步连续完整记录。</p>
+        <p class="result-warning"><strong>尚未收敛。</strong>力残差 RMS 在第 9→10 步从 0.00466 跃升到 0.05383；后期散度和动能总体升高。以下第 50 步图片展示已保存状态，不代表可信的稳定自由边界平衡。跃升原因尚未判定。</p>
+        <dl class="result-metrics">
+          <div><dt>总耗时</dt><dd>4 h 19 min</dd></div>
+          <div><dt>第 50 步力残差 RMS</dt><dd>0.07214</dd></div>
+          <div><dt>第 50 步散度 RMS</dt><dd>0.09908</dd></div>
+          <div><dt>离散网格</dt><dd>144 × 144 × 144</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="result-band" id="poincare">
+      <div class="result-inner">
+        <div class="section-label">01 / FIELD-LINE STRUCTURE</div>
+        <h2>庞加莱截面</h2>
+        <p class="result-copy">两图均从 φ=0° 的同组壁内起点出发，沿保存的总磁场追踪 300 个完整环向圈，在 0°、18°、36° 截面取交点。虚线是初始 VMEC 磁面几何参考，不是 HINT 追踪结果；黑线为容器轮廓。</p>
+        <div class="figure-grid prominent">
+          <figure><figcaption><strong>第 0 步</strong><span>VMEC 初始化后的总场，尚未进行弛豫</span></figcaption><a href="./figures/poincare_step000.png"><img src="./figures/poincare_step000.png" loading="lazy" decoding="async" alt="W7-X 第0步三环向截面庞加莱图，叠加VMEC磁面和壁轮廓"></a><div class="plane-links">分截面：<a href="./figures/poincare_step000_phi000.png">0°</a><a href="./figures/poincare_step000_phi018.png">18°</a><a href="./figures/poincare_step000_phi036.png">36°</a></div></figure>
+          <figure><figcaption><strong>第 50 步</strong><span>最后保存的总场，不能视为收敛平衡</span></figcaption><a href="./figures/poincare_step050.png"><img src="./figures/poincare_step050.png" loading="lazy" decoding="async" alt="W7-X 第50步三环向截面庞加莱图，叠加初始VMEC磁面和壁轮廓"></a><div class="plane-links">分截面：<a href="./figures/poincare_step050_phi000.png">0°</a><a href="./figures/poincare_step050_phi018.png">18°</a><a href="./figures/poincare_step050_phi036.png">36°</a></div></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band alternate" id="sections">
+      <div class="result-inner">
+        <div class="section-label">02 / SAVED OUTER STEP 50</div>
+        <h2>二维截面</h2>
+        <p class="result-copy">三幅截面纵向排列，叠加初始 VMEC 磁面、容器轮廓和计算域边框。空间散度图采用已保存网格场的数值求导；不能与初始化源表达式的解析散度混用。</p>
+        <div class="figure-grid">
+          <figure><figcaption><strong>压强</strong><span>Pa；彩色分布与等值线</span></figcaption><a href="./figures/section_pressure_step050.png"><img src="./figures/section_pressure_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的压强分布"></a></figure>
+          <figure><figcaption><strong>总磁场强度</strong><span>T</span></figcaption><a href="./figures/section_field_strength_step050.png"><img src="./figures/section_field_strength_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的总磁场强度"></a></figure>
+          <figure><figcaption><strong>流速大小</strong><span>m/s</span></figcaption><a href="./figures/section_speed_step050.png"><img src="./figures/section_speed_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的流速大小"></a></figure>
+          <figure><figcaption><strong>当地相对力残差</strong><span>|J×B−∇p| / max(|J×B|, |∇p|)</span></figcaption><a href="./figures/section_force_residual_relative_step050.png"><img src="./figures/section_force_residual_relative_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的当地相对力残差"></a></figure>
+          <figure><figcaption><strong>绝对力残差</strong><span>N/m³</span></figcaption><a href="./figures/section_force_residual_step050.png"><img src="./figures/section_force_residual_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的绝对力残差"></a></figure>
+          <figure><figcaption><strong>磁场散度绝对值</strong><span>T/m；由保存网格场求得</span></figcaption><a href="./figures/section_divergence_b_abs_step050.png"><img src="./figures/section_divergence_b_abs_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的磁场散度绝对值"></a></figure>
+          <figure><figcaption><strong>环向响应电流密度</strong><span>A/m²；不是 VMEC 的 jcurv</span></figcaption><a href="./figures/section_toroidal_current_density_step050.png"><img src="./figures/section_toroidal_current_density_step050.png" loading="lazy" decoding="async" alt="第50步三个环向截面的环向响应电流密度"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band" id="profiles">
+      <div class="result-inner">
+        <div class="section-label">03 / PROFILES</div>
+        <h2>剖面曲线</h2>
+        <p class="result-copy">s 为当步演化的标签；按截面面积对 s 分箱的曲线不是严格的磁面平均。R 剖面取 Z=0。支持的量叠加初始 VMEC 参考。</p>
+        <div class="figure-grid compact">
+          <figure><figcaption><strong>压强 / s</strong><span>演化剖面与初始 VMEC</span></figcaption><a href="./figures/profile_pressure_s_step050.png"><img src="./figures/profile_pressure_s_step050.png" loading="lazy" decoding="async" alt="第50步压强相对演化s剖面与初始VMEC对比"></a></figure>
+          <figure><figcaption><strong>环向响应电流密度 / s</strong><span>点值分箱平均</span></figcaption><a href="./figures/profile_toroidal_current_density_s_step050.png"><img src="./figures/profile_toroidal_current_density_s_step050.png" loading="lazy" decoding="async" alt="第50步环向响应电流密度随演化s的剖面"></a></figure>
+          <figure><figcaption><strong>环向包围电流 / s</strong><span>截面上 Jφ 的数值积分</span></figcaption><a href="./figures/profile_enclosed_toroidal_current_s_step050.png"><img src="./figures/profile_enclosed_toroidal_current_s_step050.png" loading="lazy" decoding="async" alt="第50步环向包围电流随演化s的剖面"></a></figure>
+          <figure><figcaption><strong>压强 / R</strong><span>Z=0 截线</span></figcaption><a href="./figures/profile_pressure_R_step050.png"><img src="./figures/profile_pressure_R_step050.png" loading="lazy" decoding="async" alt="第50步Z等于0处的压强径向剖面"></a></figure>
+          <figure><figcaption><strong>场强 / R</strong><span>Z=0 截线</span></figcaption><a href="./figures/profile_field_strength_R_step050.png"><img src="./figures/profile_field_strength_R_step050.png" loading="lazy" decoding="async" alt="第50步Z等于0处的总磁场强度径向剖面"></a></figure>
+          <figure><figcaption><strong>流速 / R</strong><span>Z=0 截线</span></figcaption><a href="./figures/profile_speed_R_step050.png"><img src="./figures/profile_speed_R_step050.png" loading="lazy" decoding="async" alt="第50步Z等于0处的流速径向剖面"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-band alternate" id="evolution">
+      <div class="result-inner">
+        <div class="section-label">04 / OUTER 0–50</div>
+        <h2>演化与数值诊断</h2>
+        <p class="result-copy">横轴为已完成的外迭代次数，并非真实实验时间。归一化 Step-B 指标、插值器 JAX 自动微分散度与网格四阶差分散度是不同定义，图中分别标出；连续源表达式的初始化解析散度不能代表后续演化场。</p>
+        <div class="figure-grid compact">
+          <figure><figcaption><strong>力残差</strong><span>RMS、最大值与体积权重 RMS</span></figcaption><a href="./figures/evolution_force.png"><img src="./figures/evolution_force.png" loading="lazy" decoding="async" alt="50步力残差演化曲线"></a></figure>
+          <figure><figcaption><strong>Step-B 磁场散度</strong><span>归一化诊断</span></figcaption><a href="./figures/evolution_divergence.png"><img src="./figures/evolution_divergence.png" loading="lazy" decoding="async" alt="50步归一化散度诊断演化曲线"></a></figure>
+          <figure><figcaption><strong>动能与响应场磁能</strong><span>归一化诊断</span></figcaption><a href="./figures/evolution_energy.png"><img src="./figures/evolution_energy.png" loading="lazy" decoding="async" alt="50步动能与响应磁能演化曲线"></a></figure>
+          <figure><figcaption><strong>压强与流速峰值</strong><span>已保存网格节点的最大值</span></figcaption><a href="./figures/evolution_pressure_speed.png"><img src="./figures/evolution_pressure_speed.png" loading="lazy" decoding="async" alt="50步压强与流速峰值演化曲线"></a></figure>
+          <figure><figcaption><strong>分量插值器 AD 散度</strong><span>JAX 导数，T/m</span></figcaption><a href="./figures/evolution_divergence_ad.png"><img src="./figures/evolution_divergence_ad.png" loading="lazy" decoding="async" alt="50步分量插值器JAX自动微分散度演化曲线"></a></figure>
+          <figure><figcaption><strong>网格 FD4 散度</strong><span>四阶有限差分，T/m</span></figcaption><a href="./figures/evolution_divergence_fd4.png"><img src="./figures/evolution_divergence_fd4.png" loading="lazy" decoding="async" alt="50步网格四阶有限差分散度演化曲线"></a></figure>
+          <figure><figcaption><strong>每步耗时</strong><span>Step-A、Step-B 与外迭代合计</span></figcaption><a href="./figures/evolution_timing.png"><img src="./figures/evolution_timing.png" loading="lazy" decoding="async" alt="50步外迭代与各阶段耗时曲线"></a></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="result-provenance">
+      <div class="result-inner">
+        <div class="section-label">DATA / REPRODUCIBILITY</div>
+        <h2>来源与界限</h2>
+        <p>结果来自远程完成的 <code>hint_debug_w7x_eim.nc</code>，以 HINT-debug 2.3.0 的 <code>HintPlots</code> 接口只读生成。GitHub 仅提供图片、绘图元数据与输入文件，不上传约 6.2 GB 的求解输出。第 0 步总场采用该算例的 VMEC 初始化；第 50 步并未达到稳定力平衡。</p>
+        <div class="provenance-links"><a href="./gallery.html">完整后处理图集</a><a href="./figure-guide.html">图像与指标说明</a><a href="./result_manifest.json">图像清单与哈希</a><a href="./results/run_summary.json">计算摘要</a><a href="./results/initialization_diagnostics.json">初始化源场诊断</a><a href="./results/poincare_step000_metadata.json">初始追踪参数</a><a href="./results/poincare_step050_metadata.json">末态追踪参数</a><a href="./">返回三维输入几何</a></div>
+      </div>
+    </section>
+  </main>
+  <footer><span>W7-X EIM / completed, not converged</span><a href="../Source-Code/">HINT 程序手册</a></footer>
+</body>
+</html>

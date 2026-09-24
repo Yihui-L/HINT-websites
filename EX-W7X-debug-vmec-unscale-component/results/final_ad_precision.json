@@ -1,0 +1,127 @@
+{
+  "outer_step": 50,
+  "interpolation": "component",
+  "derivative": "float64 JAX jacfwd of actual component interpolant",
+  "units": "T/m",
+  "independent_precision_bits": 64,
+  "meaning": "Not continuous source-field divergence; no finite-difference step",
+  "fields": {
+    "vacuum": {
+      "nodes_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.0013195374663319056,
+        "divergence_relative_mean": 9.371501786374427e-06,
+        "divergence_relative_p50": 3.380225440221651e-06,
+        "divergence_relative_p95": 3.8626236506166335e-05,
+        "divergence_relative_p99": 8.542940127250294e-05,
+        "divergence_relative_max": 0.0002674229945102991,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.002716890065237112,
+        "divergence_max": 0.037654014122695756,
+        "divergence_relative_rms": 1.9231478010302652e-05,
+        "minimum_abs_t_per_m": 1.674970007137233e-08
+      },
+      "offgrid_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.0006943760241802399,
+        "divergence_relative_mean": 4.931353991164685e-06,
+        "divergence_relative_p50": 1.8346487409458592e-06,
+        "divergence_relative_p95": 1.9832019850651795e-05,
+        "divergence_relative_p99": 4.351315560093942e-05,
+        "divergence_relative_max": 0.00014360296859630554,
+        "divergence_exceedance_fraction": 0.999908447265625,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.001416519307902089,
+        "divergence_max": 0.020220503045012994,
+        "divergence_relative_rms": 1.0028511529266329e-05,
+        "minimum_abs_t_per_m": 1.4117197133511894e-09
+      },
+      "independent_polynomial_check": {
+        "samples": 2048,
+        "mean_abs_difference_t_per_m": 1.1690711295363233e-14,
+        "max_abs_difference_t_per_m": 4.808751053603233e-14,
+        "reference_mean_abs_t_per_m": 0.0007042129504658713,
+        "reference_max_abs_t_per_m": 0.014816954267223058
+      }
+    },
+    "response": {
+      "nodes_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.017947508955090202,
+        "divergence_relative_mean": 0.0075590567083829805,
+        "divergence_relative_p50": 0.0017404542555556428,
+        "divergence_relative_p95": 0.028983830906604075,
+        "divergence_relative_p99": 0.10742902400401226,
+        "divergence_relative_max": 1.0205977115431613,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.06828031624532487,
+        "divergence_max": 2.42321062985964,
+        "divergence_relative_rms": 0.022366785046428618,
+        "minimum_abs_t_per_m": 2.09480841702539e-07
+      },
+      "offgrid_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.011840201850773916,
+        "divergence_relative_mean": 0.004865799903481967,
+        "divergence_relative_p50": 0.001656415947369449,
+        "divergence_relative_p95": 0.01590884453063958,
+        "divergence_relative_p99": 0.05786951547970462,
+        "divergence_relative_max": 1.1702287796242403,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.04688082430448294,
+        "divergence_max": 2.847578042085261,
+        "divergence_relative_rms": 0.01508244835748238,
+        "minimum_abs_t_per_m": 5.449089962999976e-07
+      },
+      "independent_polynomial_check": {
+        "samples": 2048,
+        "mean_abs_difference_t_per_m": 3.520373699872999e-16,
+        "max_abs_difference_t_per_m": 3.044862539186566e-14,
+        "reference_mean_abs_t_per_m": 0.013298509930981748,
+        "reference_max_abs_t_per_m": 1.6361981690484528
+      }
+    },
+    "total": {
+      "nodes_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.01832396258644925,
+        "divergence_relative_mean": 0.00013128934640089732,
+        "divergence_relative_p50": 3.380037670404474e-05,
+        "divergence_relative_p95": 0.000494978756925646,
+        "divergence_relative_p99": 0.0018138579862043548,
+        "divergence_relative_max": 0.01740910852506047,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.0683021213261977,
+        "divergence_max": 2.429777145074297,
+        "divergence_relative_rms": 0.00048776560815303984,
+        "minimum_abs_t_per_m": 6.256094680634483e-07
+      },
+      "offgrid_wall": {
+        "sample_count": 32768,
+        "divergence_mean_abs": 0.011940380541015651,
+        "divergence_relative_mean": 8.558764038292737e-05,
+        "divergence_relative_p50": 2.9400373878926946e-05,
+        "divergence_relative_p95": 0.0002773603036634609,
+        "divergence_relative_p99": 0.0010106450138746414,
+        "divergence_relative_max": 0.020416537135735203,
+        "divergence_exceedance_fraction": 1.0,
+        "divergence_relative_threshold": 5e-11,
+        "divergence_rms": 0.046886630447462135,
+        "divergence_max": 2.848322744262551,
+        "divergence_relative_rms": 0.0003350417507139409,
+        "minimum_abs_t_per_m": 1.0217743731111284e-06
+      },
+      "independent_polynomial_check": {
+        "samples": 2048,
+        "mean_abs_difference_t_per_m": 1.1281287791067676e-14,
+        "max_abs_difference_t_per_m": 4.389284075090316e-14,
+        "reference_mean_abs_t_per_m": 0.013416036157218566,
+        "reference_max_abs_t_per_m": 1.6351334237611244
+      }
+    }
+  }
+}
