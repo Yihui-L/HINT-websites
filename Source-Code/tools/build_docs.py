@@ -511,7 +511,7 @@ def build():
 <div class="versions"><span>HINT-debug {versions["debug"]}</span><span>HINT-wall {versions["wall"]}</span></div>
 <label class="search-label" for="global-search">全文检索</label><input id="global-search" type="search" placeholder="方程、参数、关键字" autocomplete="off">
 <output id="search-status" aria-live="polite"></output><nav aria-label="章节">{nav}</nav>
-<div class="sidebar-bottom"><a href="../index.html">返回 HINT 首页</a></div></aside>
+<div class="sidebar-bottom"><a href="https://github.com/Yihui-L/HINT-websites#readme">站点目录</a></div></aside>
 <main id="content"><div class="document-meta"><span>HINT / SOURCE-CODE / 使用说明</span><span>源码 {source_ref[:7]}{' + 未提交工作区' if source_dirty else ''} · schema 22</span></div>
 <div class="manual-intro"><p class="eyebrow">MODEL · NUMERICS · WORKFLOW</p><p>从物理方程到输入输出</p><div class="quick-links"><a href="#model">物理模型</a><a href="#installation">安装运行</a><a href="#main-parameters">参数索引</a><a href="#postprocess">后处理</a></div></div>
 {'<p><strong>未提交的工作区快照。</strong>提交号仅表示基线；实际快照以逐文件哈希为准。</p>' if source_dirty else ''}

@@ -1,6 +1,6 @@
 # HINT 程序与使用手册
 
-[阅读手册](index.html) · [网站首页](../index.html)
+[阅读手册](index.html)
 
 本目录包含 HINT-debug / HINT-wall 的通用程序手册，不包含装置算例或求解器源码。公式、样式、参数和通用模板均随仓库提供；浏览和常规重建无需连接源码仓库。快照版本与文件校验值见 [SOURCE_VERSION.md](SOURCE_VERSION.md) 和 [版本清单](docs-data/source-manifest.json)。
 

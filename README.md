@@ -1,18 +1,18 @@
 # HINT Websites
 
-独立的静态网站。[打开 HINT 网站](https://yihui-l.github.io/HINT-websites/)，无需登录。网站不依赖求解器仓库，也不需要运行 HINT。
+程序手册和四个算例各自在对应目录发布，无需登录。网站不依赖求解器仓库，也不需要运行 HINT。
 
-| 目录 | 内容 |
-|---|---|
-| [Source-Code](Source-Code/README.md) | HINT-debug / HINT-wall 程序与使用手册 |
-| [NCSX · debug · VMEC](EX-NCSX-debug-vmec-unscale-component/README.md) | 三维输入几何、初始场和第 50 步结果 |
-| [NCSX · debug · zero](EX-NCSX-debug-zero-unscale-component/README.md) | 20 步压强攀升、初始真空场与第 70 步结果 |
-| [NCSX · wall · VMEC](EX-NCSX-wall-vmec-unscale-component/README.md) | 第 0–12 步及第一壁诊断，第 13 步中止 |
-| [W7-X · debug · VMEC](EX-W7X-debug-vmec-unscale-component/README.md) | 自由边界 VMEC 复现、三维输入几何与第 50 步结果 |
+| 目录 | 内容 | 网站 |
+|---|---|---|
+| [Source-Code](Source-Code/README.md) | HINT-debug / HINT-wall 程序与使用手册 | [手册](https://yihui-l.github.io/HINT-websites/Source-Code/) |
+| [NCSX · debug · VMEC](EX-NCSX-debug-vmec-unscale-component/README.md) | 三维输入几何、初始场和第 50 步结果 | [算例](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
+| [NCSX · debug · zero](EX-NCSX-debug-zero-unscale-component/README.md) | 20 步压强攀升、初始真空场与第 70 步结果 | [算例](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/) |
+| [NCSX · wall · VMEC](EX-NCSX-wall-vmec-unscale-component/README.md) | 第 0–12 步及第一壁诊断，第 13 步中止 | [算例](https://yihui-l.github.io/HINT-websites/EX-NCSX-wall-vmec-unscale-component/) |
+| [W7-X · debug · VMEC](EX-W7X-debug-vmec-unscale-component/README.md) | 自由边界 VMEC 复现、三维输入几何与第 50 步结果 | [算例](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/) |
 
 ## 本机预览
 
-在仓库根目录运行以下命令，然后打开 [本机首页](http://127.0.0.1:8765/)：
+在仓库根目录运行以下命令，然后打开 [本机手册](http://127.0.0.1:8765/Source-Code/) 或对应算例的目录网址：
 
 ```bash
 python3 -m http.server 8765 --bind 127.0.0.1
