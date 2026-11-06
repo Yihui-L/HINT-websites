@@ -1,6 +1,6 @@
 # HINT Websites
 
-独立的静态网站。统一入口为 [index.html](index.html)，不依赖求解器仓库，不需要运行 HINT。GitHub 仓库保持私有，未开启公开 Pages。
+独立的静态网站。[打开 HINT 网站](https://yihui-l.github.io/HINT-websites/)，无需登录。网站不依赖求解器仓库，也不需要运行 HINT。
 
 | 目录 | 内容 |
 |---|---|
@@ -23,3 +23,5 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ## 维护
 
 手册的独立重建与版本刷新见 [Source-Code/README.md](Source-Code/README.md)。保留算例的已收录输入、图片、诊断与生成脚本；不要提交求解输出、运行缓存或凭据。达到计划步数不代表收敛。
+
+GitHub Pages 从 `main` 分支根目录发布，根目录的 `.nojekyll` 保留静态文件的原样发布。
