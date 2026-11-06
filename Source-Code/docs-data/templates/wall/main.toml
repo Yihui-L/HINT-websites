@@ -228,7 +228,13 @@ viscosity = 0.0
 # kdivb: normalized positive grad(div B1) diffusion, original HINT default.
 # It damps response divergence during evolution; it never modifies initialization.
 kdivb = 1e-4
-# Optional B projection during Step-B, disabled by default.
+# Mandatory first-wall curl-increment projection, at every RKG stage.
+# Relative volume-weighted RMS divergence tolerance, 0 < value < 1.
+# This does not change the frozen initial response Bn or the initial field.
+wall_increment_relative_tolerance = 1e-5
+
+# Optional full-state B projection during Step-B, disabled by default.
+# Its tolerance/every do not control the mandatory increment projection above.
 # In HINT-wall, the mandatory per-stage curl-increment constraint is separate;
 # its budget is at least max(400, 4*max(grid.shape)), also when this value is 0.
 divergence_projection_iterations = 0

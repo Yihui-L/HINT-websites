@@ -60,7 +60,7 @@ fs.mkdirSync(output, {recursive:true});
       report.push({site:'manual',viewport,errors,checks:'offline, layout, chapters, math, search, parameter versions'});
       if (results) {
         await page.goto(pathToFileURL(path.join(results,'index.html')).href);
-        assert.equal(await page.locator('.figure-card').count(),resultData.figure_count);
+        assert.equal(await page.locator('.figure-card').count(),resultData.figures.length);
         assert.equal(await page.locator('#initial-poincare').count(),1);
         await page.locator('#figure-search').fill('初始化总场');
         assert.equal(await page.locator('.figure-card:visible').count(),1);

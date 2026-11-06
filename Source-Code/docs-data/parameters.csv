@@ -179,3 +179,4 @@ post,input_file,str,"""""","""""",.nc 路径，必需,主程序统一结果文�
 post,output_file,str,"""""","""""",.nc 路径,独立后处理结果文件；空字符串自动取 input 文件名加 _analysis.nc。必须不同于 input_file。
 post,selection.record,int,-1,-1,整数,完整保存状态的记录选择，-1 为最后完整记录；不是外迭代编号，尤其 save_every>1 时不能混淆。
 post,selection.requested_time,float | None,省略 (None),省略 (None),归一化 Alfvén 时间；可省略,提供时优先于 record，选择最接近该时间的完整保存态，不在两个状态间插值。TOML 不支持 null，默认应省略。
+main,solver.step_b.wall_increment_relative_tolerance,float,NOT_ACCEPTED,1e-05,无量纲，wall 专用，0 < 值 < 1,每个 RKG 阶段强制旋度增量投影的相对体积加权 RMS 容差。独立于可选的完整状态投影，不改变冻结的初始 B1·n。

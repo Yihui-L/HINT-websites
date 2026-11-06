@@ -1,6 +1,6 @@
 # 文档构建检查
 
-当前手册为HINT-debug / HINT-wall 2.3.0，统一B状态schema22。参数类型和默认值从配置AST生成，示例按字节同步，源码哈希记录于source-manifest.json。
+当前手册为 HINT-debug 2.3.0 / HINT-wall 2.3.2，使用 B 状态 schema 22。参数类型和默认值从配置 AST 生成，示例按字节同步，源码哈希记录于 source-manifest.json。
 
 重点核对：直接 B₁/v 推进、kdivb、FIELDLINES 内外分支、内区同一几何 Jacobian 重构、LCFS 源数据只诊断不修正、默认 component 与可选耦合向量 RBF、源场 AD/插值器 AD/网格 FD4 分开存储、两种冻结初始法向边界、follow 不覆盖当前 s、初始化第 0 步写入。当前文件为 schema22，不读取旧 schema；现有历史结果保留原版本读取方式。
 

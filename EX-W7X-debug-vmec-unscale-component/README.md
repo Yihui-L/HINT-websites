@@ -1,16 +1,16 @@
 # W7-X EIM / HINT-debug case
 
-[Open the interactive site](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/)
+[Open the interactive site](index.html)
 
-The [geometry page](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/)
+The [geometry page](index.html)
 displays the 70 W7-X coil centrelines and the `s=1` surface from the
 **reproduced** free-boundary VMEC wout. The separate
-[results page](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/results.html)
+[results page](results.html)
 shows selected figures from the completed HINT-debug run; the
-[full figure catalog](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/gallery.html)
+[full figure catalog](gallery.html)
 contains every generated PNG, grouped by Poincare plots, spatial sections,
 profiles and convergence diagnostics. The companion
-[figure and metric guide](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/figure-guide.html)
+[figure and metric guide](figure-guide.html)
 defines the plotted quantities and their limits. The calculation finished all
 50 requested outer iterations, but the force residual, divergence and kinetic
 energy increased during the later iterations: **completion is not convergence**.

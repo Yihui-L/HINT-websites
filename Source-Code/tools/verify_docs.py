@@ -6,11 +6,11 @@ import hashlib
 import json
 import re
 from html.parser import HTMLParser
+from collections import Counter
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import tomllib
-from source_repo import locate_source
 
 DOCS = Path(__file__).resolve().parents[1]
 
@@ -40,9 +40,9 @@ class Page(HTMLParser):
             assert attrs.get("alt") or (unloaded_viewer and "alt" in attrs), "Missing image alternative text"
 
 
-def check_html(folder):
+def check_html(file):
     parser = Page()
-    text = (folder / "index.html").read_text()
+    text = file.read_text()
     parser.feed(text)
     assert not parser.duplicate, parser.duplicate
     assert "MATHPLACEHOLDER" not in text and 'href="source:' not in text
@@ -50,19 +50,19 @@ def check_html(folder):
         part = urlsplit(target)
         if part.scheme or part.netloc:
             continue
-        path = (folder / unquote(part.path)).resolve() if part.path else folder / "index.html"
+        path = (file.parent / unquote(part.path)).resolve() if part.path else file
         if path.is_dir():
             path /= "index.html"
-        assert path.exists(), f"Broken link: {target}"
-        if part.fragment and path == folder / "index.html":
-            assert part.fragment in parser.ids, f"Missing anchor {target}"
+        assert path.is_file(), f"Broken link in {file}: {target}"
+        if part.fragment and path == file:
+            assert unquote(part.fragment) in parser.ids, f"Missing anchor in {file}: {target}"
     for target in parser.resources:
         assert not urlsplit(target).scheme, "Static site must not require remote assets"
     return parser
 
 
 def check_manual(repo=None):
-    page = check_html(DOCS)
+    page = check_html(DOCS / "index.html")
     assert page.math >= 15, "Equation conversion incomplete"
     data = DOCS / "docs-data"
     manifest = json.loads((data / "source-manifest.json").read_text())
@@ -82,6 +82,10 @@ def check_manual(repo=None):
             if repo:
                 source = repo / f"HINT-{variant}/examples/{name}"
                 assert source.read_bytes() == template.read_bytes(), f"Template drift: {template}"
+    for row in rows:
+        for entry in row["versions"].values():
+            path, _, line = entry["source"].partition("#L")
+            assert path in manifest["source_sha256"] and line.isdecimal(), entry["source"]
     eta = next(r for r in rows if r["name"] == "solver.step_b.eta1")
     assert set(eta["versions"]) == {"debug"}
     interpolation = next(r for r in rows if r["name"] == "solver.magnetic_interpolation")
@@ -105,27 +109,32 @@ def check_manual(repo=None):
                         if isinstance(item, ast.AnnAssign):
                             assert item.target.id in exported | ignored, f"Uncatalogued field: {variant}:{item.target.id}"
     print(f"Manual: {len(rows)} union parameters, {page.math} MathML equations; links, templates and case separation pass.")
-    print("Source hashes and parameter coverage pass." if repo else "Source checkout unavailable: source hash checks skipped.")
+    print("Source hashes and parameter coverage pass." if repo else "Checked the self-contained snapshot.")
 
 
 def check_results(folder):
-    check_html(folder)
     data = json.loads((folder / "docs-data/results.json").read_text())
-    assert len(data["figures"]) == data["figure_count"]
+    assert Counter(f["category"] for f in data["figures"]) == data["figure_counts"]
     for figure in data["figures"]:
-        path = (folder / figure["file"]).resolve()
+        path = (folder / unquote(urlsplit(figure["file"]).path)).resolve()
+        assert path.stat().st_size == figure["bytes"], path
         assert hashlib.sha256(path.read_bytes()).hexdigest() == figure["sha256"], path
-    for relative, sha in data["files"].items():
+    for relative, info in data["provenance"]["input_checksums"].items():
         path = folder.parent / relative
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == sha, path
+        assert path.stat().st_size == info["bytes"], path
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == info["sha256"], path
     print(f"Result website: {len(data['figures'])} figure hashes, input hashes and links pass.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-repo")
-    parser.add_argument("--results", type=Path, help="Optional independent result website folder")
+    parser.add_argument("--source-repo", type=Path)
     args = parser.parse_args()
-    check_manual(locate_source(args.source_repo, required=False))
-    if args.results:
-        check_results(args.results.resolve())
+    check_manual(args.source_repo)
+    root = DOCS.parent
+    pages = sorted(root.rglob("*.html"))
+    for page in pages:
+        check_html(page)
+    for manifest in sorted(root.glob("EX-*/Documents/docs-data/results.json")):
+        check_results(manifest.parents[1])
+    print(f"Static links and resources checked in {len(pages)} HTML pages.")

@@ -1,9 +1,9 @@
 {
-  "source_commit": "0495705cb52feb85e8db2f31f0cc91034197a01b",
+  "source_commit": "8609e184e1d7b8bcabab662ddf1fb170243ded60",
   "source_working_tree_changes": false,
   "versions": {
     "debug": "2.3.0",
-    "wall": "2.3.0"
+    "wall": "2.3.2"
   },
   "parameter_counts": {
     "debug": {
@@ -11,7 +11,7 @@
       "post": 116
     },
     "wall": {
-      "main": 63,
+      "main": 64,
       "post": 116
     }
   },
@@ -127,13 +127,13 @@
     "HINT-debug/tests/test_vmec_profiles.py": "cd845e01fb059fbd42824138aefedceec1646b5bb2621bb5783f7166d0638f96",
     "HINT-debug/tests/test_vmec_start.py": "55ce453486843bc16b22a43fb9aa178620769a01ec2fc5071ab0d9a34177ad9f",
     "HINT-debug/tests/test_wall_file.py": "8bd933a33f8f1d995a3ca1eaf0727b58254ab3cd7c2221c284538c0b758257cd",
-    "HINT-wall/README.md": "e3d45021a2d1e2b168c09c688fdfb340479df46519dc08438f38ad2680d730f0",
-    "HINT-wall/docs/B_EVOLUTION_MIGRATION.md": "95572a8c1dec99d35d77a5c8dc49a22e05dc89529c5f6776f055d93907df07ca",
+    "HINT-wall/README.md": "1ca809e5200cb670e925760da3c6c19afe8a656ececfc1c0f60ac91e02850c60",
+    "HINT-wall/docs/B_EVOLUTION_MIGRATION.md": "b2ec228047914ef952d94087e148b6b2e45c4aebf84f6f828418622f05530614",
     "HINT-wall/docs/COIL_FILE_FORMAT.md": "7efee6bbe8a93c169234b5e179f256b0ce464da20ec056e1c9f6d6ade7ae774a",
-    "HINT-wall/docs/EXECUTION.md": "978b161da6c6b8b9b4d76f1f584549f909671cbb83c9bc3d05bc5a0ee8921308",
+    "HINT-wall/docs/EXECUTION.md": "bc7b02fe7cdc038386f4330ef83255da2e9970ea5822870e3527c33533308c30",
     "HINT-wall/docs/FIELDLINES_INITIALIZATION.md": "35cdc6e50eb452e4c78b51ae7d7aa2845456df4ac5648721c693bd36ee29b668",
     "HINT-wall/docs/INPUT_OUTPUT.md": "acc5c71e92c269e1eaf07fd264c046d5067a76165df8ea797ff7a7ff31937027",
-    "HINT-wall/docs/MODEL_AND_NUMERICS.md": "5d100f1cb7e3bbd375b5593aa831e8272460b5498bd81d67a92beb8f2441a333",
+    "HINT-wall/docs/MODEL_AND_NUMERICS.md": "dee6b4d372cb454a051479e351569216183447ec98bcb4bab36b30eae909a24e",
     "HINT-wall/docs/NOTEBOOK_PLOTTING.md": "070a41022826500d5b9bf57a09b91b89ded0242999b0ce6ecb348a106e7ccd13",
     "HINT-wall/docs/POSTPROCESSING.md": "4984698bc4f870597891dce1628c7a1d958eb2d2fdc12ce3167a8091bb4e22d0",
     "HINT-wall/docs/RBF_INTERPOLATION.md": "193ea63f23d0399bd1eea71ba7bbf1290b78236ebfa1fa208508970b774b1755",
@@ -141,7 +141,7 @@
     "HINT-wall/docs/VERIFICATION.md": "81ff2be2199f81bbb884e2959f58370c659f709c45fd0ea8fae5d4d5ba48818f",
     "HINT-wall/docs/WALL_FILE_FORMAT.md": "6f9cf081e43ce11cca92216971b9e4b3e1febeb0d0a3c49680e26bd92d1d59f1",
     "HINT-wall/examples/follow.toml": "180d9f7918a1d0e4a2f62035b70035a5020155e4fcbf60b771a94a3c1c52f175",
-    "HINT-wall/examples/main.toml": "5527b889d50af75c7736730465a7736460958a8f5ddfd51166faeb6ffc0a2b5f",
+    "HINT-wall/examples/main.toml": "a2f0a863f411e6cbbb2e56c3fcbd988c0528d08d6835bffa663e76950fc64bae",
     "HINT-wall/examples/post.toml": "df256ca10518950b06a651b0467663ffbd02fdfbf3e9183df9bd15c9e464f936",
     "HINT-wall/postprocess/hint_wall_plotting/__init__.py": "23614ad6801774635ff4fcbc9cda9f776efd1182826fcebcc559ea391af4f3e9",
     "HINT-wall/postprocess/hint_wall_plotting/data.py": "3336abd2abe2354892a8b53df435a4e0b58a43e6af0119388303c84ac997746e",
@@ -150,13 +150,13 @@
     "HINT-wall/postprocess/hint_wall_plotting/rotational_transform.py": "843e92977e60ec7f792432e263c51425b7abd96d24d6906a65b8215157136442",
     "HINT-wall/postprocess/hint_wall_plotting/variables.py": "75ed4099830e4c5b7eae5e6549edb8d7d58f92486c046d49d7839ad8c650d5ec",
     "HINT-wall/postprocess/hint_wall_plotting/vmec_reference.py": "363ffd6e6f99858eac4edb2442c5128cf837a2560ea872d94082004233e3377a",
-    "HINT-wall/pyproject.toml": "dae7de3b1ab6f23b437541e2e1b99e189a718acc97b432f5342826d1c577413c",
-    "HINT-wall/src/hint_wall/__init__.py": "fad663fa1999beaa581cea820e4e94afe204da8b6386d7958b26b8ec4d21b138",
+    "HINT-wall/pyproject.toml": "431291384cb9e98325d18488cf9b29db7b5b42b93b78eb936fd4818e550967c9",
+    "HINT-wall/src/hint_wall/__init__.py": "90d191dce785d1f8948c067aca1c6957710f4d74698f9f9eefe8ab137c180858",
     "HINT-wall/src/hint_wall/__main__.py": "1ba85ca58575d8d4467d51fe4fa427913be277197288973e4badd58fa4e7e581",
     "HINT-wall/src/hint_wall/backend.py": "bd0292800ff05d59aa066fb640c1693265ab618fb4d53a4914348e48a88babd3",
     "HINT-wall/src/hint_wall/cli.py": "62bb2911538ad9b9fab6456e158b6e6e7357e41d865b0347614cef74738efdf8",
     "HINT-wall/src/hint_wall/component.py": "253514f747b8cbcbd6c649f9564fad64fb17a69a9037d759bc11bbea4ce0ec6e",
-    "HINT-wall/src/hint_wall/config.py": "065df434ac013b526d2711cf31735b0c83b5dac7485a920bb9fc56225e934a36",
+    "HINT-wall/src/hint_wall/config.py": "9e8c671c73a412bcd4f2ebf2e51d40e028cc600ef2d312f133c0886a907829b3",
     "HINT-wall/src/hint_wall/diagnostic_log.py": "12b9aa73f75a8f62038df65fd6c090f41bc127aa10e520c4fd651ac4922f1e1c",
     "HINT-wall/src/hint_wall/exceptions.py": "61e91b8c2e5f6c6611b8bc956e67a689d4dd46215fcaf6bfcc9aecac5e3b5183",
     "HINT-wall/src/hint_wall/interpolation.py": "ee85a85e96b55c4f357090c62b11e94835ac25cc1373e1ef167d757e67ca770a",
@@ -200,8 +200,8 @@
     "HINT-wall/src/hint_wall/solver/flux.py": "77950beaf3443b47d94515e3690897e74ed63ce681384cf1b98705e2767faebe",
     "HINT-wall/src/hint_wall/solver/step_a.py": "c424d0ffb3f4264a5a28bb04e3ff57d867798a6d4be10f5e81c66aab4bd54741",
     "HINT-wall/src/hint_wall/solver/step_a_jax.py": "cc801fb46b1e4bc6011acebd2a8f322f4bb5f63db07f3d2981acd72f7a8b2c00",
-    "HINT-wall/src/hint_wall/solver/step_b.py": "1d2fe351d25f1519dcc56083ade3a0cbf1db7af3639c59888b024e66bb77bf27",
-    "HINT-wall/src/hint_wall/solver/wall.py": "c45e250782b3094516be90bf76b14651d8ac2ac9ddf1358c82e8df1dd6e8b306",
+    "HINT-wall/src/hint_wall/solver/step_b.py": "828ab2b9975be5e527f267f2dfe01f032d66a3d197724d64f0c0cb3602fc4982",
+    "HINT-wall/src/hint_wall/solver/wall.py": "a9547e4298075ae6ea777882546a18a23382b574832dc124ffb322b8a600a831",
     "HINT-wall/src/hint_wall/storage.py": "27d4d33ace02dabe0211e68a2cf13c52847849aec4a2c659fea2c7df69dc81b9",
     "HINT-wall/tests/test_acceleration_paths.py": "ded712cd91c36053d8c72598664733ab21c635289dfeb4bbcd4a4029e1c0e6d8",
     "HINT-wall/tests/test_axis_tolerance.py": "6699d4c65d479fb2713fc0c285fefa665114102000356fd072f8e06e29aad406",
@@ -235,7 +235,7 @@
     "HINT-wall/tests/test_vmec_plot_references.py": "f055625a1f188327a7a09a690b96012a570e3d1fb4113b10e74c8fdc50ca832c",
     "HINT-wall/tests/test_vmec_profiles.py": "0ce947ebfa7967a02999a835e781190a7c25ace94018ca5076e2a207c6c9128f",
     "HINT-wall/tests/test_vmec_start.py": "e9f213e802b594ebae7efa9457ab08568566094554b8b06b192600d740961357",
-    "HINT-wall/tests/test_wall_divergence.py": "a5c0f8f71c0af19f737015a504db89198a94d5a7611704643a51bb178357cef7",
+    "HINT-wall/tests/test_wall_divergence.py": "45c4ab60f173569a792cfb5a680537faa12e60a229c52c50539a81973e09f77b",
     "HINT-wall/tests/test_wall_file.py": "1abafac6e950ce1f57ff65c723860ca82baff4241f2aa92ce94e5a446b1d5f7b"
   },
   "validation_scope": "Documentation/source contract and browser checks; no new equilibrium benchmark."

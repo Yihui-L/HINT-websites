@@ -4,9 +4,9 @@
 
 Python **3.11 或更新版本**；当前依赖下限包含 NumPy 2、SciPy 1.14、netCDF4 1.7.2、JAX 0.5、threadpoolctl 3.5。实际解析结果取决于平台。MPI 的系统库/启动器以及 CUDA 驱动不是 pip 自动配置的集群资源。
 
+安装求解器时，请先取得有权限使用的源码包，在包含 `HINT-debug/` 和 `HINT-wall/` 的本地目录执行：
+
 ```bash
-git clone git@github.com:Yihui-L/HINT-docs.git
-cd HINT-docs
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -22,7 +22,7 @@ GPU 路径按驱动兼容性选择包内 extra，例如 `./HINT-debug[jax-cuda12
 
 ```text
 work/
-  source/HINT-docs/              # 源码
+  source/                       # 求解器源码
   environments/                 # 虚拟环境，可在其他位置
   cases/my-case/
     main.toml

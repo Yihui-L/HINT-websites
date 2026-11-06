@@ -1,26 +1,25 @@
 # HINT Websites
 
-HINT 的独立公开网站。源码和网站分开维护；HINT-docs 源码仓库仍为私有。
+独立的静态网站。统一入口为 [index.html](index.html)，不依赖求解器仓库，不需要运行 HINT。GitHub 仓库保持私有，未开启公开 Pages。
 
-| 一级目录 | 内容 | 网站 |
-|---|---|---|
-| `Source-Code/` | HINT-debug / HINT-wall 程序与使用手册，无具体算例记录 | [阅读手册](https://yihui-l.github.io/HINT-websites/Source-Code/) |
-| `EX-NCSX-debug-vmec-unscale-component/` | NCSX HINT-debug 2.3.0，VMEC启动，线圈/LCFS三维交互图及第50步结果 | [查看输入几何](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/) |
-| `EX-NCSX-debug-zero-unscale-component/` | NCSX HINT-debug 2.3.0，zero启动，20步压强攀升，第70步结果及初始真空场 | [查看zero启动结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/) |
-| `EX-NCSX-wall-vmec-unscale-component/` | NCSX HINT-wall 2.3.2，VMEC启动；完成第12步，第13步中止，提供演化曲线和边界诊断 | [查看演化结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-wall-vmec-unscale-component/) |
-| `EX-W7X-debug-vmec-unscale-component/` | W7-X EIM HINT-debug 2.3.0，真实容器输入、复现的自由边界 VMEC 平衡与线圈/LCFS 三维交互图 | [查看输入几何](https://yihui-l.github.io/HINT-websites/EX-W7X-debug-vmec-unscale-component/) |
+| 目录 | 内容 |
+|---|---|
+| [Source-Code](Source-Code/README.md) | HINT-debug / HINT-wall 程序与使用手册 |
+| [NCSX · debug · VMEC](EX-NCSX-debug-vmec-unscale-component/README.md) | 三维输入几何、初始场和第 50 步结果 |
+| [NCSX · debug · zero](EX-NCSX-debug-zero-unscale-component/README.md) | 20 步压强攀升、初始真空场与第 70 步结果 |
+| [NCSX · wall · VMEC](EX-NCSX-wall-vmec-unscale-component/README.md) | 第 0–12 步及第一壁诊断，第 13 步中止 |
+| [W7-X · debug · VMEC](EX-W7X-debug-vmec-unscale-component/README.md) | 自由边界 VMEC 复现、三维输入几何与第 50 步结果 |
 
-除 Git 管理目录外，仓库保留以上五个一级文件夹。各有独立入口，不依赖其他网站的资源文件。根目录仅保留 `.nojekyll` 和本 README，分别用于静态发布配置和仓库说明。
+## 本机预览
 
-## 内容边界
+在仓库根目录运行以下命令，然后打开 [本机首页](http://127.0.0.1:8765/)：
 
-- `Source-Code/` 包含正文、参数表、通用模板、资源、构建与校验工具。文件夹名称不表示其中包含求解器源码。
-- 实例目录分别维护图片、结果说明和可发布的小型数据。debug VMEC实例保留第0步、第50步及0-50步历史；debug zero实例展示初始真空场、第70步及0-70步历史，记录第21步检查点续算过程；wall VMEC实例记录0-12步演化及第13步中止原因，不代表收敛平衡。网站状态是静态发布快照，不是实时任务监控。
-- NCSX 算例不上传 wout、mgrid、计算 NetCDF、凭据、运行缓存或私有仓库 Git 历史。W7-X 算例按用户要求单独发布复现的 VMEC `wout` 与输入；仍不发布 HINT 运行缓存或计算 NetCDF。
-- 初始化磁面图和达到预定外迭代步数均不等价于已经验证力平衡收敛。
+```bash
+python3 -m http.server 8765 --bind 127.0.0.1
+```
 
-## 维护与发布
+本机 HTTP 服务用于加载三维页面的 JS 模块和几何文件。地址只在运行服务的机器上可用，不是供合作者访问的在线链接。
 
-通用手册的构建命令见 [Source-Code/README.md](Source-Code/README.md)。实例的输入、图片、方法说明和结果清单只在各自实例目录维护。
+## 维护
 
-GitHub Pages 使用 `main` 分支根目录并强制 HTTPS。提交推送后需要等待 Pages 构建完成。各网站从各自目录的 `index.html` 进入；仓库根网址不提供首页或自动跳转，也不维护旧网址兼容。
+手册的独立重建与版本刷新见 [Source-Code/README.md](Source-Code/README.md)。保留算例的已收录输入、图片、诊断与生成脚本；不要提交求解输出、运行缓存或凭据。达到计划步数不代表收敛。

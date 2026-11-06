@@ -1,4 +1,4 @@
-"""Build the self-contained manual from reviewed prose and current source ASTs."""
+"""Build the manual from the checked-in snapshot, or refresh it from local source."""
 
 from __future__ import annotations
 
@@ -18,12 +18,13 @@ from pathlib import Path
 import markdown
 import tomllib
 from latex2mathml.converter import convert
-from source_repo import locate_source
 
 DOCS = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--source-repo", help="Separate HINT-docs source checkout")
-REPO = locate_source(parser.parse_args().source_repo)
+parser.add_argument("--source-repo", type=Path, help="Refresh the snapshot from a local source checkout")
+parser.add_argument("--figures", action="store_true", help="Regenerate the existing diagrams")
+ARGS = parser.parse_args()
+REPO = ARGS.source_repo.resolve() if ARGS.source_repo else None
 DATA = DOCS / "docs-data"
 NOTES = json.loads((DATA / "parameter-notes.json").read_text())
 MAIN = {
@@ -51,22 +52,20 @@ POST = {
     "boundary_trace": "HMAGConfig",
     "convergence": "FeatureConfig",
 }
-SOURCE_REF = subprocess.check_output(
-    ["git", "log", "-1", "--format=%H", "--", "HINT-debug", "HINT-wall"],
-    cwd=REPO,
-    text=True,
-).strip()
-SOURCE_DIRTY = bool(subprocess.check_output(
-    ["git", "status", "--porcelain", "--", "HINT-debug", "HINT-wall"],
-    cwd=REPO, text=True,
-).strip())
+REFERENCES = set()
 
 
-def source_url(variant: str, relative: str, line: int = 1) -> str:
+def source_location(variant: str, relative: str, line: int = 1) -> str:
     path = f"HINT-{variant}/{relative}"
     if not (REPO / path).is_file():
         raise ValueError(f"Missing source link: {path}")
-    return f"https://github.com/Yihui-L/HINT-docs/blob/{SOURCE_REF}/{path}#L{line}"
+    return f"{path}#L{line}"
+
+
+def source_anchor(location: str) -> str:
+    path = location.partition("#")[0]
+    REFERENCES.add(path)
+    return "source-" + path.replace("/", "--")
 
 
 def digest(path: Path) -> str:
@@ -164,7 +163,7 @@ def parameters():
                         raise ValueError(f"Type drift: {full}")
                     row["versions"][variant] = {
                         "default": entry["default"],
-                        "source": source_url(variant, relative, entry["line"]),
+                        "source": source_location(variant, relative, entry["line"]),
                     }
         # These keys are mapped explicitly by PostConfig.from_toml, not table dataclasses.
         root = [
@@ -188,7 +187,7 @@ def parameters():
             )
             row["versions"][variant] = {
                 "default": default,
-                "source": source_url(variant, relative),
+                "source": source_location(variant, relative),
             }
     return list(rows.values())
 
@@ -215,7 +214,7 @@ def render_md(text):
         rendered = rendered.replace(f"<p>MATHPLACEHOLDER{i}END</p>", block)
     rendered = re.sub(
         r'href="source:(debug|wall):([^"#]+)"',
-        lambda m: 'href="' + source_url(m[1], m[2]) + '"',
+        lambda m: 'href="#' + source_anchor(f"HINT-{m[1]}/{m[2]}") + '"',
         rendered,
     )
     rendered = rendered.replace(
@@ -243,7 +242,10 @@ def parameter_table(rows, program):
             cells.append(
                 "不接受"
                 if entry is None
-                else f'<a href="{entry["source"]}"><code>{html.escape(default_text(entry["default"]))}</code></a>'
+                else (
+                    f'<a href="#{source_anchor(entry["source"])}" title="{html.escape(entry["source"])}">'
+                    f'<code>{html.escape(default_text(entry["default"]))}</code></a>'
+                )
             )
         name = row["name"]
         body.append(
@@ -385,10 +387,17 @@ def figures():
 
 def build():
     (DOCS / "assets").mkdir(exist_ok=True)
-    rows = parameters()
-    (DATA / "parameters.json").write_text(
-        json.dumps(rows, ensure_ascii=False, indent=2) + "\n"
-    )
+    if REPO:
+        rows = parameters()
+        catalogs = {v: plotting_catalog(v) for v in ("debug", "wall")}
+        manifest = refresh_snapshot(rows, catalogs)
+    else:
+        rows = json.loads((DATA / "parameters.json").read_text())
+        catalogs = json.loads((DATA / "variables.json").read_text())
+        manifest = json.loads((DATA / "source-manifest.json").read_text())
+    versions = manifest["versions"]
+    source_ref = manifest["source_commit"]
+    source_dirty = manifest["source_working_tree_changes"]
     out = io.StringIO()
     writer = csv.writer(out, lineterminator="\n")
     writer.writerow(
@@ -426,7 +435,7 @@ def build():
         sections.append((path.stem.split("-", 1)[1], title, render_md(text)))
     for program, title in (("main", "主程序参数全表"), ("post", "后处理参数全表")):
         intro = (
-            "默认值来自源码配置类；0/空值可能只是必填占位。默认值链接到对应定义行。"
+            "默认值来自源码配置类；0/空值可能只是必填占位。链接指向本地出处索引，悬停显示原定义行。"
             "条件不生效不一定意味着可以输入非法类型。TOML 的 None 表示省略该键。"
         )
         sections.append(
@@ -436,12 +445,6 @@ def build():
                 f"<h1>{title}</h1><p>{intro}</p>" + parameter_table(rows, program),
             )
         )
-    catalogs = {}
-    for variant in ("debug", "wall"):
-        catalogs[variant] = plotting_catalog(variant)
-    (DATA / "variables.json").write_text(
-        json.dumps(catalogs, ensure_ascii=False, indent=2) + "\n"
-    )
     varrows = []
     for name, info in catalogs["debug"].items():
         varrows.append(
@@ -459,42 +462,18 @@ def build():
             "<tbody>" + "".join(varrows) + "</tbody></table></div>",
         )
     )
-    versions = {}
-    hashes = {}
-    for variant in ("debug", "wall"):
-        root = REPO / f"HINT-{variant}"
-        versions[variant] = tomllib.loads((root / "pyproject.toml").read_text())[
-            "project"
-        ]["version"]
-        for p in sorted(root.rglob("*")):
-            if (
-                p.is_file()
-                and p.suffix in {".py", ".toml", ".md"}
-                and not any(x.startswith(".") for x in p.relative_to(root).parts)
-            ):
-                hashes[str(p.relative_to(REPO))] = digest(p)
-        target = DATA / "templates" / variant
-        target.mkdir(parents=True, exist_ok=True)
-        for name in ("main.toml", "follow.toml", "post.toml", "postprocess_demo.ipynb"):
-            shutil.copyfile(root / "examples" / name, target / name)
-    manifest = {
-        "source_commit": SOURCE_REF,
-        "source_working_tree_changes": SOURCE_DIRTY,
-        "versions": versions,
-        "parameter_counts": {
-            v: {
-                p: sum(r["program"] == p and v in r["versions"] for r in rows)
-                for p in ("main", "post")
-            }
-            for v in versions
-        },
-        "plot_variable_count": len(catalogs["debug"]),
-        "source_sha256": hashes,
-        "validation_scope": "Documentation/source contract and browser checks; no new equilibrium benchmark.",
-    }
-    (DATA / "source-manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
+    references = "".join(
+        f'<li id="{source_anchor(path)}"><code>{html.escape(path)}</code>'
+        f'<small> · SHA-256 <code>{manifest["source_sha256"][path][:12]}…</code></small></li>'
+        for path in sorted(REFERENCES)
     )
+    sections.append((
+        "source-references",
+        "源码出处索引",
+        "<h1>源码出处索引</h1><p>这些路径对应已核对的源码快照。"
+        '完整校验值见 <a href="docs-data/source-manifest.json">版本清单</a>；站点不需要访问求解器仓库。</p>'
+        f"<ul>{references}</ul>",
+    ))
     download = "<h1>文档与输入模板</h1><p>参数模板来自当前源码，不包含任何装置输入、运行记录或计算结果。</p><ul>"
     for filename, label in [
         ("parameters.json", "参数 JSON"),
@@ -532,24 +511,24 @@ def build():
 <div class="versions"><span>HINT-debug {versions["debug"]}</span><span>HINT-wall {versions["wall"]}</span></div>
 <label class="search-label" for="global-search">全文检索</label><input id="global-search" type="search" placeholder="方程、参数、关键字" autocomplete="off">
 <output id="search-status" aria-live="polite"></output><nav aria-label="章节">{nav}</nav>
-<div class="sidebar-bottom"><a href="https://github.com/Yihui-L/HINT-websites/tree/main/Source-Code">GitHub · 手册文档</a>
-<a href="https://github.com/Yihui-L/HINT-docs">GitHub · 程序源码（需权限）</a></div></aside>
-<main id="content"><div class="document-meta"><span>HINT / SOURCE-CODE / 使用说明</span><span>源码 {SOURCE_REF[:7]}{' + 未提交工作区' if SOURCE_DIRTY else ''} · schema 22</span></div>
+<div class="sidebar-bottom"><a href="../index.html">返回 HINT 首页</a></div></aside>
+<main id="content"><div class="document-meta"><span>HINT / SOURCE-CODE / 使用说明</span><span>源码 {source_ref[:7]}{' + 未提交工作区' if source_dirty else ''} · schema 22</span></div>
 <div class="manual-intro"><p class="eyebrow">MODEL · NUMERICS · WORKFLOW</p><p>从物理方程到输入输出</p><div class="quick-links"><a href="#model">物理模型</a><a href="#installation">安装运行</a><a href="#main-parameters">参数索引</a><a href="#postprocess">后处理</a></div></div>
-{'<p><strong>未发布的工作区快照。</strong>源码链接指向最近提交，未包含当前候选修改；请结合逐文件哈希及核验章节阅读，不能将本页视为已验收版本。</p>' if SOURCE_DIRTY else ''}
+{'<p><strong>未提交的工作区快照。</strong>提交号仅表示基线；实际快照以逐文件哈希为准。</p>' if source_dirty else ''}
 {articles}<p id="no-results" hidden>未找到匹配章节。</p><footer>源代码定义行为，离散诊断支持判断；本文不代替算例验证。<br>HINT-debug {versions["debug"]} / HINT-wall {versions["wall"]}</footer></main>
 </body></html>"""
     (DOCS / "index.html").write_text(page)
     (DOCS / "SOURCE_VERSION.md").write_text(
         f"# Source Version\n\n- HINT-debug {versions['debug']} / HINT-wall {versions['wall']}\n"
-        f"- Source commit: `{SOURCE_REF}`\n- NetCDF schema: 22 (variant-specific identifiers)\n"
-        f"- Uncommitted source-tree changes: {SOURCE_DIRTY}. "
+        f"- Source commit: `{source_ref}`\n- NetCDF schema: 22 (variant-specific identifiers)\n"
+        f"- Uncommitted source-tree changes: {source_dirty}. "
         "When true, the commit is a base reference, not this complete snapshot.\n"
         "- 参数默认值与字段类型由配置 AST 生成，解释为本快照人工核对。\n"
         "- 本快照包含插值约束、诊断、存储与加速路径修正；未重新运行物理 benchmark。\n"
         "- 逐文件 SHA-256 与参数数量见 docs-data/source-manifest.json。\n"
     )
-    figures()
+    if ARGS.figures:
+        figures()
     print(
         json.dumps(
             {
@@ -559,6 +538,48 @@ def build():
             ensure_ascii=False,
         )
     )
+
+
+def refresh_snapshot(rows, catalogs):
+    versions, hashes = {}, {}
+    source_ref = subprocess.check_output(
+        ["git", "log", "-1", "--format=%H", "--", "HINT-debug", "HINT-wall"],
+        cwd=REPO, text=True,
+    ).strip()
+    source_dirty = bool(subprocess.check_output(
+        ["git", "status", "--porcelain", "--", "HINT-debug", "HINT-wall"],
+        cwd=REPO, text=True,
+    ).strip())
+    for variant in ("debug", "wall"):
+        root = REPO / f"HINT-{variant}"
+        versions[variant] = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
+        for path in sorted(root.rglob("*")):
+            relative = path.relative_to(root)
+            if path.is_file() and path.suffix in {".py", ".toml", ".md"} and not any(
+                part.startswith(".") for part in relative.parts
+            ):
+                hashes[str(path.relative_to(REPO))] = digest(path)
+        target = DATA / "templates" / variant
+        target.mkdir(parents=True, exist_ok=True)
+        for name in ("main.toml", "follow.toml", "post.toml", "postprocess_demo.ipynb"):
+            shutil.copyfile(root / "examples" / name, target / name)
+    manifest = {
+        "source_commit": source_ref,
+        "source_working_tree_changes": source_dirty,
+        "versions": versions,
+        "parameter_counts": {
+            v: {p: sum(r["program"] == p and v in r["versions"] for r in rows) for p in ("main", "post")}
+            for v in versions
+        },
+        "plot_variable_count": len(catalogs["debug"]),
+        "source_sha256": hashes,
+        "validation_scope": "Documentation/source contract and browser checks; no new equilibrium benchmark.",
+    }
+    for name, content in (
+        ("parameters", rows), ("variables", catalogs), ("source-manifest", manifest)
+    ):
+        (DATA / f"{name}.json").write_text(json.dumps(content, ensure_ascii=False, indent=2) + "\n")
+    return manifest
 
 
 if __name__ == "__main__":

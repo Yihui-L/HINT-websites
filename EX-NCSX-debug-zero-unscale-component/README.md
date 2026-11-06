@@ -1,6 +1,6 @@
 # NCSX: HINT-debug 2.3.0 / Zero / Unscale / Component
 
-[结果网站](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-zero-unscale-component/)
+[结果网站](Documents/index.html)
 
 本页只展示本次零启动任务的初始化、第70步结果和0–70步历史。源码未改动。完成70步不等于力平衡已收敛。
 

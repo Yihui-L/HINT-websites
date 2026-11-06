@@ -2,9 +2,9 @@
 
 仅展示本次50步运行及第0步初始化。程序正常达到迭代上限，但末期力残差和动能上升，不能视为力平衡收敛结果。
 
-- [三维输入几何](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/)
-- [重点结果](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/results.html)
-- [完整后处理图集](https://yihui-l.github.io/HINT-websites/EX-NCSX-debug-vmec-unscale-component/gallery.html)
+- [三维输入几何](index.html)
+- [重点结果](results.html)
+- [完整后处理图集](gallery.html)
 - 源码提交：0495705cb52feb85e8db2f31f0cc91034197a01b
 - 完成时间：2026-09-21T08:48:39.422802+00:00
 - 144×144×144，nfp=3，50次外迭代，每次Step-B 1000内步。
