@@ -2,6 +2,8 @@
 
 本仓库收录 HINT-debug 和 HINT-wall 的公开程序手册，以及 NCSX、W7-X 的四组计算记录。五个站点各自独立发布，打开下表链接即可浏览，无需登录、安装 HINT 或访问求解器仓库。
 
+源码另存于 [HINT-docs（需访问权限）](https://github.com/Yihui-L/HINT-docs)：`HINT/` 是原版 Fortran 代码，`HINT-debug/` 和 `HINT-wall/` 是 Python 实现。此处手册和算例面向后两种实现。
+
 ## 在线入口
 
 | 站点 | 内容与运行状态 | 目录说明 |

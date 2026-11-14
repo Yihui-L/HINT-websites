@@ -1,6 +1,6 @@
 # HINT 程序手册
 
-本手册面向 **HINT-debug 2.3.0 / HINT-wall 2.3.2** Python 实现。本站只存放通用程序说明、参数模板、版本快照与文档工具，不记录具体算例。它不是原始 Fortran HINT 的逐参数翻译。版本和文件校验值见[版本清单](docs-data/source-manifest.json)，各章节的源码出处可在本地索引中查阅。
+本手册面向 **HINT-debug 2.3.0 / HINT-wall 2.3.2** Python 实现。原版 Fortran 代码保存在源码仓库的 [`HINT/` 目录（需访问权限）](https://github.com/Yihui-L/HINT-docs/tree/main/HINT)，不在本手册的使用范围内。本站只存放通用程序说明、参数模板、版本快照与文档工具，不记录具体算例。版本和文件校验值见[版本清单](docs-data/source-manifest.json)，各章节的源码出处可在本地索引中查阅。
 
 两个版本都从 VMEC、线圈文本 和第一壁文本构建统一数据，使用无磁面假设的磁力线压力松弛和电阻形式磁场松弛，输出一个可续算的 NetCDF。主要区别是**磁场/速度约束的位置及对应离散算子**。它们不是完整输运程序，也不是时间准确的实验放电模拟器。
 
